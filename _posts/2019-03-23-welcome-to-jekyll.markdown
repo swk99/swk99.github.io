@@ -4,7 +4,7 @@ title:  "Hello"
 date:   2019-03-23 21:03:36 +0530
 categories: AboutMe
 ---
-I am an SW developer at Samsung Electronics.
+I am a SW engineer at Samsung Electronics.
 
 I obtained my B.Eng. in Electronic and Electrical Engineering at Sungkyunkwan University at South Korea with Magna Cum Laude.
 
