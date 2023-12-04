@@ -1,7 +1,9 @@
+---
 layout: post
 title:  "Summarize the key points from the papers"
-date:   2023-12-05 
-categories: Paper
+date:   2023-12-05 21:03:36 +0530
+categories: paper
+---
 
 **Summarize the key points from the papers**
 
