@@ -1,0 +1,24 @@
+layout: post
+title:  "Summarize the key points from the papers"
+date:   2023-12-05 
+categories: Paper
+
+**Summarize the key points from the papers**
+
+(1) The considered *network type* varies across papers
+
+ex) vehicular networks and Mobile Edge Computing (MEC) systems, molecular structures..etc..
+
+(2) What is the *system model*?
+
+ex)The system models comprise different numbers of nodes with distinct configurations.
+
+ (3) *The purpose* of incorporating "the concept" in these models is to address specific physical implications.
+
+ex of "the concept") fairness algorithm.
+
+ (4) The *optimization objective*s involve maximizing, minimizing, or optimizing certain aspects. The objective functions vary across papers.
+
+ (5) The *controlling variables* differ, influencing the outcomes of the models.
+
+ (6) *Various constraints* are present, including those related to computing models.
