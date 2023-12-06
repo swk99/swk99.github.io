@@ -17,7 +17,7 @@ ex)The system models comprise different numbers of nodes with distinct configura
 
  (3) *The purpose* of incorporating "the concept" in these models is to address specific physical implications.
 
-ex of "the concept") fairness algorithm.
+ex of "the concept") fairness.
 
  (4) The *optimization objective*s involve maximizing, minimizing, or optimizing certain aspects. The objective functions vary across papers.
 
