@@ -37,7 +37,10 @@ jobs:
       - name: Unit and small-screen widget tests
         run: flutter test test --reporter expanded
       - name: Build iOS simulator app
-        run: flutter build ios --simulator --debug
+        run: |
+          flutter build ios --simulator --debug
+          mkdir -p artifacts
+          ditto -c -k --sequesterRsrc --keepParent build/ios/iphonesimulator/Runner.app artifacts/Phrase-Garden-iOS-Simulator.zip
       - name: Boot iPhone simulator
         run: |
           DEVICE_ID=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; d=json.load(sys.stdin); print(next(x["udid"] for devices in d["devices"].values() for x in devices if x["name"].startswith("iPhone")))')
@@ -48,8 +51,6 @@ jobs:
         run: flutter test integration_test/app_test.dart -d "$IOS_DEVICE_ID" --reporter expanded
       - name: Package simulator build and reproducible project
         run: |
-          mkdir -p artifacts
-          ditto -c -k --sequesterRsrc --keepParent build/ios/iphonesimulator/Runner.app artifacts/Phrase-Garden-iOS-Simulator.zip
           zip -r artifacts/Phrase-Garden-Flutter-Source.zip lib assets test integration_test ios pubspec.yaml pubspec.lock README.md .metadata -x 'ios/Pods/*' 'ios/.symlinks/*' 'ios/Flutter/ephemeral/*' 'ios/Flutter/Generated.xcconfig' 'ios/Flutter/flutter_export_environment.sh'
       - uses: actions/upload-artifact@v4
         with:
