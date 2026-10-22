@@ -52,7 +52,7 @@ class _GardenHomeState extends State<GardenHome> {
     panel(Column(crossAxisAlignment:CrossAxisAlignment.stretch,children:[
       Row(children:[const Icon(Icons.spa,color:green),const SizedBox(width:8),Expanded(child:Text('${s.mastered} / 1,000개 익숙해졌어요'))]),
       const SizedBox(height:16),LinearProgressIndicator(value:s.mastered/1000,minHeight:7),
-      const SizedBox(height:20),DropdownButtonFormField<int>(initialValue:s.day,decoration:const InputDecoration(labelText:'학습 일차',border:OutlineInputBorder()),items:List.generate(50,(i)=>DropdownMenuItem(value:i+1,child:Text('Day ${i+1} · 카드 20장'))),onChanged:(v){s.day=v!;s.save();}),
+      const SizedBox(height:20),DropdownButtonFormField<int>(isExpanded:true,initialValue:s.day,decoration:const InputDecoration(labelText:'학습 일차',border:OutlineInputBorder()),items:List.generate(50,(i)=>DropdownMenuItem(value:i+1,child:Text('Day ${i+1} · 카드 20장',overflow:TextOverflow.ellipsis))),onChanged:(v){s.day=v!;s.save();}),
       const SizedBox(height:16),FilledButton.icon(key:const Key('start-cards'),onPressed:()=>study(s.today),icon:const Icon(Icons.style_outlined),label:const Text('오늘의 카드 시작')),
       const SizedBox(height:8),OutlinedButton.icon(onPressed:()=>study((s.today.toList()..shuffle()).take(10).toList(),mode:'quiz'),icon:const Icon(Icons.quiz_outlined),label:const Text('퀴즈 10문제')),
       OutlinedButton.icon(onPressed:()=>study((s.today.toList()..shuffle()).take(10).toList(),mode:'listen'),icon:const Icon(Icons.headphones),label:const Text('듣기 퀴즈'))])),

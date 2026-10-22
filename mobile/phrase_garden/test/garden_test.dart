@@ -39,7 +39,7 @@ void main(){
       await tester.ensureVisible(find.byKey(const Key('remember')));await tester.tap(find.byKey(const Key('remember')));await tester.pumpAndSettle();
       expect(find.text('chase up'),findsOneWidget);expect(s.record(1).seen,1);
       await tester.pageBack();await tester.pumpAndSettle();await tester.tap(find.text('표현 도서관'));await tester.pumpAndSettle();
-      await tester.enterText(find.byKey(const Key('search')),'fob off');await tester.pumpAndSettle();expect(find.text('fob off'),findsOneWidget);expect(tester.takeException(),isNull);
+      await tester.enterText(find.byKey(const Key('search')),'fob off');await tester.pumpAndSettle();expect(find.widgetWithText(ListTile,'fob off'),findsOneWidget);expect(tester.takeException(),isNull);
     });
   }
 }
