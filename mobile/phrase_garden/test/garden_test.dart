@@ -30,7 +30,7 @@ void main(){
     testWidgets('Small screen $width flip, grade and search',(tester)async{
       tester.view.physicalSize=Size(width,844);tester.view.devicePixelRatio=1;
       addTearDown(tester.view.resetPhysicalSize);addTearDown(tester.view.resetDevicePixelRatio);
-      final s=await GardenStore.load();await tester.pumpWidget(GardenApp(s));await tester.pumpAndSettle();
+      final s=(await tester.runAsync(GardenStore.load))!;await tester.pumpWidget(GardenApp(s));await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('start-cards')));await tester.pumpAndSettle();
       expect(find.text('follow up on'),findsOneWidget);
       expect(tester.widget<FilledButton>(find.byKey(const Key('remember'))).onPressed,isNull);
