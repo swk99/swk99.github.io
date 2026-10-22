@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:phrase_garden/model.dart';
@@ -7,7 +8,9 @@ import 'package:phrase_garden/main.dart';
 
 void main(){
   TestWidgetsFlutterBinding.ensureInitialized();
-  setUp(()=>SharedPreferences.setMockInitialValues({}));
+  setUp((){SharedPreferences.setMockInitialValues({});
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(const MethodChannel('flutter_tts'), (_) async => 1);
+  });
   test('1000 complete records, 50 days and unambiguous quizzes',() async {
     final s=await GardenStore.load();
     expect(s.phrases.length,1000);expect(s.phrases.map((p)=>p.id).toSet().length,1000);
