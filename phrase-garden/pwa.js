@@ -14,7 +14,7 @@ window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();pro
 window.addEventListener('appinstalled',reflect);
 reflect();
 if(!('serviceWorker' in navigator)){status.textContent='온라인으로 공부할 수 있어요.';return;}
-window.addEventListener('load',async()=>{
+(async()=>{
  try{
  const reg=await navigator.serviceWorker.register('./sw.js',{scope:'./'});
  function offer(worker){waiting=worker;update.hidden=false;}
@@ -23,7 +23,7 @@ window.addEventListener('load',async()=>{
  await navigator.serviceWorker.ready;
  status.textContent='오프라인 학습 준비 완료 · 카드·퀴즈 1,000개';
  }catch(_){status.textContent='오프라인 저장을 완료하지 못했어요. 인터넷 연결 후 다시 열어주세요.';}
-});
+})();
 let refreshing=false;
 navigator.serviceWorker.addEventListener('controllerchange',()=>{if(waiting&&!refreshing){refreshing=true;location.reload();}});
 update.addEventListener('click',()=>{if(waiting)waiting.postMessage({type:'ACTIVATE_UPDATE'});});
