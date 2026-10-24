@@ -1,4 +1,4 @@
-import {tflURL, normalizeTfl, normalizeGoogle, rankRoutes, choicesFrom} from './core.mjs?v=2';
+import {tflURL, normalizeTfl, normalizeGoogle, rankRoutes, choicesFrom, londonEpoch, londonParts} from './core.mjs?v=2';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -30,6 +30,30 @@ for (const id of ['from','to']) $(id).addEventListener('input',()=>{
 });
 $('walk-limit').addEventListener('input',()=>{$('walk-value').textContent=`${$('walk-limit').value}분 이내`; invalidate();});
 $('departure').addEventListener('change',invalidate);
+
+function londonInputValue(epoch) {
+  const p=londonParts(epoch);
+  return p.year+'-'+p.month+'-'+p.day+'T'+p.hour+':'+p.minute;
+}
+$('departure-at').value=londonInputValue(Date.now()+3600000);
+function updateDepartureInput() {
+  const custom=$('departure').value==='custom';
+  $('departure-custom').hidden=!custom;
+  $('departure-at').required=custom;
+  $('departure-at').disabled=!custom;
+}
+$('departure').addEventListener('change',updateDepartureInput);
+$('departure-at').addEventListener('change',invalidate);
+$('tomorrow').addEventListener('click',()=>{
+  const p=londonParts(Date.now());
+  const next=new Date(Date.UTC(Number(p.year),Number(p.month)-1,Number(p.day)+1));
+  $('departure-at').value=next.toISOString().slice(0,10)+'T08:00';
+  $('departure').value='custom';updateDepartureInput();invalidate();
+  $('status').textContent='내일 오전 8시로 입력했어요. 원하는 런던 출발 시각으로 바꿔 검색하세요.';
+  $('departure-at').focus();
+});
+updateDepartureInput();
+
 $('swap').addEventListener('click',()=>{
   [$('from').value,$('to').value]=[$('to').value,$('from').value];
   [state.overrides.from,state.overrides.to]=[state.overrides.to,state.overrides.from];
@@ -215,7 +239,12 @@ $('route-form').addEventListener('submit',async event=>{
   if (!from || !to) { $('status').textContent='출발지와 도착지를 입력해 주세요.'; return; }
   state.controller?.abort(); const controller=new AbortController(); state.controller=controller;
   const version=++state.version, current=()=>version===state.version;
-  const requested=Date.now()+Number($('departure').value)*60000, walkLimit=Number($('walk-limit').value);
+  const customDeparture=$('departure').value==='custom';
+  const requested=customDeparture?londonEpoch($('departure-at').value+':00',Date.now()):Date.now()+Number($('departure').value)*60000;
+  const walkLimit=Number($('walk-limit').value);
+  if(!Number.isFinite(requested)) { $('status').textContent='유효한 런던 날짜와 시간을 입력해 주세요. 서머타임 시작으로 존재하지 않는 시각은 선택할 수 없어요.';return; }
+  if(customDeparture && requested<Date.now()) { $('status').textContent='출발 시각이 지났어요. 미래의 날짜와 시간을 선택해 주세요.';return; }
+  if(requested>Date.now()+90*86400000) { $('status').textContent='출발 날짜는 앞으로 90일 이내로 선택해 주세요.';return; }
   const args={departure:requested,walkLimit,key:state.keys.tfl};
   const resolved=field=>state.overrides[field]?.input===$(field).value.trim()?state.overrides[field].value:$(field).value.trim();
   const origin=googleLocation('from'),destination=googleLocation('to');
@@ -254,7 +283,7 @@ $('route-form').addEventListener('submit',async event=>{
       $('results').innerHTML=`<div class="empty panel"><span class="empty-icon" aria-hidden="true">⌁</span><h2>${successful?'버스만으로 갈 수 있는 후보를 찾지 못했어요.':'연결을 확인하고 다시 시도해 주세요.'}</h2><p>${successful?'도보 제한을 늘리거나, 출발 시점·주변 정류장을 바꿔 보세요.<br>전철이 섞이거나 총 도보 제한을 넘는 경로는 제외했어요.':'위 안내를 확인해 주세요. Google을 연결하면 TfL 오류 시에도 Google 후보를 조회할 수 있어요.'}</p></div>`;
       return;
     }
-    $('status').textContent=`${state.routes.length}개 후보 · 총 도보 ${walkLimit}분 이내 · ${clock(requested)} 출발 기준 (런던 시간)`;
+    $('status').textContent=`${state.routes.length}개 후보 · 총 도보 ${walkLimit}분 이내 · ${londonInputValue(requested).replace('T',' ')} 출발 기준 (런던 시간)`;
     renderCards(); selectRoute(0);
   } catch(error) {
     if(!current())return;
