@@ -71,6 +71,60 @@ $('clear-keys').addEventListener('click',()=>{
 });
 connections();
 
+const placeStorageKey='bus-trails.places.v1';
+let savedPlaces={home:'',work:''};
+try {
+  const stored=JSON.parse(localStorage.getItem(placeStorageKey)||'{}');
+  for(const name of ['home','work']) if(typeof stored?.[name]==='string')savedPlaces[name]=stored[name].slice(0,160);
+} catch {}
+function openPlaces(focusName) {
+  $('home-address').value=savedPlaces.home;
+  $('work-address').value=savedPlaces.work;
+  $('places-status').textContent='';
+  $('places').showModal();
+  if(focusName)$(focusName+'-address').focus();
+}
+function refreshPlaces() {
+  document.querySelectorAll('[data-place]').forEach(button=>{
+    const name=button.dataset.place;
+    button.title=savedPlaces[name] || ((name==='home'?'집':'직장')+' 주소 저장하기');
+  });
+}
+$('places-open').addEventListener('click',()=>openPlaces());
+document.querySelectorAll('[data-copy-place]').forEach(button=>button.addEventListener('click',()=>{
+  const name=button.dataset.copyPlace;
+  $(name+'-address').value=$(name==='home'?'from':'to').value.trim();
+}));
+$('places-form').addEventListener('submit',event=>{
+  event.preventDefault();
+  const next={home:$('home-address').value.trim(),work:$('work-address').value.trim()};
+  try {
+    if(next.home||next.work)localStorage.setItem(placeStorageKey,JSON.stringify(next));
+    else localStorage.removeItem(placeStorageKey);
+  } catch {
+    $('places-status').textContent='브라우저가 저장을 허용하지 않아 저장하지 못했어요. 브라우저의 사이트 데이터 설정을 확인해 주세요.';
+    return;
+  }
+  savedPlaces=next;refreshPlaces();
+  $('places').close();
+  $('status').textContent='집·직장 설정을 저장했어요. 입력칸 아래 집·직장 버튼을 눌러 사용하세요.';
+});
+document.querySelectorAll('[data-place]').forEach(button=>button.addEventListener('click',()=>{
+  const name=button.dataset.place,field=button.dataset.field;
+  if(!savedPlaces[name]){openPlaces(name);return;}
+  $(field).value=savedPlaces[name];
+  delete state.overrides[field];
+  $('location-choices').hidden=true;invalidate();
+  $('status').textContent=(name==='home'?'집':'직장')+'을 '+(field==='from'?'출발지':'도착지')+'에 입력했어요.';
+}));
+$('commute').addEventListener('click',()=>{
+  if(!savedPlaces.home||!savedPlaces.work){openPlaces(!savedPlaces.home?'home':'work');return;}
+  $('from').value=savedPlaces.home;$('to').value=savedPlaces.work;
+  state.overrides={};$('location-choices').hidden=true;invalidate();
+  $('status').textContent='집 → 직장을 입력했어요. 경로 찾기를 누르세요. 퇴근길은 출발·도착 바꾸기를 누르면 돼요.';
+});
+refreshPlaces();
+
 async function requestTfl(from,to,options,signal) {
   const controller=new AbortController();
   const abort=()=>controller.abort(); signal.addEventListener('abort',abort,{once:true});
