@@ -1,3 +1,4 @@
+import {setNavigationRoute,stopNavigation} from './navigation.mjs?v=1';
 import {tflURL, normalizeTfl, normalizeGoogle, rankRoutes, choicesFrom, londonEpoch, londonParts} from './core.mjs?v=2';
 
 const $ = id => document.getElementById(id);
@@ -18,6 +19,7 @@ function busy(value) {
   $('route-form').setAttribute('aria-busy', String(value));
 }
 function invalidate() {
+  stopNavigation();
   state.version++; state.controller?.abort(); busy(false); state.routes=[];
   $('results').innerHTML=blankResults; $('detail').hidden=true; $('warnings').replaceChildren();
   $('status').textContent='조건을 바꿨어요. 경로를 다시 검색해 주세요.';
@@ -249,7 +251,7 @@ $('route-form').addEventListener('submit',async event=>{
   const resolved=field=>state.overrides[field]?.input===$(field).value.trim()?state.overrides[field].value:$(field).value.trim();
   const origin=googleLocation('from'),destination=googleLocation('to');
   const start=resolved('from'),end=resolved('to');
-  busy(true); $('detail').hidden=true; $('location-choices').hidden=true; $('results').replaceChildren(); warnings([]);
+  stopNavigation(); busy(true); $('detail').hidden=true; $('location-choices').hidden=true; $('results').replaceChildren(); warnings([]);
   $('status').textContent='TfL에서 위치와 첫 버스 경로를 확인하고 있어요…';
   const notices=[]; let candidates=[],successful=0;
   try {
@@ -331,6 +333,7 @@ function selectRoute(index, reveal=false) {
     try { drawGoogle(route); }
     catch { $('map').hidden=true; $('sketch').hidden=false; if(route.provider==='TfL')drawSketch(route); else $('sketch').textContent='Google 지도를 표시하지 못했어요. 새로고침 후 다시 검색해 주세요.'; }
   } else { $('map').hidden=true; $('sketch').hidden=false; drawSketch(route); }
+  setNavigationRoute(route,state.googleReady&&!$('map').hidden?state.map:null);
 }
 function segmentPath(segment) { return segment.path.length?segment.path:[segment.fromPoint,segment.toPoint].filter(Boolean); }
 function drawGoogle(route) {
