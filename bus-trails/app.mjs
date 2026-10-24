@@ -1,4 +1,4 @@
-import {tflURL, normalizeTfl, normalizeGoogle, rankRoutes, choicesFrom} from './core.mjs';
+import {tflURL, normalizeTfl, normalizeGoogle, rankRoutes, choicesFrom} from './core.mjs?v=2';
 
 const $ = id => document.getElementById(id);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

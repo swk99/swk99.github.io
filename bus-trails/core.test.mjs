@@ -69,6 +69,6 @@ test('Google fractional walking time remains precise after merging',()=>{
 });
 test('disambiguation retains exact coordinates to align Google and TfL origins',()=>{
   const result=choicesFrom({fromLocationDisambiguation:{disambiguationOptions:[{parameterValue:'1001206',place:{commonName:'New Malden Station',lat:51.4,lon:-.25}}]}});
-  assert.deepEqual(result.from[0],{label:'New Malden Station',value:'1001206',point:{lat:51.4,lng:-.25}});
+  assert.deepEqual(result.from[0],{label:'New Malden Station',value:'51.4,-0.25',point:{lat:51.4,lng:-.25}});
   assert.deepEqual(choicesFrom({journeys:[]}),{});
 });
