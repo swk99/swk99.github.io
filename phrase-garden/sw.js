@@ -1,1 +1,22 @@
-Y29uc3QgQ0FDSEU9J3BocmFzZS1nYXJkZW4tc2hlbGwtdjMnOwpjb25zdCBST09UPW5ldyBVUkwoJy4vJyxzZWxmLmxvY2F0aW9uLmhyZWYpOwpjb25zdCBGSUxFUz1bJy4vJywnaW5kZXguaHRtbCcsJ3N0eWxlLmNzcycsJ2RhdGEuanMnLCdhcHAuanMnLCdwd2EuanMnLCdtYW5pZmVzdC53ZWJtYW5pZmVzdCcsJ2ljb24uc3ZnJywnaWNvbi0xOTIucG5nJywnaWNvbi01MTIucG5nJywnYXBwbGUtdG91Y2gtaWNvbi5wbmcnLCdzdHVkeS1ndWlkZS5tZCddOwpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2luc3RhbGwnLGV2ZW50PT57CiBldmVudC53YWl0VW50aWwoY2FjaGVzLm9wZW4oQ0FDSEUpLnRoZW4oY2FjaGU9PmNhY2hlLmFkZEFsbChGSUxFUy5tYXAocGF0aD0+bmV3IFJlcXVlc3QobmV3IFVSTChwYXRoLFJPT1QpLHtjYWNoZToncmVsb2FkJ30pKSkpKTsKfSk7CnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignYWN0aXZhdGUnLGV2ZW50PT57CiBldmVudC53YWl0VW50aWwoKGFzeW5jKCk9Pntmb3IoY29uc3Qga2V5IG9mIGF3YWl0IGNhY2hlcy5rZXlzKCkpe2lmKGtleS5zdGFydHNXaXRoKCdwaHJhc2UtZ2FyZGVuLXNoZWxsLScpJiZrZXkhPT1DQUNIRSlhd2FpdCBjYWNoZXMuZGVsZXRlKGtleSk7fWF3YWl0IHNlbGYuY2xpZW50cy5jbGFpbSgpO30pKCkpOwp9KTsKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdtZXNzYWdlJyxldmVudD0+e2lmKGV2ZW50LmRhdGE/LnR5cGU9PT0nQUNUSVZBVEVfVVBEQVRFJylzZWxmLnNraXBXYWl0aW5nKCk7fSk7CnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignZmV0Y2gnLGV2ZW50PT57CiBjb25zdCB1cmw9bmV3IFVSTChldmVudC5yZXF1ZXN0LnVybCk7CiBpZihldmVudC5yZXF1ZXN0Lm1ldGhvZCE9PSdHRVQnfHx1cmwub3JpZ2luIT09Uk9PVC5vcmlnaW58fCF1cmwucGF0aG5hbWUuc3RhcnRzV2l0aChST09ULnBhdGhuYW1lKSlyZXR1cm47CiBldmVudC5yZXNwb25kV2l0aCgoYXN5bmMoKT0+ewogY29uc3QgY2FjaGU9YXdhaXQgY2FjaGVzLm9wZW4oQ0FDSEUpOwogaWYoZXZlbnQucmVxdWVzdC5tb2RlPT09J25hdmlnYXRlJyl7CiAgIGNvbnN0IHJvdXRlPXVybC5wYXRobmFtZS5zbGljZShST09ULnBhdGhuYW1lLmxlbmd0aCk7CiAgIGlmKHJvdXRlPT09Jyd8fHJvdXRlPT09J2luZGV4Lmh0bWwnKXJldHVybiAoYXdhaXQgY2FjaGUubWF0Y2goUk9PVC5ocmVmKSl8fGZldGNoKGV2ZW50LnJlcXVlc3QpOwogfQogcmV0dXJuIChhd2FpdCBjYWNoZS5tYXRjaChldmVudC5yZXF1ZXN0KSl8fGZldGNoKGV2ZW50LnJlcXVlc3QpOwogfSkoKSk7Cn0pOw==
+const CACHE='phrase-garden-shell-v3';
+const ROOT=new URL('./',self.location.href);
+const FILES=['./','index.html','style.css','data.js','app.js','pwa.js','manifest.webmanifest','icon.svg','icon-192.png','icon-512.png','apple-touch-icon.png','study-guide.md'];
+self.addEventListener('install',event=>{
+ event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES.map(path=>new Request(new URL(path,ROOT),{cache:'reload'})))));
+});
+self.addEventListener('activate',event=>{
+ event.waitUntil((async()=>{for(const key of await caches.keys()){if(key.startsWith('phrase-garden-shell-')&&key!==CACHE)await caches.delete(key);}await self.clients.claim();})());
+});
+self.addEventListener('message',event=>{if(event.data?.type==='ACTIVATE_UPDATE')self.skipWaiting();});
+self.addEventListener('fetch',event=>{
+ const url=new URL(event.request.url);
+ if(event.request.method!=='GET'||url.origin!==ROOT.origin||!url.pathname.startsWith(ROOT.pathname))return;
+ event.respondWith((async()=>{
+ const cache=await caches.open(CACHE);
+ if(event.request.mode==='navigate'){
+   const route=url.pathname.slice(ROOT.pathname.length);
+   if(route===''||route==='index.html')return (await cache.match(ROOT.href))||fetch(event.request);
+ }
+ return (await cache.match(event.request))||fetch(event.request);
+ })());
+});
