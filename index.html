@@ -2,3 +2,45 @@
 layout: home
 author_profile: true
 ---
+
+<style>
+  .sunny-apps { margin: 0 0 2.5rem; }
+  .sunny-apps h1 { margin: 0 0 .5rem; font-size: 1.65em; }
+  .sunny-apps-intro { color: #59636b; font-size: .85em; }
+  .sunny-app-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 16px; margin-top: 24px; }
+  .sunny-app-card { display: flex; flex-direction: column; padding: 24px; border: 1px solid #dce4da; border-radius: 18px; background: #f7faf4; color: #263a2e !important; text-decoration: none !important; transition: transform .15s, box-shadow .15s; }
+  .sunny-app-card:nth-child(2) { background: #fff8ee; border-color: #eadfcd; }
+  .sunny-app-card:nth-child(3) { background: #f0f5fc; border-color: #d9e3ef; }
+  .sunny-app-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px #263a2e12; }
+  .sunny-app-card:focus-visible { outline: 3px solid #386c54; outline-offset: 4px; }
+  .sunny-app-icon { font-size: 1.8em; }
+  .sunny-app-card h2 { margin: 14px 0 10px; padding: 0; border: 0; font-size: 1em; }
+  .sunny-app-card p { margin: 0 0 22px; font-size: .75em; line-height: 1.7; }
+  .sunny-app-open { margin-top: auto; font-size: .75em; font-weight: bold; }
+  @media (prefers-reduced-motion: reduce) { .sunny-app-card { transition: none; } .sunny-app-card:hover { transform: none; } }
+</style>
+
+<section class="sunny-apps" aria-labelledby="sunny-apps-title" lang="ko">
+  <h1 id="sunny-apps-title">Sunny’s little projects</h1>
+  <p class="sunny-apps-intro">공부하고, 만들어 보고, 매일 조금씩. 나의 작은 앱들을 한곳에서 열어보세요.</p>
+  <div class="sunny-app-grid">
+    <a class="sunny-app-card" href="{{ '/phrase-garden/' | relative_url }}">
+      <span class="sunny-app-icon" aria-hidden="true">🌱</span>
+      <h2>영어 정원 · Phrase Garden</h2>
+      <p>1,000개의 영어 표현을 발음·카드·퀴즈로 학습해요. ✓ 공부 완료와 △ 더 공부하기로 나만의 복습 목록을 만들어요.</p>
+      <span class="sunny-app-open">영어 공부하러 가기 →</span>
+    </a>
+    <a class="sunny-app-card" href="{{ '/oop-cafe/' | relative_url }}">
+      <span class="sunny-app-icon" aria-hidden="true">☕</span>
+      <h2>코코 &amp; 엘리의 OOP Café</h2>
+      <p>코알라와 코끼리와 함께 객체 지향 설계, SOLID와 디자인 패턴을 배우고 Java 코드로 연습해요.</p>
+      <span class="sunny-app-open">OOP 카페 들어가기 →</span>
+    </a>
+    <a class="sunny-app-card" href="{{ '/security-year/' | relative_url }}">
+      <span class="sunny-app-icon" aria-hidden="true">🛡️</span>
+      <h2>SECURITY / 12</h2>
+      <p>12개월의 보안 전략을 직접 선택해요. 코알리나와 미션을 풀며 DevSecOps 개념을 익히는 학습 게임이에요.</p>
+      <span class="sunny-app-open">보안 게임 시작하기 →</span>
+    </a>
+  </div>
+</section>
