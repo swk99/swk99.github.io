@@ -211,14 +211,19 @@ $('route-form').addEventListener('submit',async event=>{
 
 function renderCards() {
   $('results').innerHTML=state.routes.slice(0,10).map((r,i)=>`<button class="route-card" data-route="${i}" aria-pressed="false"><div class="route-badges">${i===0?'<span class="fastest">조회 후보 중 가장 빠름</span>':''}<span>${esc(r.provider)}</span></div><div class="route-top"><span class="duration">${mins(r.totalMinutes)}<small>분</small></span><span class="arrival">${clock(r.arrival)} 도착<br>대기 시간 포함</span></div><div class="route-line">${r.segments.map(s=>s.mode==='bus'?`<span class="bus-pill">버스 ${esc(s.line||'노선')}</span>`:`<span class="walk-pill">도보 ${mins(s.minutes)}분</span>`).join('<span aria-hidden="true">›</span>')}</div><div class="route-meta"><span>총 도보 ${mins(r.walkMinutes)}분</span><span>${r.transfers?`환승 ${r.transfers}회`:'환승 없음'}</span><span>상세 보기 ↓</span></div></button>`).join('')+'<p class="count-note">모든 시간은 런던 현지 시각입니다. 현재 운행 상황에 따라 달라질 수 있어요.</p>';
-  $('results').querySelectorAll('[data-route]').forEach(button=>button.addEventListener('click',()=>selectRoute(Number(button.dataset.route))));
+  $('results').querySelectorAll('[data-route]').forEach(button=>button.addEventListener('click',()=>selectRoute(Number(button.dataset.route),true)));
 }
-function selectRoute(index) {
+function selectRoute(index, reveal=false) {
   const route=state.routes[index]; if(!route)return;
   $('results').querySelectorAll('[data-route]').forEach(button=>{
     const active=Number(button.dataset.route)===index;button.classList.toggle('active',active);button.setAttribute('aria-pressed',String(active));
   });
   $('detail').hidden=false; $('detail-title').textContent=`${mins(route.totalMinutes)}분, 버스와 함께 가는 길`;
+  if (reveal) requestAnimationFrame(()=>{
+    $('detail-title').setAttribute('tabindex','-1');
+    $('detail-title').focus({preventScroll:true});
+    $('detail').scrollIntoView({behavior:'instant',block:'start'});
+  });
   $('detail-provider').textContent=route.provider;
   $('steps').innerHTML=route.segments.map((s,i)=>{
     const walking=s.mode==='walk';
