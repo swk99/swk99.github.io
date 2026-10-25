@@ -1,4 +1,4 @@
-const CACHE='phrase-garden-shell-v3';
+const CACHE='phrase-garden-shell-v4';
 const ROOT=new URL('./',self.location.href);
 const FILES=['./','index.html','style.css','data.js','app.js','pwa.js','manifest.webmanifest','icon.svg','icon-192.png','icon-512.png','apple-touch-icon.png','study-guide.md'];
 self.addEventListener('install',event=>{
