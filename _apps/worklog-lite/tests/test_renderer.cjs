@@ -1,0 +1,15 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const src=fs.readFileSync('static/app.js','utf8').split('function toast(')[0];
+const context=vm.createContext({});vm.runInContext(src+'\nthis.render=markdown;this.inlineRender=inline;',context);
+const md=context.render;
+assert.match(md('## Heading\n\n- [x] Done\n- [ ] Todo').html, /class="check-box checked"/);
+assert.match(md('| A | B |\n| --- | --- |\n| 한글 | text |').html, /<th>A<\/th>/);
+assert.match(md('```\n<script>alert(1)</script>\n```').html, /&lt;script&gt;/);
+assert.doesNotMatch(md('<img src=x onerror=alert(1)>').html, /<img/);
+assert.doesNotMatch(md('[evil](javascript:alert) [bad](data:text/html,hi)').html, /href=/);
+assert.match(md('[safe](https://example.com)').html, /rel="noopener noreferrer"/);
+assert.match(md('[local](#page/example-doc)').html, /href="#page\/example-doc"/);
+assert.doesNotMatch(md('**<script>** [x](https://x/"onmouseover="evil)').html, /href="[^>]*"onmouseover=/);
+assert.equal(md('# Same\n\n# Same').headings[1].id,'section-1');
+assert.match(md('`**literal**`').html, /<code>\*\*literal\*\*<\/code>/);
+console.log('10 renderer and HTML-escaping checks passed');

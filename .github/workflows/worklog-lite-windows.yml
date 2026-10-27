@@ -1,0 +1,68 @@
+name: Worklog Lite Windows
+on:
+  push:
+    branches: [master]
+    paths:
+      - '_apps/worklog-lite/**'
+      - '.github/workflows/worklog-lite-windows.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: worklog-lite-windows
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    defaults:
+      run:
+        working-directory: _apps/worklog-lite
+        shell: pwsh
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+          architecture: x64
+      - name: Check source and behavior
+        run: |
+          python -m unittest discover -s tests -v
+          if ($LASTEXITCODE -ne 0) { throw 'Integration tests failed.' }
+          node tests/test_renderer.cjs
+          if ($LASTEXITCODE -ne 0) { throw 'Renderer tests failed.' }
+      - name: Build Windows executable
+        run: ./build-windows.ps1
+      - name: Run the actual executable against a temporary workspace
+        run: |
+          python -c "import json,pathlib,subprocess; exe=pathlib.Path('dist/WorklogLite.exe').resolve(); assert exe.read_bytes()[:2]==b'MZ'; subprocess.run([str(exe),'--self-test','--test-report',str(pathlib.Path('smoke-report.json').resolve())],check=True,timeout=180); result=json.loads(pathlib.Path('smoke-report.json').read_text(encoding='utf-8')); assert result['ok']; print(json.dumps(result,indent=2))"
+          if ($LASTEXITCODE -ne 0) { throw 'Packaged executable smoke test failed.' }
+      - name: Package downloads
+        run: |
+          Copy-Item README_KO.md dist/README_KO.md
+          Copy-Item README.md dist/README.md
+          Copy-Item smoke-report.json dist/smoke-report.json
+          Compress-Archive -Path dist/WorklogLite.exe,dist/README_KO.md,dist/README.md -DestinationPath dist/WorklogLite-Windows-x64.zip
+          $hash = (Get-FileHash dist/WorklogLite.exe -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  WorklogLite.exe" | Set-Content dist/SHA256SUMS.txt -Encoding utf8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WorklogLite-Windows-x64
+          path: |
+            _apps/worklog-lite/dist/WorklogLite.exe
+            _apps/worklog-lite/dist/WorklogLite-Windows-x64.zip
+            _apps/worklog-lite/dist/SHA256SUMS.txt
+            _apps/worklog-lite/dist/smoke-report.json
+          if-no-files-found: error
+          retention-days: 30
+      - name: Publish download release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: worklog-lite-v0.1.0-${{ github.run_number }}
+          RELEASE_TARGET: ${{ github.sha }}
+        run: |
+          gh release create "$env:RELEASE_TAG" dist/WorklogLite.exe dist/WorklogLite-Windows-x64.zip dist/SHA256SUMS.txt dist/smoke-report.json --target "$env:RELEASE_TARGET" --title "Worklog Lite — Windows x64 (build ${{ github.run_number }})" --notes-file RELEASE_NOTES.md --latest=false
+          if ($LASTEXITCODE -ne 0) { throw 'GitHub release upload failed.' }
