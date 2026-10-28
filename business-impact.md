@@ -87,3 +87,35 @@ I turn operational failure modes into reliable, observable and auditable enginee
 **Operational friction → structured automation.** **Integration failure → durable recovery.** **Infrastructure uncertainty → validated evidence.** **Unstructured data → decision support.**
 
 *Public version: no customer personal data, private endpoints, sensitive internal financial values or unverified cost-saving claims.*
+
+
+## Financial impact and ROI — transparent estimation
+
+**Important:** No independently verified realised GBP savings have been provided. The figures below are *illustrative scenario estimates*, **not achieved savings, audited ROI or production outcomes**. They must not be presented in a CV as money already saved.
+
+| Workstream | Assumption | Illustrative value | Evidence needed |
+|---|---|---:|---|
+| Reconciliation | 0.5 hours saved per working day × 250 days × £25 loaded hourly cost | **£3,125/year** | Before/after handling time, actual working days, finance-approved hourly cost |
+| Loan email triage | 3,450 emails × 3 minutes saved per email × £20/hour | **£3,450 one-off** | Proportion of emails actually processed, measured per-email reduction, actual staff cost |
+| Card blocking | 500 requests/month × 4 minutes saved × £20/hour × 12 | **£8,000/year** | Production volumes, manual baseline, automation coverage, unit costs |
+| CI/CD automation | 4 engineer-hours/week × 52 × £30/hour | **£6,240/year** | Actual automated tasks, time logs, salary/loading model |
+
+**Illustrative recurring annual potential (excluding one-off email backfile): £17,365/year.** This combines independent hypothetical workstreams; it is **not** an attributable realised total. The email backfile scenario adds a separate **£3,450 one-time** potential, not annual recurring savings. These scenarios may overlap and should not be summed for a formal business case without deduplication.
+
+### Financial-control distinction: reconciliation variance is not savings
+A previously reviewed reconciliation snapshot recorded nominal net **−£114,886.42** and reconciliation net **−£118,043.98**; the arithmetic difference is **£3,157.56**. This represents a **variance requiring investigation**, not a recovered sum or a cost saving. These internal financial figures are intentionally **excluded from the public portfolio** and should remain in a private evidence workbook.
+
+### Stronger interview-ready impact statements
+- **Reconciliation:** "Investigated reconciliation exceptions across a 5,351-record run and identified cutoff/weekend-processing risks; developed a measurement framework for manual-review reduction."
+- **Loan AI:** "Structured a 3,450-email dataset to support AI-assisted classification and recommendations; quantified potential processing-time benefits using an explicit per-message baseline."
+- **Card blocking:** "Designed an auditable, recoverable card-blocking workflow and tested a 30,000-record workload; modelled the customer-service capacity benefit pending production validation."
+- **Cloud/telecom:** "Contributed to multi-vendor network and cloud validation, including 72-hour stress tests; did not attribute unsupported revenue or downtime savings."
+
+### Evidence register to convert estimates into verified outcomes
+1. Baseline and post-change cycle times, using comparable samples.
+2. Monthly/annual production volumes and actual automation coverage.
+3. Fully loaded labour costs approved for external reporting.
+4. Deployment date, attribution, exception rates and rework.
+5. Sign-off from the business owner before claiming realised GBP savings.
+
+**ROI formula:** `(validated annual benefit - annual operating cost) / implementation cost × 100%`. Count avoided losses separately from labour savings, and do not count a financial variance as recovered funds.
