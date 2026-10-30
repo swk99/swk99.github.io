@@ -41,23 +41,124 @@ I turn operational failure modes into reliable, observable and auditable enginee
 **Result:** Established a systematic troubleshooting approach; final remediation metrics are not verified.  
 **Business impact:** Better fault isolation and operational maintainability.
 
-## Amazon Web Services | Cloud Support (Nov 2024–Apr 2025)
+## Amazon Web Services | Cloud Support Associate (Nov 2024–Apr 2025)
 
-### STAR — Cloud customer reliability
-**Situation:** Storage and content-delivery configuration failures disrupted customer workflows.  
-**Task:** Identify causes and safe remediation paths.  
-**Action:** Troubleshot S3, CloudFront, EFS and SES, including OAI/OAC, presigned URL 403 responses, IAM, replication, encryption and CloudTrail-based investigation.  
-**Result:** Supported cloud issue diagnosis and customer remediation; case-volume and financial impact are not documented.  
-**Business impact:** More reliable cloud operations and reduced configuration uncertainty.
+*Dublin, Ireland · Enterprise customer support · Hybrid-cloud reliability*
 
-## Samsung Electronics | Network Infrastructure / Software QA (Aug 2023–Sep 2024)
+### STAR — Restoring a customer's S3 on Outposts connectivity
 
-### STAR — Telecom interoperability and release confidence
-**Situation:** Virtualised radio access infrastructure required rigorous multi-vendor validation.  
-**Task:** Detect integration and resilience risks before deployment.  
-**Action:** Worked with vDU, O-RAN MOP, Verizon Cloud IoT, Viavi/DU–E500 test environments, **72-hour stress testing**, AWS Outposts M5→M6 validation and a Red Hat vRAN PoC.  
-**Result:** Contributed validation evidence for network software and infrastructure decisions. The test duration is not an uptime improvement claim.  
-**Business impact:** Stronger evidence for release readiness and platform compatibility.
+**Impact at a glance:** Investigated a production storage-access incident, supported connectivity restoration, and turned the resolution into a runbook used by global support engineers.
+
+**Situation**  
+An enterprise customer experienced HTTP 404 responses when accessing S3 on Outposts in a hybrid environment connecting an on-premises data centre with the AWS Oregon Region. The customer needed a working service and an explanation of the failure; the error code alone did not establish whether the problem was in the application, storage configuration or network path.
+
+**Task**  
+Identify the underlying cause, support corrective action, and make the investigation useful beyond the immediate support case.
+
+**Action**
+- Analysed the available logs and configuration details and traced the request path across the customer's hybrid environment.
+- Investigated IP subnet planning and routing, identifying a subnet-planning misconfiguration associated with the incident.
+- Supported the corrective steps needed to restore the affected connectivity.
+- Documented the investigation, root cause and resolution in a troubleshooting runbook that other support engineers could reuse.
+
+**Result**  
+The investigation supported restoration of the customer's affected connectivity. The resulting runbook was used by global support engineering teams, extending the value of the work beyond one incident.
+
+**Business impact**  
+Restoring access addressed the customer's immediate operational disruption. Capturing the diagnosis as reusable support knowledge also gave engineers a repeatable starting point for similar investigations, rather than leaving the resolution in a single ticket.
+
+**Customer value**  
+The customer received both practical recovery support and a specific explanation of the configuration issue. That matters because a usable service resolves the immediate problem, while a clear root cause gives the customer's technical team something concrete to correct and review.
+
+**Leadership demonstrated:** Ownership of an ambiguous incident, detailed technical investigation, and knowledge sharing across support teams.
+
+### STAR — Turning recurring routing issues into a support process
+
+**Impact at a glance:** Developed a Jira-based process for investigating errors between data-centre servers and cloud storage.
+
+**Situation**  
+Recurring S3 request failures, including HTTP 404 responses in the cases I investigated, required attention to the routing between data-centre servers and cloud storage. Resolving individual tickets alone did not provide a consistent process for addressing similar issues.
+
+**Task**  
+Use the recurring failure pattern to improve how those issues were investigated and followed through.
+
+**Action**
+- Built on the existing Jira ticket workflow to develop a process focused on data-centre-to-cloud-storage errors.
+- Brought IP-routing investigation into that workflow, drawing on the configuration problems encountered in customer cases.
+- Connected incident investigation with reusable troubleshooting knowledge so that the work could inform subsequent support cases.
+
+**Result**  
+Developed a support-process improvement around a recurring class of hybrid-cloud problems. A measured before-and-after reduction in error rates or resolution time is not available.
+
+**Business impact**  
+The process was designed to make recurring issues easier to investigate consistently and to reduce reliance on individual engineers remembering earlier cases.
+
+**Customer value**  
+The intended benefit was a more coherent support experience: investigation focused on the relevant infrastructure path, with findings that could carry forward into future cases. This is a process benefit, not a claim of measured customer satisfaction.
+
+**Related experience:** Troubleshot S3, CloudFront, EFS and SES, including OAI/OAC, presigned URL 403 responses, IAM, replication, encryption and CloudTrail-based investigation.
+
+## Samsung Electronics | Software Engineer, Networks (Aug 2023–Sep 2024)
+
+*South Korea · Verizon and AT&T customer engagements · Cloud IoT and network infrastructure*
+
+### STAR — Automating large-scale validation for telecom customers
+
+**Impact at a glance:** Set up and tested automated network performance workflows for **1,000 user equipment (UE) devices over 72 hours**, supporting end-to-end infrastructure validation for Verizon and AT&T engagements.
+
+**Situation**  
+Telecom customers needed evidence that integrated network infrastructure could operate under sustained load. End-to-end Cloud IoT testing involved multiple components and vendors, while the engineering team had limited capacity for repetitive execution and investigation.
+
+**Task**  
+Make large-scale testing repeatable and produce useful evidence for engineering and customer discussions about integration issues and release readiness.
+
+**Action**
+- Set up and tested an automated workflow using **Terraform** for infrastructure provisioning, **Python** for test orchestration and **Docker** for consistent execution environments.
+- Automated performance-test execution at a scale of **1,000 UE across 72-hour runs**.
+- Improved the collection of test results and logs to support failure reproduction and diagnosis.
+- Participated directly in customer meetings with **Verizon and AT&T**, alongside the engineering work.
+- Contributed to broader validation involving vDU, O-RAN MOP, Viavi/DU–E500 environments, AWS Outposts M5-to-M6 migration validation and a Red Hat vRAN proof of concept.
+
+**Result**  
+Established a repeatable large-scale testing workflow and contributed validation evidence for network software and infrastructure decisions. The automation reduced reliance on repeated manual execution and supported investigation of issues before release.
+
+**Business impact**  
+This work supported delivery on commercially significant telecom engagements by making sustained validation practical with a small engineering team. More reproducible test execution also made engineering findings easier to compare and use in release decisions.
+
+**Commercial context:** The engagements I worked on were approximately **KRW 10 billion in revenue per project**, based on my understanding of their business scale. This describes the engagements' scale; it is not revenue personally generated by my automation.
+
+**Customer value**  
+For Verizon and AT&T, the value was evidence about how the integrated infrastructure behaved under load, supported by engineers who participated in customer discussions. Repeatable tests and usable logs provided a more concrete basis for investigating failures and assessing readiness than a one-off test result.
+
+**Leadership demonstrated:** Identifying a capacity constraint and addressing it through reusable engineering automation.
+
+### STAR — Extending an internal chatbot with log-based automation
+
+**Impact at a glance:** Built a log-based automation tool as an extension to an internal chatbot to support a capacity-constrained engineering team.
+
+**Situation**  
+The team needed to investigate infrastructure-test issues despite having relatively few engineers. Repetitive work with logs consumed attention that was also needed for deeper technical analysis and customer-facing delivery.
+
+**Task**  
+Create an internal tool that addressed this recurring engineering bottleneck within an interface the team already used.
+
+**Action**
+- Identified the mismatch between the team's engineering capacity and the volume of investigation work.
+- Built a log-based automation tool and extended the internal chatbot with that capability.
+- Focused the tool on supporting engineers' work with test and infrastructure logs.
+
+**Result**  
+Created an internal automation capability connected to the team's existing chatbot. This complemented the automated test workflow by addressing the investigation work around test execution.
+
+**Business impact**  
+The tool targeted an operational constraint in delivering large customer projects: limited engineering capacity. Its intended value was to make routine log work more manageable and preserve engineers' attention for issues requiring judgement. Time savings and adoption rates were not formally measured.
+
+**Customer value**  
+The customer benefit was indirect: better-supported engineers could focus more attention on understanding integration issues and progressing customer work. No customer satisfaction score or direct customer endorsement is claimed for this internal tool.
+
+**Leadership demonstrated:** Internal product thinking—recognising a user problem, building around an existing workflow, and connecting engineering tooling to delivery needs.
+
+> **How to read customer impact:** Recovery, test scale, tool development and runbook reuse are reported outcomes. Customer-value statements explain why those outcomes matter; they are not survey results, testimonials, measured CSAT improvements or quantified downtime savings.
 
 ## Earlier Engineering and Research
 
