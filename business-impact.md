@@ -220,3 +220,107 @@ A previously reviewed reconciliation snapshot recorded nominal net **−£114,88
 5. Sign-off from the business owner before claiming realised GBP savings.
 
 **ROI formula:** `(validated annual benefit - annual operating cost) / implementation cost × 100%`. Count avoided losses separately from labour savings, and do not count a financial variance as recovered funds.
+
+
+---
+
+## Detailed credit risk and lending projects
+
+The following case studies expand on my lending work at London Mutual Credit Union. They distinguish development-stage research, calculated risk indicators, measured pilot results and illustrative business-impact estimates.
+
+### 1. Narrative credit assessment and GRPO-based score adjustment
+
+**Status:** Approach designed; training completion and predictive improvement have not yet been established.
+
+**Purpose and inputs**  
+Develop an internal adjustment score that can be considered alongside FICO scores, using loan officers' detailed narrative assessments and insights. Some assessments extend to approximately four A4 pages.
+
+**Situation**  
+Loan officers recorded detailed application-specific reasoning in free text. A structured approach was needed to incorporate that information into internal credit assessment alongside an existing bureau score.
+
+**Task**  
+Design a method to structure long-form assessments and generate an internal adjustment value with an accompanying explanation.
+
+**Action**
+- Designed a model approach that takes the officer's narrative assessment as input and produces an internal adjustment score and supporting rationale.
+- Included Group Relative Policy Optimization (GRPO) in the proposed learning approach to improve generated outputs against defined reward criteria.
+- Explored an additive combination of the internal adjustment and FICO score. The combination remains a design proposal requiring calibration and validation.
+
+**Result**  
+Defined the scope of an internal score-adjustment project connecting narrative judgement with bureau-based assessment. Reward design, completed training runs and measured performance improvements remain to be validated.
+
+**Business impact — intended**  
+Help loan officers review qualitative judgement systematically, with a traceable connection between narrative evidence, an internal score and its explanation. No improvement in default prediction or underwriting accuracy is claimed at this stage.
+
+### 2. Internal credit score and ECL calculation pipeline
+
+**Tools and methods:** Python, pandas, NumPy, scikit-learn; internal scoring and risk-band mapping; IFRS 9-related staging and PD horizons; PSI monitoring.
+
+**Situation**  
+Credit-bureau attributes and application information needed to be transformed into consistent internal risk indicators for analysis.
+
+**Task**  
+Develop a pipeline from 36 source columns to eight derived outputs: **Credit Score, Risk Band, 12-month PD, IFRS 9 Stage, Applied PD, LGD, EAD and ECL**.
+
+**Action**
+- Designed an internal Credit Score using bureau attributes such as arrears history, active accounts, court judgements, CIFAS and electoral-roll information, together with income, expenditure, employment and housing information.
+- Mapped scores into risk bands A–E and assigned non-overlapping 12-month PD ranges. Calculated mean PDs ranged from approximately **1.4% for band A to 85% for band E**.
+- Implemented Stage 1, 2 and 3 classification and an adjusted PD treatment for Stages 2 and 3, with an average uplift of approximately **1.5×** in the described implementation.
+- Applied two LGD assumptions (**0.75 and 0.45**), calculated EAD and produced ECL using **PD × LGD × EAD**.
+- Calculated annual PSI comparisons using 2017–2021 as the reference period for distribution monitoring.
+- Identified and addressed data-quality issues, including missing application dates in approximately **40%** of records and shifted columns.
+
+**Result**  
+Generated eight derived credit-risk indicators across **73,367 records**, with the following stage distribution:
+
+| Assigned stage | Records |
+|---|---:|
+| Stage 1 | 45,327 |
+| Stage 2 | 25,549 |
+| Stage 3 | 2,491 |
+| **Total** | **73,367** |
+
+**Business impact**  
+Created a structured analytical dataset connecting source attributes to internal scores, risk bands and expected-loss calculations, supporting review of portfolio composition and data quality.
+
+**Interpretation of the outputs**  
+These are calculated indicators under the implementation's scoring, staging and parameter assumptions. They do not, by themselves, establish validated default probabilities or a production-approved IFRS 9 impairment model. The score construction, significant-increase-in-credit-risk (SICR) criteria, lifetime-PD methodology and loss assumptions require documented validation. An average PD uplift alone does not establish lifetime PD.
+
+### 3. Loan approval model — pilot evaluation and business impact
+
+**Evaluation tools:** AUC, Gini, KS and decision agreement; Python and scikit-learn.
+
+**Situation and task**  
+Existing third-party loan scores did not align sufficiently with manual underwriting decisions. I developed an internal model to support those decisions and connected it to CU Online.
+
+**Evaluation approach**  
+Compared model probabilities and decisions with a test officer's manual assessment of **24 applications**. Discrimination metrics use the **21 applications classified as approval or decline**, excluding three REFER cases. One “approved, waiting for documents” case is counted as an approval.
+
+**Measured pilot results**
+
+| Metric | Internal model | Existing third-party score |
+|---|---:|---:|
+| AUC | **0.933** | 0.760 |
+| Gini | **0.865** | 0.519 |
+| KS | **0.846** | 0.625 |
+| Decision agreement, all 24 cases | **70.8%** | 37.5% |
+| Actual declines classified as declines | **7 / 8** | 5 / 8 |
+
+Decision agreement reflects the pilot's decision mapping and thresholds; it is distinct from the threshold-independent AUC comparison.
+
+**Result**  
+The internal model showed stronger discrimination and agreement with manual decisions in this pilot. Integration with the CU Online operating system was completed.
+
+**Evaluation boundary**  
+The target is the **underwriting approval decision, not subsequent default**. This small pilot provides initial evidence; the metrics should not be interpreted as validated default-risk performance or as results from a 1,000-case evaluation.
+
+**Business impact — measured and estimated**
+
+| Evidence type | Finding or scenario |
+|---|---|
+| Measured pilot | Improved approval-decision discrimination and agreement with the manual assessment. |
+| Simple extrapolation | If agreement rates of 70.8% and 37.5% were maintained, approximately **708 vs 375 decisions per 1,000** would agree with the assessor: about **333 additional agreements**. This is not a measured larger-sample result or a forecast with quantified uncertainty. |
+| Illustrative time-saving scenario | A **10% reduction** from an assumed **20-minute review** would save **2 minutes per application**, or approximately **33 hours per 1,000 applications**. Neither the baseline nor the reduction has been measured. |
+| Expected operational benefit | Scores, SHAP explanations and summaries could support new loan officers and reduce reliance on external scoring services. Actual cost savings depend on contract costs and the scope of replacement. |
+
+*Time savings are assumption-based scenarios requiring before-and-after measurement. Additional agreement with an assessor does not automatically imply fewer defaults, reduced credit losses or realised financial savings.*
