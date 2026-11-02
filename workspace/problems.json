@@ -1,0 +1,997 @@
+[
+  {
+    "id": 547,
+    "title": "Number of Provinces",
+    "file": "find_circle_num.py",
+    "rules": [
+      "Given a symmetric n × n adjacency matrix, 1 means two cities are directly connected.",
+      "A province contains all cities connected directly or indirectly; every city belongs to exactly one province.",
+      "Return the number of provinces."
+    ],
+    "examples": "Example 1:\n\n\nInput: isConnected = [[1,1,0],[1,1,0],[0,0,1]]\nOutput: 2\nExample 2:\n\n\nInput: isConnected = [[1,0,0],[0,1,0],[0,0,1]]\nOutput: 3",
+    "constraints": "1 <= n <= 200\nn == isConnected.length\nn == isConnected[i].length\nisConnected[i][j] is 1 or 0.\nisConnected[i][i] == 1\nisConnected[i][j] == isConnected[j][i]",
+    "method": "findCircleNum",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def findCircleNum(self, isConnected: List[List[int]]) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          [
+            [
+              1,
+              1,
+              0
+            ],
+            [
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ]
+        ],
+        "expected": 3
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          [
+            [
+              1
+            ]
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              1
+            ]
+          ]
+        ],
+        "expected": 1
+      }
+    ]
+  },
+  {
+    "id": 802,
+    "title": "Find Eventual Safe States",
+    "file": "eventual_safe_nodes.py",
+    "rules": [
+      "graph[i] lists the outgoing neighbors of node i in a directed graph.",
+      "A terminal node has no outgoing edges. A node is safe only if every possible path from it eventually reaches a terminal node.",
+      "Return all safe node IDs in ascending order; cycles and nodes that can reach cycles are unsafe."
+    ],
+    "examples": "Example 1:\n\nIllustration of graph\nInput: graph = [[1,2],[2,3],[5],[0],[5],[],[]]\nOutput: [2,4,5,6]\nExplanation: The given graph is shown above.\nNodes 5 and 6 are terminal nodes as there are no outgoing edges from either of them.\nEvery path starting at nodes 2, 4, 5, and 6 all lead to either node 5 or 6.\nExample 2:\n\nInput: graph = [[1,2,3,4],[1,2],[3,4],[0,4],[]]\nOutput: [4]\nExplanation:\nOnly node 4 is a terminal node, and every path starting at node 4 leads to node 4.",
+    "constraints": "n == graph.length\n1 <= n <= 104\n0 <= graph[i].length <= n\n0 <= graph[i][j] <= n - 1\ngraph[i] is sorted in a strictly increasing order.\nThe graph may contain self-loops.\nThe number of edges in the graph will be in the range [1, 4 * 104].",
+    "method": "eventualSafeNodes",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def eventualSafeNodes(self, graph: List[List[int]]) -> List[int]:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          [
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              5
+            ],
+            [
+              0
+            ],
+            [
+              5
+            ],
+            [],
+            []
+          ]
+        ],
+        "expected": [
+          2,
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "args": [
+          [
+            [
+              1,
+              2,
+              3,
+              4
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              0,
+              4
+            ],
+            []
+          ]
+        ],
+        "expected": [
+          4
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          [
+            [
+              0
+            ]
+          ]
+        ],
+        "expected": []
+      },
+      {
+        "args": [
+          [
+            [
+              1
+            ],
+            []
+          ]
+        ],
+        "expected": [
+          0,
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "id": 841,
+    "title": "Keys and Rooms",
+    "file": "can_visit_all_rooms.py",
+    "rules": [
+      "Start in room 0; all other rooms are locked.",
+      "rooms[i] contains keys to rooms you may unlock after visiting room i. Keep all collected keys.",
+      "Return True if every room is reachable, otherwise False."
+    ],
+    "examples": "Example 1:\n\nInput: rooms = [[1],[2],[3],[]]\nOutput: true\nExplanation: \nWe visit room 0 and pick up key 1.\nWe then visit room 1 and pick up key 2.\nWe then visit room 2 and pick up key 3.\nWe then visit room 3.\nSince we were able to visit every room, we return true.\nExample 2:\n\nInput: rooms = [[1,3],[3,0,1],[2],[0]]\nOutput: false\nExplanation: We can not enter room number 2 since the only key that unlocks it is in that room.",
+    "constraints": "n == rooms.length\n2 <= n <= 1000\n0 <= rooms[i].length <= 1000\n1 <= sum(rooms[i].length) <= 3000\n0 <= rooms[i][j] < n\nAll the values of rooms[i] are unique.",
+    "method": "canVisitAllRooms",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def canVisitAllRooms(self, rooms: List[List[int]]) -> bool:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ],
+            []
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            [
+              1,
+              3
+            ],
+            [
+              3,
+              0,
+              1
+            ],
+            [
+              2
+            ],
+            [
+              0
+            ]
+          ]
+        ],
+        "expected": false
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          [
+            [
+              1
+            ],
+            []
+          ]
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          [
+            [
+              0
+            ],
+            [
+              0
+            ]
+          ]
+        ],
+        "expected": false
+      }
+    ]
+  },
+  {
+    "id": 1129,
+    "title": "Shortest Path with Alternating Colors",
+    "file": "shortest_alternating_paths.py",
+    "rules": [
+      "The directed graph has nodes 0 through n − 1 and red or blue edges; loops and parallel edges are allowed.",
+      "Find shortest paths starting at node 0 with alternating edge colors. Either color may come first.",
+      "Return n distances, using −1 for unreachable nodes and 0 for node 0."
+    ],
+    "examples": "Example 1:\n\nInput: n = 3, redEdges = [[0,1],[1,2]], blueEdges = []\nOutput: [0,1,-1]\nExample 2:\n\nInput: n = 3, redEdges = [[0,1]], blueEdges = [[2,1]]\nOutput: [0,1,-1]",
+    "constraints": "1 <= n <= 100\n0 <= redEdges.length, blueEdges.length <= 400\nredEdges[i].length == blueEdges[j].length == 2\n0 <= ai, bi, uj, vj < n",
+    "method": "shortestAlternatingPaths",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def shortestAlternatingPaths(self, n: int, redEdges: List[List[int]], blueEdges: List[List[int]]) -> List[int]:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          3,
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ],
+          []
+        ],
+        "expected": [
+          0,
+          1,
+          -1
+        ]
+      },
+      {
+        "args": [
+          3,
+          [
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              2,
+              1
+            ]
+          ]
+        ],
+        "expected": [
+          0,
+          1,
+          -1
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          1,
+          [],
+          []
+        ],
+        "expected": [
+          0
+        ]
+      },
+      {
+        "args": [
+          3,
+          [
+            [
+              0,
+              1
+            ]
+          ],
+          [
+            [
+              1,
+              2
+            ]
+          ]
+        ],
+        "expected": [
+          0,
+          1,
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1376,
+    "title": "Time Needed to Inform All Employees",
+    "file": "num_of_minutes.py",
+    "rules": [
+      "The manager array describes a rooted employee tree; manager[headID] = −1.",
+      "The head starts spreading news. Employee i takes informTime[i] minutes to inform all direct reports, who then spread it concurrently.",
+      "Return the time until every employee has received the news."
+    ],
+    "examples": "Example 1:\n\nInput: n = 1, headID = 0, manager = [-1], informTime = [0]\nOutput: 0\nExplanation: The head of the company is the only employee in the company.\nExample 2:\n\n\nInput: n = 6, headID = 2, manager = [2,2,-1,2,2,2], informTime = [0,0,1,0,0,0]\nOutput: 1\nExplanation: The head of the company with id = 2 is the direct manager of all the employees in the company and needs 1 minute to inform them all.\nThe tree structure of the employees in the company is shown.",
+    "constraints": "1 <= n <= 105\n0 <= headID < n\nmanager.length == n\n0 <= manager[i] < n\nmanager[headID] == -1\ninformTime.length == n\n0 <= informTime[i] <= 1000\ninformTime[i] == 0 if employee i has no subordinates.\nIt is guaranteed that all the employees can be informed.",
+    "method": "numOfMinutes",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def numOfMinutes(self, n: int, headID: int, manager: List[int], informTime: List[int]) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          1,
+          0,
+          [
+            -1
+          ],
+          [
+            0
+          ]
+        ],
+        "expected": 0
+      },
+      {
+        "args": [
+          6,
+          2,
+          [
+            2,
+            2,
+            -1,
+            2,
+            2,
+            2
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ]
+        ],
+        "expected": 1
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          3,
+          0,
+          [
+            -1,
+            0,
+            1
+          ],
+          [
+            2,
+            3,
+            0
+          ]
+        ],
+        "expected": 5
+      }
+    ]
+  },
+  {
+    "id": 1466,
+    "title": "Reorder Routes to Make All Paths Lead to the City Zero",
+    "file": "min_reorder.py",
+    "rules": [
+      "There are n cities and n − 1 directed roads whose underlying undirected graph is a tree.",
+      "Each [a, b] denotes a road from a to b; you may reverse roads.",
+      "Return the minimum reversals needed so every city can reach city 0."
+    ],
+    "examples": "Example 1:\n\n\nInput: n = 6, connections = [[0,1],[1,3],[2,3],[4,0],[4,5]]\nOutput: 3\nExplanation: Change the direction of edges show in red such that each node can reach the node 0 (capital).\nExample 2:\n\n\nInput: n = 5, connections = [[1,0],[1,2],[3,2],[3,4]]\nOutput: 2\nExplanation: Change the direction of edges show in red such that each node can reach the node 0 (capital).\nExample 3:\n\nInput: n = 3, connections = [[1,0],[2,0]]\nOutput: 0",
+    "constraints": "2 <= n <= 5 * 104\nconnections.length == n - 1\nconnections[i].length == 2\n0 <= ai, bi <= n - 1\nai != bi",
+    "method": "minReorder",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def minReorder(self, n: int, connections: List[List[int]]) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          6,
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              3
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              4,
+              0
+            ],
+            [
+              4,
+              5
+            ]
+          ]
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          5,
+          [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              3,
+              2
+            ],
+            [
+              3,
+              4
+            ]
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          3,
+          [
+            [
+              1,
+              0
+            ],
+            [
+              2,
+              0
+            ]
+          ]
+        ],
+        "expected": 0
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          2,
+          [
+            [
+              0,
+              1
+            ]
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          2,
+          [
+            [
+              1,
+              0
+            ]
+          ]
+        ],
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "id": 1192,
+    "title": "Critical Connections in a Network",
+    "file": "critical_connections.py",
+    "rules": [
+      "The n servers form a connected undirected graph with no duplicate connections or self-loops.",
+      "A connection is critical if removing it disconnects the network.",
+      "Return all critical connections in any order; either endpoint orientation is accepted."
+    ],
+    "examples": "Example 1:\n\n\nInput: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]\nOutput: [[1,3]]\nExplanation: [[3,1]] is also accepted.\nExample 2:\n\nInput: n = 2, connections = [[0,1]]\nOutput: [[0,1]]",
+    "constraints": "2 <= n <= 105\nn - 1 <= connections.length <= 105\n0 <= ai, bi <= n - 1\nai != bi\nThere are no repeated connections.",
+    "method": "criticalConnections",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def criticalConnections(self, n: int, connections: List[List[int]]) -> List[List[int]]:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          4,
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              1,
+              3
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            3
+          ]
+        ]
+      },
+      {
+        "args": [
+          2,
+          [
+            [
+              0,
+              1
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            0,
+            1
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          3,
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              0
+            ]
+          ]
+        ],
+        "expected": []
+      },
+      {
+        "args": [
+          3,
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              2
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1926,
+    "title": "Nearest Exit from Entrance in Maze",
+    "file": "nearest_exit.py",
+    "rules": [
+      "The maze contains empty cells (.) and walls (+); start at the given entrance.",
+      "Move one cell up, down, left, or right through empty cells. An exit is an empty boundary cell other than the entrance.",
+      "Return the fewest steps to an exit, or −1 if none is reachable."
+    ],
+    "examples": "Example 1:\n\n\nInput: maze = [[\"+\",\"+\",\".\",\"+\"],[\".\",\".\",\".\",\"+\"],[\"+\",\"+\",\"+\",\".\"]], entrance = [1,2]\nOutput: 1\nExplanation: There are 3 exits in this maze at [1,0], [0,2], and [2,3].\nInitially, you are at the entrance cell [1,2].\n- You can reach [1,0] by moving 2 steps left.\n- You can reach [0,2] by moving 1 step up.\nIt is impossible to reach [2,3] from the entrance.\nThus, the nearest exit is [0,2], which is 1 step away.\nExample 2:\n\n\nInput: maze = [[\"+\",\"+\",\"+\"],[\".\",\".\",\".\"],[\"+\",\"+\",\"+\"]], entrance = [1,0]\nOutput: 2\nExplanation: There is 1 exit in this maze at [1,2].\n[1,0] does not count as an exit since it is the entrance cell.\nInitially, you are at the entrance cell [1,0].\n- You can reach [1,2] by moving 2 steps right.\nThus, the nearest exit is [1,2], which is 2 steps away.\nExample 3:\n\n\nInput: maze = [[\".\",\"+\"]], entrance = [0,0]\nOutput: -1\nExplanation: There are no exits in this maze.",
+    "constraints": "maze.length == m\nmaze[i].length == n\n1 <= m, n <= 100\nmaze[i][j] is either '.' or '+'.\nentrance.length == 2\n0 <= entrancerow < m\n0 <= entrancecol < n\nentrance will always be an empty cell.",
+    "method": "nearestExit",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def nearestExit(self, maze: List[List[str]], entrance: List[int]) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          [
+            [
+              "+",
+              "+",
+              ".",
+              "+"
+            ],
+            [
+              ".",
+              ".",
+              ".",
+              "+"
+            ],
+            [
+              "+",
+              "+",
+              "+",
+              "."
+            ]
+          ],
+          [
+            1,
+            2
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            [
+              "+",
+              "+",
+              "+"
+            ],
+            [
+              ".",
+              ".",
+              "."
+            ],
+            [
+              "+",
+              "+",
+              "+"
+            ]
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          [
+            [
+              ".",
+              "+"
+            ]
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "expected": -1
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          [
+            [
+              "."
+            ]
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "expected": -1
+      },
+      {
+        "args": [
+          [
+            [
+              ".",
+              "."
+            ]
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "expected": 1
+      }
+    ]
+  },
+  {
+    "id": 934,
+    "title": "Shortest Bridge",
+    "file": "shortest_bridge.py",
+    "rules": [
+      "The square binary grid contains exactly two islands, each connected in four directions.",
+      "Flip water cells (0) into land (1) to connect the two islands.",
+      "Return the minimum number of water cells to flip."
+    ],
+    "examples": "Example 1:\n\nInput: grid = [[0,1],[1,0]]\nOutput: 1\nExample 2:\n\nInput: grid = [[0,1,0],[0,0,0],[0,0,1]]\nOutput: 2\nExample 3:\n\nInput: grid = [[1,1,1,1,1],[1,0,0,0,1],[1,0,1,0,1],[1,0,0,0,1],[1,1,1,1,1]]\nOutput: 1",
+    "constraints": "n == grid.length == grid[i].length\n2 <= n <= 100\ngrid[i][j] is either 0 or 1.\nThere are exactly two islands in grid.",
+    "method": "shortestBridge",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def shortestBridge(self, grid: List[List[int]]) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          [
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ]
+        ],
+        "expected": 2
+      },
+      {
+        "args": [
+          [
+            [
+              1,
+              1,
+              1,
+              1,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              1,
+              0,
+              1
+            ],
+            [
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            [
+              1,
+              1,
+              1,
+              1,
+              1
+            ]
+          ]
+        ],
+        "expected": 1
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              1
+            ]
+          ]
+        ],
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "id": 433,
+    "title": "Minimum Genetic Mutation",
+    "file": "min_mutation.py",
+    "rules": [
+      "Genes contain eight characters drawn from A, C, G, and T.",
+      "Each mutation changes exactly one character; every resulting gene must be in bank. The starting gene need not be in bank.",
+      "Return the minimum mutations from startGene to endGene, or −1 if impossible."
+    ],
+    "examples": "Example 1:\n\nInput: startGene = \"AACCGGTT\", endGene = \"AACCGGTA\", bank = [\"AACCGGTA\"]\nOutput: 1\nExample 2:\n\nInput: startGene = \"AACCGGTT\", endGene = \"AAACGGTA\", bank = [\"AACCGGTA\",\"AACCGCTA\",\"AAACGGTA\"]\nOutput: 2",
+    "constraints": "0 <= bank.length <= 10\nstartGene.length == endGene.length == bank[i].length == 8\nstartGene, endGene, and bank[i] consist of only the characters ['A', 'C', 'G', 'T'].",
+    "method": "minMutation",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def minMutation(self, startGene: str, endGene: str, bank: List[str]) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "AACCGGTT",
+          "AACCGGTA",
+          [
+            "AACCGGTA"
+          ]
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "AACCGGTT",
+          "AAACGGTA",
+          [
+            "AACCGGTA",
+            "AACCGCTA",
+            "AAACGGTA"
+          ]
+        ],
+        "expected": 2
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          "AACCGGTT",
+          "AACCGGTA",
+          []
+        ],
+        "expected": -1
+      }
+    ]
+  },
+  {
+    "id": 127,
+    "title": "Word Ladder",
+    "file": "ladder_length.py",
+    "rules": [
+      "Transform beginWord into endWord by changing exactly one letter per step.",
+      "Every word after beginWord must appear in wordList; beginWord itself need not appear.",
+      "Return the number of words in the shortest sequence, including both endpoints, or 0 if impossible."
+    ],
+    "examples": "Example 1:\n\nInput: beginWord = \"hit\", endWord = \"cog\", wordList = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\",\"cog\"]\nOutput: 5\nExplanation: One shortest transformation sequence is \"hit\" -> \"hot\" -> \"dot\" -> \"dog\" -> cog\", which is 5 words long.\nExample 2:\n\nInput: beginWord = \"hit\", endWord = \"cog\", wordList = [\"hot\",\"dot\",\"dog\",\"lot\",\"log\"]\nOutput: 0\nExplanation: The endWord \"cog\" is not in wordList, therefore there is no valid transformation sequence.",
+    "constraints": "1 <= beginWord.length <= 10\nendWord.length == beginWord.length\n1 <= wordList.length <= 5000\nwordList[i].length == beginWord.length\nbeginWord, endWord, and wordList[i] consist of lowercase English letters.\nbeginWord != endWord\nAll the words in wordList are unique.",
+    "method": "ladderLength",
+    "starter": "from typing import List\nfrom collections import deque, defaultdict\n\n\nclass Solution:\n    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "hit",
+          "cog",
+          [
+            "hot",
+            "dot",
+            "dog",
+            "lot",
+            "log",
+            "cog"
+          ]
+        ],
+        "expected": 5
+      },
+      {
+        "args": [
+          "hit",
+          "cog",
+          [
+            "hot",
+            "dot",
+            "dog",
+            "lot",
+            "log"
+          ]
+        ],
+        "expected": 0
+      }
+    ],
+    "extra": [
+      {
+        "args": [
+          "a",
+          "c",
+          [
+            "a",
+            "b",
+            "c"
+          ]
+        ],
+        "expected": 2
+      }
+    ]
+  }
+]
