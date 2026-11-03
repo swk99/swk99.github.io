@@ -37,10 +37,10 @@ def evaluate(payload):
                 actual=json.loads(json.dumps(actual))
                 expected=case.get('expected')
                 ok=None if 'expected' not in case else normalize(actual)==normalize(expected)
-                results.append(dict(case=index+1,ok=ok,actual=actual,expected=expected))
+                results.append(dict(case=index+1,label=case.get("label"),ok=ok,actual=actual,expected=expected))
         except BaseException:
             sys.settrace(None)
-            results.append(dict(case=index+1,ok=False,error=traceback.format_exc(limit=6)))
+            results.append(dict(case=index+1,label=case.get("label"),ok=False,error=traceback.format_exc(limit=6)))
             break
         finally: sys.settrace(None)
     return dict(results=results,frames=frames,output=output.getvalue(),elapsed=round((time.monotonic()-started)*1000,1),traceTruncated=len(frames)>=2500)
