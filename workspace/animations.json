@@ -721,7 +721,8 @@
         ]
       ]
     ],
-    "expected": 1
+    "expected": 1,
+    "gridKind": "islands"
   },
   "433": {
     "nodes": [

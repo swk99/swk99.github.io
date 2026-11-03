@@ -31,7 +31,7 @@ export function installAnimations(anchor,getProblem){
 }
 function renderGrid(scene,frame,el){
  const grid=el('div',undefined,'animation-grid');grid.style.gridTemplateColumns=`repeat(${scene.grid[0].length}, minmax(30px, 64px))`;grid.setAttribute('role','img');grid.setAttribute('aria-label','예제 미로. '+frame.text);
- scene.grid.forEach((row,r)=>row.forEach((v,c)=>{const key=r+','+c,wall=v===1||v==='+';const cell=el('div',wall?'■':key,'animation-cell'+(wall?' wall':'')+(frame.active.includes(key)?' active':''));cell.title=`(${r},${c})${wall?' 벽':' 빈칸'}`;grid.append(cell);}));return grid;
+ scene.grid.forEach((row,r)=>row.forEach((v,c)=>{const key=r+','+c,wall=scene.gridKind!=='islands'&&(v===1||v==='+');const cell=el('div',wall?'■':key,'animation-cell'+(wall?' wall':'')+(scene.gridKind==='islands'&&v===1?' land':'')+(frame.active.includes(key)?' active':''));cell.title=`(${r},${c})${wall?' 벽':scene.gridKind==='islands'?(v===1?' 땅':' 물'):' 빈칸'}`;grid.append(cell);}));return grid;
 }
 function renderGraph(scene,frame){
  const ns='http://www.w3.org/2000/svg';const svg=(tag,attrs={},text)=>{const n=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n;};
