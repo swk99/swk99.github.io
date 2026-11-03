@@ -15,7 +15,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "도시 0과 1은 직접 연결되어 있습니다.",
+        "text": "Cities 0 and 1 are directly connected.",
         "active": [
           "0",
           "1"
@@ -25,7 +25,7 @@
         ]
       },
       {
-        "text": "연결된 도시들을 하나의 province로 묶습니다.",
+        "text": "Treat these connected cities as one province.",
         "active": [
           "0",
           "1"
@@ -35,14 +35,14 @@
         ]
       },
       {
-        "text": "도시 2는 따로 떨어진 또 하나의 province입니다.",
+        "text": "City 2 is separate and forms another province.",
         "active": [
           "2"
         ],
         "edges": []
       },
       {
-        "text": "서로 떨어진 묶음은 2개입니다.",
+        "text": "There are 2 disconnected groups, so the answer is 2.",
         "active": [
           "0",
           "1",
@@ -116,7 +116,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "5와 6은 나가는 간선이 없는 안전한 정점입니다.",
+        "text": "Nodes 5 and 6 have no outgoing edges, so they are safe.",
         "active": [
           "5",
           "6"
@@ -124,7 +124,7 @@
         "edges": []
       },
       {
-        "text": "2와 4에서 출발하면 반드시 5에서 끝납니다.",
+        "text": "Starting from 2 or 4 always leads to terminal node 5.",
         "active": [
           "2",
           "4",
@@ -136,7 +136,7 @@
         ]
       },
       {
-        "text": "0 → 1 → 3 → 0은 순환입니다. 이 순환에 들어갈 수 있으면 안전하지 않습니다.",
+        "text": "0 → 1 → 3 → 0 is a cycle. A node that can enter this cycle is not safe.",
         "active": [
           "0",
           "1",
@@ -149,7 +149,7 @@
         ]
       },
       {
-        "text": "안전한 정점: [2, 4, 5, 6]",
+        "text": "The safe nodes are [2, 4, 5, 6].",
         "active": [
           "2",
           "4",
@@ -214,14 +214,14 @@
     "grid": null,
     "steps": [
       {
-        "text": "0번 방에서 시작합니다.",
+        "text": "Start in room 0.",
         "active": [
           "0"
         ],
         "edges": []
       },
       {
-        "text": "0번 방의 열쇠로 1번 방을 엽니다.",
+        "text": "Use the key in room 0 to unlock room 1.",
         "active": [
           "0",
           "1"
@@ -231,7 +231,7 @@
         ]
       },
       {
-        "text": "1번 방의 열쇠로 2번 방을 엽니다.",
+        "text": "Use the key in room 1 to unlock room 2.",
         "active": [
           "1",
           "2"
@@ -241,7 +241,7 @@
         ]
       },
       {
-        "text": "2번 방의 열쇠로 3번 방까지 도착합니다. 모든 방 방문 → true",
+        "text": "Use the key in room 2 to reach room 3. Every room is visited: true.",
         "active": [
           "2",
           "3"
@@ -289,14 +289,14 @@
     "grid": null,
     "steps": [
       {
-        "text": "0번에서 시작. 거리는 0입니다.",
+        "text": "Start at node 0 with distance 0.",
         "active": [
           "0"
         ],
         "edges": []
       },
       {
-        "text": "빨간 간선으로 1번까지 1번 이동합니다.",
+        "text": "Follow the red edge to node 1 in one step.",
         "active": [
           "0",
           "1"
@@ -306,7 +306,7 @@
         ]
       },
       {
-        "text": "다음 간선도 빨간색이라 사용할 수 없습니다. 색은 번갈아야 합니다.",
+        "text": "The next edge is also red, so it cannot be used. Edge colors must alternate.",
         "active": [
           "1",
           "2"
@@ -316,7 +316,7 @@
         ]
       },
       {
-        "text": "정답 [0, 1, -1]. 2번은 조건을 지키며 도달할 수 없습니다.",
+        "text": "The answer is [0, 1, -1]. Node 2 cannot be reached while obeying the color rule.",
         "active": [
           "0",
           "1"
@@ -353,21 +353,21 @@
     "grid": null,
     "steps": [
       {
-        "text": "예제 1에는 직원이 한 명뿐이고 그 직원이 head입니다.",
+        "text": "Example 1 has only one employee, who is also the head.",
         "active": [
           "0 (head)"
         ],
         "edges": []
       },
       {
-        "text": "알려야 할 부하 직원이 없습니다.",
+        "text": "There are no direct reports to inform.",
         "active": [
           "0 (head)"
         ],
         "edges": []
       },
       {
-        "text": "따라서 전체 전파 시간은 0입니다.",
+        "text": "Therefore the total time is 0.",
         "active": [
           "0 (head)"
         ],
@@ -421,14 +421,14 @@
     "grid": null,
     "steps": [
       {
-        "text": "모든 도시가 0으로 갈 수 있어야 합니다.",
+        "text": "Every city must be able to reach city 0.",
         "active": [
           "0"
         ],
         "edges": []
       },
       {
-        "text": "0 → 1과 1 → 3은 반대 방향이어야 합니다.",
+        "text": "Edges 0 → 1 and 1 → 3 need to point the other way.",
         "active": [
           "0",
           "1",
@@ -440,7 +440,7 @@
         ]
       },
       {
-        "text": "2 → 3과 4 → 0은 그대로 사용할 수 있습니다.",
+        "text": "Edges 2 → 3 and 4 → 0 can keep their original directions.",
         "active": [
           "2",
           "3",
@@ -453,7 +453,7 @@
         ]
       },
       {
-        "text": "4 → 5도 뒤집어야 합니다. 뒤집을 간선은 총 3개입니다.",
+        "text": "Edge 4 → 5 also needs reversing. In total, reverse 3 edges.",
         "active": [
           "4",
           "5"
@@ -519,7 +519,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "0, 1, 2는 삼각형으로 연결되어 있습니다.",
+        "text": "Nodes 0, 1, and 2 form a triangle.",
         "active": [
           "0",
           "1",
@@ -532,7 +532,7 @@
         ]
       },
       {
-        "text": "삼각형 간선 하나가 끊겨도 돌아갈 길이 있습니다.",
+        "text": "Removing one triangle edge still leaves an alternative route.",
         "active": [
           "0",
           "2",
@@ -544,7 +544,7 @@
         ]
       },
       {
-        "text": "하지만 1—3을 끊으면 3이 고립됩니다.",
+        "text": "Removing edge 1—3, however, isolates node 3.",
         "active": [
           "1",
           "3"
@@ -554,7 +554,7 @@
         ]
       },
       {
-        "text": "유일한 critical connection은 [1, 3]입니다.",
+        "text": "The only critical connection is [1, 3].",
         "active": [
           "1",
           "3"
@@ -618,14 +618,14 @@
     ],
     "steps": [
       {
-        "text": "입구 (1,2)에서 시작합니다. 입구 자체는 출구로 세지 않습니다.",
+        "text": "Start at entrance (1,2). The entrance itself does not count as an exit.",
         "active": [
           "1,2"
         ],
         "edges": []
       },
       {
-        "text": "위쪽 (0,2)는 경계의 빈칸입니다.",
+        "text": "Cell (0,2), immediately above, is an empty boundary cell.",
         "active": [
           "1,2",
           "0,2"
@@ -633,7 +633,7 @@
         "edges": []
       },
       {
-        "text": "한 번 이동하면 출구에 도착합니다. 정답 1.",
+        "text": "One move reaches the exit. The answer is 1.",
         "active": [
           "0,2"
         ],
@@ -684,7 +684,7 @@
     ],
     "steps": [
       {
-        "text": "두 섬은 대각선에 있어 직접 연결되지 않습니다.",
+        "text": "The two islands are diagonal, so they are not directly connected.",
         "active": [
           "0,1",
           "1,0"
@@ -692,7 +692,7 @@
         "edges": []
       },
       {
-        "text": "물 (0,0)을 땅으로 바꿉니다.",
+        "text": "Change water cell (0,0) into land.",
         "active": [
           "0,1",
           "0,0"
@@ -700,7 +700,7 @@
         "edges": []
       },
       {
-        "text": "이제 상하좌우로 두 섬이 연결됩니다. 최소 변경 1칸.",
+        "text": "The islands now connect through horizontal or vertical moves. Only 1 water cell needs changing.",
         "active": [
           "0,1",
           "0,0",
@@ -739,14 +739,14 @@
     "grid": null,
     "steps": [
       {
-        "text": "시작 유전자는 AACCGGTT입니다.",
+        "text": "The starting gene is AACCGGTT.",
         "active": [
           "AACCGGTT"
         ],
         "edges": []
       },
       {
-        "text": "마지막 글자 T를 A로 바꿉니다. 새 유전자는 bank에 있어야 합니다.",
+        "text": "Change the last character from T to A. The resulting gene must be in bank.",
         "active": [
           "AACCGGTT",
           "AACCGGTA"
@@ -756,7 +756,7 @@
         ]
       },
       {
-        "text": "목표 AACCGGTA에 도달했습니다. 변이 횟수 1.",
+        "text": "The target AACCGGTA has been reached with 1 mutation.",
         "active": [
           "AACCGGTA"
         ],
@@ -816,14 +816,14 @@
     "grid": null,
     "steps": [
       {
-        "text": "hit에서 시작합니다. 한 번에 한 글자만 바꿉니다.",
+        "text": "Start at hit. Change only one character per step.",
         "active": [
           "hit"
         ],
         "edges": []
       },
       {
-        "text": "hit → hot. hot은 wordList에 있습니다.",
+        "text": "hit → hot. The new word hot is in wordList.",
         "active": [
           "hit",
           "hot"
@@ -833,7 +833,7 @@
         ]
       },
       {
-        "text": "hot → dot → dog. 중간 단어도 목록에 있어야 합니다.",
+        "text": "hot → dot → dog. Every intermediate word must also be in the list.",
         "active": [
           "hot",
           "dot",
@@ -845,7 +845,7 @@
         ]
       },
       {
-        "text": "dog → cog. 단어 수는 hit, hot, dot, dog, cog = 5입니다.",
+        "text": "dog → cog. The sequence hit, hot, dot, dog, cog contains 5 words.",
         "active": [
           "dog",
           "cog"
@@ -887,7 +887,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "같은 이름이라는 이유만으로 합치지는 않습니다.",
+        "text": "Matching names alone are not enough to merge accounts.",
         "active": [
           "John #1",
           "John #2",
@@ -896,7 +896,7 @@
         "edges": []
       },
       {
-        "text": "첫 두 John 계정은 johnsmith@mail.com을 공유합니다.",
+        "text": "The first two John accounts share johnsmith@mail.com.",
         "active": [
           "John #1",
           "John #2"
@@ -906,7 +906,7 @@
         ]
       },
       {
-        "text": "이 두 계정의 이메일을 중복 없이 모으고 사전순으로 정렬합니다.",
+        "text": "Combine these accounts, remove duplicate emails, and sort the remaining emails.",
         "active": [
           "John #1",
           "John #2"
@@ -916,7 +916,7 @@
         ]
       },
       {
-        "text": "Mary와 마지막 John은 따로 남습니다. 결과 계정 묶음은 3개입니다.",
+        "text": "Mary and the last John remain separate. The result has 3 account groups.",
         "active": [
           "Mary",
           "John #3"
@@ -979,7 +979,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "a == b이므로 두 변수를 같은 묶음으로 합칩니다.",
+        "text": "a == b forces both variables into the same group.",
         "active": [
           "a",
           "b"
@@ -989,7 +989,7 @@
         ]
       },
       {
-        "text": "그런데 b != a도 동시에 요구합니다.",
+        "text": "But b != a also requires them to have different values.",
         "active": [
           "b",
           "a"
@@ -999,7 +999,7 @@
         ]
       },
       {
-        "text": "같아야 하면서 달라야 하므로 모순입니다. 정답 false.",
+        "text": "These requirements contradict each other. The answer is false.",
         "active": [
           "a",
           "b"
@@ -1027,7 +1027,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "같다고 알려진 문자들을 전이적으로 묶습니다.",
+        "text": "Collect characters into transitive equivalence groups.",
         "active": [
           "m,p",
           "a,o",
@@ -1037,7 +1037,7 @@
         "edges": []
       },
       {
-        "text": "각 묶음에서 가장 작은 문자 m, a, k, e를 대표로 고릅니다.",
+        "text": "Choose the smallest character in each group: m, a, k, and e.",
         "active": [
           "m,p",
           "a,o",
@@ -1047,14 +1047,14 @@
         "edges": []
       },
       {
-        "text": "parser의 p→m, a→a, r→k, s→k, e→e, r→k를 적용합니다.",
+        "text": "For parser, apply p→m, a→a, r→k, s→k, e→e, and r→k.",
         "active": [
           "k,r,s"
         ],
         "edges": []
       },
       {
-        "text": "최종 문자열: makkek",
+        "text": "The resulting string is makkek.",
         "active": [
           "m,p",
           "a,o",
@@ -1092,7 +1092,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "tars와 rats는 한 번의 자리 교환으로 같아집니다.",
+        "text": "tars and rats can become equal with one swap.",
         "active": [
           "tars",
           "rats"
@@ -1102,7 +1102,7 @@
         ]
       },
       {
-        "text": "rats와 arts도 비슷합니다. 세 단어가 같은 연결 묶음이 됩니다.",
+        "text": "rats and arts are also similar, connecting all three words.",
         "active": [
           "rats",
           "arts"
@@ -1112,7 +1112,7 @@
         ]
       },
       {
-        "text": "tars와 arts가 직접 비슷하지 않아도 연결되어 있으면 같은 그룹입니다.",
+        "text": "tars and arts need not be directly similar: the chain through rats puts them in the same group.",
         "active": [
           "tars",
           "rats",
@@ -1124,7 +1124,7 @@
         ]
       },
       {
-        "text": "star는 따로 떨어집니다. 그룹 수는 2입니다.",
+        "text": "star is separate. There are 2 groups.",
         "active": [
           "star"
         ],
@@ -1156,7 +1156,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "[1,0]은 0을 먼저 듣고 1을 들어야 한다는 뜻입니다.",
+        "text": "[1,0] means course 0 must be completed before course 1.",
         "active": [
           "0",
           "1"
@@ -1166,14 +1166,14 @@
         ]
       },
       {
-        "text": "선수과목이 없는 0을 먼저 이수합니다.",
+        "text": "Take course 0, which has no prerequisites.",
         "active": [
           "0"
         ],
         "edges": []
       },
       {
-        "text": "이제 1을 이수할 수 있습니다.",
+        "text": "Course 1 is now available.",
         "active": [
           "1"
         ],
@@ -1182,7 +1182,7 @@
         ]
       },
       {
-        "text": "모두 이수 가능 → true",
+        "text": "Both courses can be completed, so return true.",
         "active": [
           "0",
           "1"
@@ -1216,7 +1216,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "[1,0]은 0을 먼저 듣고 1을 들어야 한다는 뜻입니다.",
+        "text": "[1,0] means course 0 must be completed before course 1.",
         "active": [
           "0",
           "1"
@@ -1226,14 +1226,14 @@
         ]
       },
       {
-        "text": "선수과목이 없는 0을 먼저 이수합니다.",
+        "text": "Take course 0, which has no prerequisites.",
         "active": [
           "0"
         ],
         "edges": []
       },
       {
-        "text": "이제 1을 이수할 수 있습니다.",
+        "text": "Course 1 is now available.",
         "active": [
           "1"
         ],
@@ -1242,7 +1242,7 @@
         ]
       },
       {
-        "text": "가능한 수강 순서 → [0, 1]",
+        "text": "A valid course order is [0, 1].",
         "active": [
           "0",
           "1"
@@ -1294,7 +1294,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "wrt와 wrf의 첫 다른 글자는 t와 f입니다. t < f.",
+        "text": "The first different letters in wrt and wrf are t and f, so t < f.",
         "active": [
           "t",
           "f"
@@ -1304,7 +1304,7 @@
         ]
       },
       {
-        "text": "wrf와 er에서는 w < e, er와 ett에서는 r < t를 얻습니다.",
+        "text": "wrf before er gives w < e. er before ett gives r < t.",
         "active": [
           "w",
           "e",
@@ -1317,7 +1317,7 @@
         ]
       },
       {
-        "text": "ett와 rftt에서는 e < r를 얻습니다.",
+        "text": "ett before rftt gives e < r.",
         "active": [
           "e",
           "r"
@@ -1327,7 +1327,7 @@
         ]
       },
       {
-        "text": "연결된 순서를 따르면 w → e → r → t → f, 즉 wertf입니다.",
+        "text": "Following the constraints gives w → e → r → t → f, or wertf.",
         "active": [
           "w",
           "e",
@@ -1391,7 +1391,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "그룹 0={3,4,6}, 그룹 1={2,5}; 나머지는 그룹이 없습니다.",
+        "text": "Group 0 contains {3,4,6}; group 1 contains {2,5}. The other items have no group.",
         "active": [
           "3",
           "4",
@@ -1400,7 +1400,7 @@
         "edges": []
       },
       {
-        "text": "그룹 0 내부의 선수 관계를 따르면 6 → 3 → 4입니다.",
+        "text": "Within group 0, the dependencies give the order 6 → 3 → 4.",
         "active": [
           "6",
           "3",
@@ -1413,7 +1413,7 @@
         ]
       },
       {
-        "text": "6을 끝냈으므로 1을 배치하고, 그룹 1은 5 → 2로 붙여 둡니다.",
+        "text": "After 6 is done, place 1. Keep group 1 together in the order 5 → 2.",
         "active": [
           "1",
           "5",
@@ -1425,7 +1425,7 @@
         ]
       },
       {
-        "text": "0,7을 추가하면 [6,3,4,1,5,2,0,7]. 같은 그룹은 연속이며 모든 선수 조건을 지킵니다.",
+        "text": "Append 0 and 7: [6,3,4,1,5,2,0,7]. Groups stay contiguous and all dependencies are respected.",
         "active": [
           "0",
           "1",
@@ -1513,14 +1513,14 @@
     "grid": null,
     "steps": [
       {
-        "text": "0번에서 a를 한 번 만납니다.",
+        "text": "At node 0, color a has appeared once.",
         "active": [
           "0:a"
         ],
         "edges": []
       },
       {
-        "text": "0 → 2로 이동하면 a가 두 번입니다.",
+        "text": "Following 0 → 2 gives two occurrences of a.",
         "active": [
           "0:a",
           "2:a"
@@ -1530,7 +1530,7 @@
         ]
       },
       {
-        "text": "2 → 3 → 4를 따르면 a, a, c, a가 됩니다.",
+        "text": "Continue 2 → 3 → 4. The full path has colors a, a, c, a.",
         "active": [
           "2:a",
           "3:c",
@@ -1542,7 +1542,7 @@
         ]
       },
       {
-        "text": "가장 자주 등장하는 색 a의 개수는 3입니다.",
+        "text": "The most frequent color is a, appearing 3 times.",
         "active": [
           "0:a",
           "2:a",
@@ -1616,7 +1616,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "0에서 3으로, 경유지는 최대 1개입니다. 즉 최대 2개 항공편.",
+        "text": "Travel from 0 to 3 with at most 1 stop: at most 2 flights.",
         "active": [
           "0",
           "3"
@@ -1624,7 +1624,7 @@
         "edges": []
       },
       {
-        "text": "0 → 1 → 2 → 3은 400이지만 경유지가 2개라 불가능합니다.",
+        "text": "0 → 1 → 2 → 3 costs 400, but its 2 stops make it invalid.",
         "active": [
           "0",
           "1",
@@ -1638,7 +1638,7 @@
         ]
       },
       {
-        "text": "0 → 1 → 3은 경유지가 1개이고 비용은 100 + 600입니다.",
+        "text": "0 → 1 → 3 uses 1 stop and costs 100 + 600.",
         "active": [
           "0",
           "1",
@@ -1650,7 +1650,7 @@
         ]
       },
       {
-        "text": "허용되는 최저 가격은 700입니다.",
+        "text": "The cheapest permitted price is 700.",
         "active": [
           "0",
           "1",
@@ -1724,7 +1724,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "직행 0 → 2의 성공 확률은 0.2입니다.",
+        "text": "The direct route 0 → 2 has success probability 0.2.",
         "active": [
           "0",
           "2"
@@ -1734,7 +1734,7 @@
         ]
       },
       {
-        "text": "0 → 1 → 2의 성공 확률은 간선 확률을 곱한 0.5 × 0.5입니다.",
+        "text": "The route 0 → 1 → 2 succeeds with probability 0.5 × 0.5.",
         "active": [
           "0",
           "1",
@@ -1746,7 +1746,7 @@
         ]
       },
       {
-        "text": "0.25 > 0.2이므로 간접 경로가 더 좋습니다. 정답 0.25.",
+        "text": "Since 0.25 > 0.2, the indirect route is better. Return 0.25.",
         "active": [
           "0",
           "1",
@@ -1827,28 +1827,28 @@
     ],
     "steps": [
       {
-        "text": "공은 (0,4)에서 시작합니다. 벽 또는 경계까지 굴러야 멈춥니다.",
+        "text": "Start at (0,4). The ball keeps rolling until a wall or boundary stops it.",
         "active": [
           "0,4"
         ],
         "edges": []
       },
       {
-        "text": "왼쪽 1칸: (0,3). 누적 거리 1.",
+        "text": "Left 1 cell to (0,3). Total distance: 1.",
         "active": [
           "0,3"
         ],
         "edges": []
       },
       {
-        "text": "아래 1칸: (1,3). 누적 거리 2.",
+        "text": "Down 1 cell to (1,3). Total distance: 2.",
         "active": [
           "1,3"
         ],
         "edges": []
       },
       {
-        "text": "왼쪽 3칸: (1,0). 누적 거리 5.",
+        "text": "Left 3 cells to (1,0). Total distance: 5.",
         "active": [
           "1,2",
           "1,1",
@@ -1857,14 +1857,14 @@
         "edges": []
       },
       {
-        "text": "아래 1칸: (2,0). 누적 거리 6.",
+        "text": "Down 1 cell to (2,0). Total distance: 6.",
         "active": [
           "2,0"
         ],
         "edges": []
       },
       {
-        "text": "오른쪽 2칸: (2,2). 누적 거리 8.",
+        "text": "Right 2 cells to (2,2). Total distance: 8.",
         "active": [
           "2,1",
           "2,2"
@@ -1872,7 +1872,7 @@
         "edges": []
       },
       {
-        "text": "아래 2칸: (4,2). 누적 거리 10.",
+        "text": "Down 2 cells to (4,2). Total distance: 10.",
         "active": [
           "3,2",
           "4,2"
@@ -1880,7 +1880,7 @@
         "edges": []
       },
       {
-        "text": "오른쪽 2칸으로 목적지 (4,4)에 멈춥니다. 최단 거리 12.",
+        "text": "Right 2 cells and stop at destination (4,4). The shortest distance is 12.",
         "active": [
           "4,3",
           "4,4"
@@ -1980,7 +1980,7 @@
     ],
     "steps": [
       {
-        "text": "공은 (4,3), 구멍은 (0,1)입니다. 구멍을 만나면 즉시 멈춥니다.",
+        "text": "The ball starts at (4,3); the hole is at (0,1). Reaching the hole stops the roll immediately.",
         "active": [
           "4,3",
           "0,1"
@@ -1988,14 +1988,14 @@
         "edges": []
       },
       {
-        "text": "l: 왼쪽으로 (4,2)까지 1칸 굴립니다.",
+        "text": "l: roll left 1 cell to (4,2).",
         "active": [
           "4,2"
         ],
         "edges": []
       },
       {
-        "text": "u: 위로 (0,2)까지 4칸 굴립니다. 누적 5칸.",
+        "text": "u: roll up 4 cells to (0,2). Total distance: 5.",
         "active": [
           "3,2",
           "2,2",
@@ -2005,14 +2005,14 @@
         "edges": []
       },
       {
-        "text": "l: (0,1)의 구멍으로 1칸. 총 거리 6, 명령 lul.",
+        "text": "l: roll 1 cell into the hole at (0,1). Total distance: 6; instructions: lul.",
         "active": [
           "0,1"
         ],
         "edges": []
       },
       {
-        "text": "ul도 거리 6이지만 l < u이므로 사전순으로 더 작은 lul을 반환합니다.",
+        "text": "ul also has distance 6, but l < u, so lul is lexicographically smaller and is returned.",
         "active": [
           "0,1"
         ],
@@ -2095,7 +2095,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "모든 도시를 최소 비용으로 연결해야 합니다.",
+        "text": "Connect every city with the smallest total cost.",
         "active": [
           "1",
           "2",
@@ -2104,7 +2104,7 @@
         "edges": []
       },
       {
-        "text": "가장 싼 2—3 간선(1)을 선택합니다.",
+        "text": "Choose the cheapest edge, 2—3, with cost 1.",
         "active": [
           "2",
           "3"
@@ -2114,7 +2114,7 @@
         ]
       },
       {
-        "text": "1—2 간선(5)을 더하면 모든 도시가 연결됩니다.",
+        "text": "Add edge 1—2 with cost 5 to connect all cities.",
         "active": [
           "1",
           "2",
@@ -2126,7 +2126,7 @@
         ]
       },
       {
-        "text": "비용은 1+5=6. 나머지 간선은 필요 없습니다.",
+        "text": "The total is 1 + 5 = 6. The remaining edge is unnecessary.",
         "active": [
           "1",
           "2",
@@ -2194,12 +2194,12 @@
     "grid": null,
     "steps": [
       {
-        "text": "간선 비용은 |x차이| + |y차이|입니다.",
+        "text": "An edge costs |x difference| + |y difference|, the Manhattan distance.",
         "active": [],
         "edges": []
       },
       {
-        "text": "1—3을 비용 3으로 연결합니다.",
+        "text": "Connect points 1—3 with cost 3.",
         "active": [
           "1:(2,2)",
           "3:(5,2)"
@@ -2209,7 +2209,7 @@
         ]
       },
       {
-        "text": "0—1과 3—4를 각각 비용 4로 연결합니다.",
+        "text": "Connect 0—1 and 3—4, each with cost 4.",
         "active": [
           "0:(0,0)",
           "1:(2,2)",
@@ -2223,7 +2223,7 @@
         ]
       },
       {
-        "text": "남은 2를 1에 비용 9로 연결합니다. 총 3+4+4+9=20.",
+        "text": "Connect the remaining point 2 to point 1 with cost 9. Total: 3 + 4 + 4 + 9 = 20.",
         "active": [],
         "edges": [
           0,
@@ -2308,7 +2308,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "MST는 모든 정점을 최소 비용으로 연결하며 순환이 없어야 합니다.",
+        "text": "An MST connects every node without cycles at the smallest total cost.",
         "active": [
           "0",
           "1",
@@ -2319,7 +2319,7 @@
         "edges": []
       },
       {
-        "text": "간선 #0과 #1은 모든 MST에 필요합니다. 빼면 최소 비용이 증가합니다.",
+        "text": "Edges #0 and #1 appear in every MST. Removing either increases the minimum cost.",
         "active": [
           "0",
           "1",
@@ -2331,7 +2331,7 @@
         ]
       },
       {
-        "text": "3을 붙일 때 #2 또는 #3 중 하나를 선택할 수 있습니다.",
+        "text": "To connect node 3, choose either edge #2 or edge #3.",
         "active": [
           "0",
           "2",
@@ -2343,7 +2343,7 @@
         ]
       },
       {
-        "text": "4를 붙일 때 #4 또는 #5 중 하나를 선택할 수 있습니다.",
+        "text": "To connect node 4, choose either edge #4 or edge #5.",
         "active": [
           "0",
           "3",
@@ -2355,7 +2355,7 @@
         ]
       },
       {
-        "text": "critical=[0,1], pseudo-critical=[2,3,4,5]. #6은 어떤 MST에도 쓰이지 않습니다.",
+        "text": "critical = [0,1], pseudo-critical = [2,3,4,5]. Edge #6 appears in no MST.",
         "active": [],
         "edges": [
           0,
@@ -2458,7 +2458,7 @@
     "grid": null,
     "steps": [
       {
-        "text": "water 노드에서 집으로 가는 간선은 우물을 짓는 비용입니다.",
+        "text": "An edge from the water node to a house represents the cost of building a well there.",
         "active": [
           "water"
         ],
@@ -2469,7 +2469,7 @@
         ]
       },
       {
-        "text": "집 1에 비용 1로 우물을 만듭니다.",
+        "text": "Build a well at house 1 for cost 1.",
         "active": [
           "water",
           "house 1"
@@ -2479,7 +2479,7 @@
         ]
       },
       {
-        "text": "집 1—2, 집 2—3에 각각 비용 1의 파이프를 놓습니다.",
+        "text": "Lay pipes between houses 1—2 and 2—3, each for cost 1.",
         "active": [
           "house 1",
           "house 2",
@@ -2491,7 +2491,7 @@
         ]
       },
       {
-        "text": "모든 집에 물이 공급됩니다. 최소 비용 1+1+1=3.",
+        "text": "Every house receives water. The minimum total cost is 1 + 1 + 1 = 3.",
         "active": [
           "water",
           "house 1",
