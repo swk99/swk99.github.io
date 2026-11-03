@@ -7,7 +7,7 @@ function save(){if(!current)return;try{localStorage.setItem('graph-workspace:'+c
 function refreshLines(){const text=value();$('gutter').textContent=text.split('\n').map((_,i)=>i+1).join('\n');const p=$('code').selectionStart;const before=text.slice(0,p).split('\n');$('position').textContent=`Ln ${before.length}, Col ${before.at(-1).length+1}`;}
 function buttons(){for(const id of ['run','debug','submit'])$(id).disabled=!ready||busy;$('stop').disabled=!busy&&!(!ready&&worker);$('case').disabled=busy;}
 function resetTrace(){frames=[];$('trace-controls').hidden=true;$('variables').hidden=true;if(aceEditor&&marker!=null){aceEditor.session.removeMarker(marker);marker=null;}}
-function openProblem(p){if(busy)stop('Execution stopped: module changed.');save();current=p;leetcodeLink.href='https://leetcode.com/problems/'+leetcodeSlugs[p.id]+'/description/';leetcodeLink.hidden=!leetcodeSlugs[p.id];resetTrace();$('filename').textContent=p.file;$('crumb').textContent=p.file;$('pid').textContent='#'+p.id;$('problem-title').textContent=p.title;$('rules').replaceChildren(...p.rules.map(r=>{const li=document.createElement('li');li.textContent=r;return li;}));$('examples').textContent=p.examples;$('constraints').textContent=p.constraints;$('custom').value=JSON.stringify(p.tests[0].args);$('test-count').textContent=`${p.tests.length} examples · ${p.extra.length} edge cases`;renderEdgeCases(p);
+function openProblem(p){if(busy)stop('Execution stopped: module changed.');save();current=p;if(editorialDialog.open)editorialDialog.close();leetcodeLink.href='https://leetcode.com/problems/'+(p.slug||leetcodeSlugs[p.id])+'/description/';leetcodeLink.hidden=!(p.slug||leetcodeSlugs[p.id]);resetTrace();$('filename').textContent=p.file;$('crumb').textContent=p.file;$('pid').textContent='#'+p.id;$('problem-title').textContent=p.title;$('rules').replaceChildren(...p.rules.map(r=>{const li=document.createElement('li');li.textContent=r;return li;}));$('examples').textContent=p.examples;renderExampleImages(p);$('constraints').textContent=p.constraints;$('custom').value=JSON.stringify(p.tests[0].args);$('test-count').textContent=`${p.tests.length} examples · ${p.extra.length} edge cases`;renderEdgeCases(p);
 let draft;try{draft=localStorage.getItem('graph-workspace:'+p.id);}catch(e){}$('code').value=draft??p.starter;if(aceEditor)aceEditor.setValue($('code').value,-1);refreshLines();$('output').textContent=`${p.file} ready. Implement Solution.${p.method}().`;history.replaceState(null,'','#'+p.id);renderFiles();}
 
 function renderEdgeCases(p) {
@@ -108,6 +108,62 @@ leetcodeLink.addEventListener('click', async () => {
     else {$('code').focus(); $('code').select();}
   }
 });
+
+
+function renderExampleImages(p) {
+  let area=$('example-images');
+  if(!area){area=document.createElement('div');area.id='example-images';$('examples').after(area);}
+  area.replaceChildren();
+  $('examples').parentElement.querySelector('.note').textContent=(p.images||[]).length?'Original example text and supplied diagram links.':'Original example text. Diagrams referenced in this text were not supplied as image links.';
+  (p.images||[]).forEach((url,index)=>{
+    const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';
+    const img=document.createElement('img');img.src=url;img.loading='lazy';img.alt=p.title+' · supplied example diagram '+(index+1);img.style.cssText='max-width:100%;height:auto;background:white;border-radius:5px;margin:8px 0';
+    a.append(img);area.append(a);
+  });
+}
+const editorialButton=document.createElement('button');
+editorialButton.id='editorial-button';editorialButton.textContent='해설 · 3가지 풀이';
+editorialButton.title='한국어 해설, Python 풀이 3가지, 시간·공간 복잡도';
+$('run').after(editorialButton);
+const editorialDialog=document.createElement('dialog');
+editorialDialog.id='editorial-dialog';editorialDialog.lang='ko';
+editorialDialog.setAttribute('aria-labelledby','editorial-title');
+document.body.append(editorialDialog);
+let editorialDataPromise;
+editorialButton.onclick=async()=>{
+  const selected=current;if(!selected)return;
+  editorialDialog.replaceChildren();
+  const head=document.createElement('div');head.className='editorial-head';
+  const title=document.createElement('h2');title.id='editorial-title';title.textContent=selected.id+' · '+selected.title;
+  const close=document.createElement('button');close.textContent='닫기 ×';close.onclick=()=>editorialDialog.close();head.append(title,close);
+  const body=document.createElement('div');body.className='editorial-body';body.textContent='한국어 해설을 불러오는 중…';editorialDialog.append(head,body);editorialDialog.showModal();
+  try{
+    editorialDataPromise ||= fetch('editorials.json').then(r=>{if(!r.ok)throw new Error('해설 파일을 불러오지 못했습니다.');return r.json();}).catch(e=>{editorialDataPromise=null;throw e;});
+    const data=(await editorialDataPromise)[String(selected.id)];
+    if(current!==selected||!editorialDialog.open)return;
+    if(!data)throw new Error('이 문제의 해설을 찾을 수 없습니다.');
+    body.replaceChildren();
+    const intro=document.createElement('p');intro.className='editorial-intro';intro.textContent=data.summary;
+    const caution=document.createElement('p');caution.className='editorial-caution';caution.textContent='주의할 점 · '+data.pitfall;
+    const table=document.createElement('table');table.className='complexity-table';
+    const row=document.createElement('tr');for(const label of ['풀이','시간 복잡도','공간 복잡도']){const th=document.createElement('th');th.textContent=label;row.append(th);}table.append(row);
+    data.methods.forEach((m,i)=>{const tr=document.createElement('tr');for(const value of [(i+1)+'. '+m.name,m.time,m.space]){const td=document.createElement('td');td.textContent=value;tr.append(td);}table.append(tr);});
+    const notation=document.createElement('details');const ns=document.createElement('summary');ns.textContent='복잡도 기호와 기준';const np=document.createElement('p');np.textContent=data.notation;notation.append(ns,np);
+    body.append(intro,caution,table,notation);
+    data.methods.forEach((m,i)=>{
+      const section=document.createElement('details');section.className='editorial-method';section.open=i===0;
+      const summary=document.createElement('summary');summary.textContent='방법 '+(i+1)+' · '+m.name;
+      const idea=document.createElement('p');idea.textContent=m.idea;
+      const list=document.createElement('ol');m.steps.forEach(step=>{const li=document.createElement('li');li.textContent=step;list.append(li);});
+      const bar=document.createElement('div');bar.className='editorial-codebar';const label=document.createElement('span');label.textContent='Python 3 · 독립 실행 가능한 Solution 코드';
+      const copy=document.createElement('button');copy.textContent='코드 복사';
+      const pre=document.createElement('pre');const code=document.createElement('code');code.textContent=m.code;pre.append(code);
+      copy.onclick=async()=>{try{await navigator.clipboard.writeText(m.code);copy.textContent='복사 완료';}catch(e){const selection=window.getSelection();const range=document.createRange();range.selectNodeContents(code);selection.removeAllRanges();selection.addRange(range);copy.textContent='선택된 코드를 Ctrl/Cmd+C로 복사';}};
+      bar.append(label,copy);section.append(summary,idea,list,bar,pre);body.append(section);
+    });
+    const note=document.createElement('p');note.className='note';note.textContent='직접 작성한 한국어 해설입니다. 원본 예제와 추가 테스트로 검증했으며, 느린 비교용 풀이·깊은 재귀의 한계는 각 방법에 표시했습니다. 코드를 복사해 편집기에 붙여넣은 뒤 Run / Debug로 확인할 수 있습니다.';body.append(note);
+  }catch(e){body.textContent=e.message;}
+};
 
 async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||problems[0]);boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode('ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:13,tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;aceEditor.session.on('change',()=>{save();resetTrace();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
 
