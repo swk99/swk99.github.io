@@ -7,7 +7,7 @@ function save(){if(!current)return;try{localStorage.setItem('graph-workspace:'+c
 function refreshLines(){const text=value();$('gutter').textContent=text.split('\n').map((_,i)=>i+1).join('\n');const p=$('code').selectionStart;const before=text.slice(0,p).split('\n');$('position').textContent=`Ln ${before.length}, Col ${before.at(-1).length+1}`;}
 function buttons(){for(const id of ['run','debug','submit'])$(id).disabled=!ready||busy;$('stop').disabled=!busy&&!(!ready&&worker);$('case').disabled=busy;}
 function resetTrace(){frames=[];$('trace-controls').hidden=true;$('variables').hidden=true;if(aceEditor&&marker!=null){aceEditor.session.removeMarker(marker);marker=null;}}
-function openProblem(p){if(busy)stop('Execution stopped: module changed.');save();current=p;if(editorialDialog.open)editorialDialog.close();leetcodeLink.href='https://leetcode.com/problems/'+(p.slug||leetcodeSlugs[p.id])+'/description/';leetcodeLink.hidden=!(p.slug||leetcodeSlugs[p.id]);resetTrace();$('filename').textContent=p.file;$('crumb').textContent=p.file;$('pid').textContent='#'+p.id;$('problem-title').textContent=p.title;$('rules').replaceChildren(...p.rules.map(r=>{const li=document.createElement('li');li.textContent=r;return li;}));$('examples').textContent=p.examples;renderExampleImages(p);$('constraints').textContent=p.constraints;$('custom').value=JSON.stringify(p.tests[0].args);$('test-count').textContent=`${p.tests.length} examples · ${p.extra.length} edge cases`;renderEdgeCases(p);
+function openProblem(p){window.workspaceAnimationClose?.();if(busy)stop('Execution stopped: module changed.');save();current=p;if(editorialDialog.open)editorialDialog.close();leetcodeLink.href='https://leetcode.com/problems/'+(p.slug||leetcodeSlugs[p.id])+'/description/';leetcodeLink.hidden=!(p.slug||leetcodeSlugs[p.id]);resetTrace();$('filename').textContent=p.file;$('crumb').textContent=p.file;$('pid').textContent='#'+p.id;$('problem-title').textContent=p.title;$('rules').replaceChildren(...p.rules.map(r=>{const li=document.createElement('li');li.textContent=r;return li;}));$('examples').textContent=p.examples;renderExampleImages(p);$('constraints').textContent=p.constraints;$('custom').value=JSON.stringify(p.tests[0].args);$('test-count').textContent=`${p.tests.length} examples · ${p.extra.length} edge cases`;renderEdgeCases(p);
 let draft;try{draft=localStorage.getItem('graph-workspace:'+p.id);}catch(e){}$('code').value=draft??p.starter;if(aceEditor)aceEditor.setValue($('code').value,-1);refreshLines();$('output').textContent=`${p.file} ready. Implement Solution.${p.method}().`;history.replaceState(null,'','#'+p.id);renderFiles();}
 
 function renderEdgeCases(p) {
@@ -125,6 +125,7 @@ const editorialButton=document.createElement('button');
 editorialButton.id='editorial-button';editorialButton.textContent='해설 · 3가지 풀이';
 editorialButton.title='한국어 해설, Python 풀이 3가지, 시간·공간 복잡도';
 $('run').after(editorialButton);
+import('./animations.js').then(m=>m.installAnimations(editorialButton,()=>current)).catch(e=>console.error('Animation player unavailable',e));
 const editorialDialog=document.createElement('dialog');
 editorialDialog.id='editorial-dialog';editorialDialog.lang='ko';
 editorialDialog.setAttribute('aria-labelledby','editorial-title');
