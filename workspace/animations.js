@@ -1,50 +1,43 @@
-// Korean problem statements only. Deliberately excludes solutions and expected outputs.
-const descriptions = {
-547: ['도시들이 몇 개의 독립된 지역으로 나뉘는지 묻는 문제입니다. 도로를 여러 번 거쳐 연결되는 도시들도 같은 지역입니다.', 'isConnected는 도시 사이의 직접 연결 여부를 담은 정사각형 표입니다. isConnected[i][j]가 1이면 i와 j가 직접 연결되고, 0이면 직접 연결되지 않습니다. 대각선의 1은 자기 자신을 뜻합니다.', '서로 이어진 도시 묶음의 개수를 정수로 반환합니다. 도시 목록이나 이동 경로를 반환하는 문제가 아닙니다.', 'A와 B가 연결되고 B와 C가 연결되면, A와 C 사이에 직접 도로가 없어도 세 도시는 같은 지역입니다. 다른 도시와 연결되지 않은 도시도 하나의 지역입니다.'],
-802: ['화살표를 따라 어디로 이동하든 결국 더 이상 이동할 수 없는 곳에 도착하는 출발점을 찾습니다.', 'graph[i]는 i번 정점에서 한 번에 이동할 수 있는 정점 번호들입니다. 빈 목록이면 그 정점에서는 더 이상 이동할 수 없습니다. 도로에는 방향이 있습니다.', '조건을 만족하는 모든 정점 번호를 오름차순 목록으로 반환합니다.', '종료되는 경로가 하나 있다는 것만으로는 부족합니다. 선택 가능한 경로 중 하나라도 영원히 반복해서 이동할 수 있다면 안전한 출발점이 아닙니다.'],
-841: ['0번 방에서 출발해서 주어진 열쇠만으로 모든 방에 들어갈 수 있는지 묻습니다.', 'rooms[i]는 i번 방 안에 놓인 열쇠들의 목록입니다. 열쇠 번호는 열 수 있는 방 번호입니다. 처음에는 0번 방만 열려 있습니다.', '모든 방에 들어갈 수 있으면 True, 들어갈 수 없는 방이 있으면 False를 반환합니다.', '방 안의 열쇠는 그 방에 실제로 들어간 뒤에만 얻습니다. 얻은 열쇠는 계속 보관하며, 열쇠가 가리키는 방에서 반대 방향 방으로 갈 수 있다는 뜻은 아닙니다.'],
-1129: ['빨간 길과 파란 길을 번갈아 이용하면서 0번 정점에서 각 정점까지 가는 가장 짧은 이동 횟수를 묻습니다.', 'n은 정점 수입니다. redEdges와 blueEdges의 [a, b]는 각각 해당 색으로 a에서 b로 가는 방향 있는 길입니다. 같은 정점으로 돌아오는 길이나 중복 길도 있을 수 있습니다.', '정점 번호 순서대로 이동 횟수를 담은 길이 n의 목록을 반환합니다. 출발점의 거리는 0이고 도착할 수 없는 곳은 -1입니다.', '첫 길은 어느 색이든 가능합니다. 그다음부터는 직전에 이용한 길과 색이 달라야 합니다. 길의 개수를 세며 색이 바뀐 횟수를 세는 것은 아닙니다.'],
-1376: ['회사 대표가 중요한 소식을 직원 전체에게 전달합니다. 대표가 자신의 직속 부하에게 알리면, 그 직원들도 각자의 직속 부하에게 알립니다. 대표가 전달을 시작한 순간부터 모든 직원이 소식을 들을 때까지 걸리는 시간을 묻습니다.', 'n은 전체 직원 수이며 번호는 0부터 n - 1까지입니다. headID는 대표의 직원 번호입니다. manager[i]는 i번 직원의 직속 상사 번호입니다. 대표만 상사가 없으므로 manager[headID]는 -1입니다. 조직도는 모든 직원이 대표 아래에 연결된 하나의 트리입니다.', 'informTime[i]는 i번 직원이 소식을 받은 뒤 자신의 직속 부하 전체에게 전달하는 데 필요한 분 단위 시간입니다. 반환값은 모든 직원이 소식을 받을 때까지의 경과 시간 하나입니다. 전달 순서나 직원별 시간 목록을 반환하지 않습니다.', '직원 한 명이 직속 부하 여러 명에게 알리는 시간은 informTime[i]입니다. 부하 수만큼 시간을 반복해서 더한다는 뜻이 아닙니다. 서로 다른 직원은 동시에 전달할 수 있습니다. 직속 부하가 없는 직원의 informTime은 0이며, 이는 그 직원이 처음부터 소식을 알고 있다는 의미가 아닙니다.'],
-1466: ['일방통행 도로 일부의 방향을 바꿔 모든 도시에서 0번 도시까지 갈 수 있게 만들려고 합니다.', 'n은 도시 수이고 connections의 [a, b]는 a에서 b로 가는 도로입니다. 방향을 무시하면 모든 도시가 연결되어 있고 도로는 n - 1개입니다.', '조건을 만족시키기 위해 방향을 바꾸어야 하는 도로의 최소 개수를 반환합니다.', '목표는 각 도시에서 0번으로 가는 것입니다. 0번에서 모든 도시로 갈 수 있어야 한다는 조건은 아닙니다. 도로를 새로 만들거나 없애지 않습니다.'],
-1192: ['서버를 연결하는 선 중 하나만 끊어져도 네트워크 일부가 분리되는 중요한 연결을 찾습니다.', 'n은 서버 수이며 connections의 [a, b]는 양방향 연결입니다. 처음에는 모든 서버가 서로 통신할 수 있습니다.', '중요한 연결들을 [a, b] 형태의 목록으로 반환합니다. 목록 순서와 한 연결 안의 두 서버 순서는 상관없습니다.', '각 연결을 단독으로 제거했을 때를 판단하는 조건입니다. 선을 없애도 다른 경로로 모든 서버가 연결되어 있으면 그 선은 중요한 연결이 아닙니다.'],
-1926: ['미로 입구에서 출발해 가장 가까운 출구에 도달하는 데 필요한 걸음 수를 묻습니다.', 'maze에서 .은 빈칸, +는 벽입니다. entrance는 [행, 열] 좌표입니다. 상하좌우로 인접한 빈칸으로 한 칸씩 움직일 수 있습니다.', '출구까지의 최소 걸음 수를 반환하고, 도달할 수 있는 출구가 없으면 -1을 반환합니다.', '출구는 미로의 가장 바깥 테두리에 있는 빈칸입니다. 시작 칸은 테두리에 있어도 출구로 인정하지 않습니다. 대각선으로 움직일 수 없습니다.'],
-934: ['물로 떨어져 있는 두 섬 사이에 땅을 만들어 하나로 연결하려고 합니다.', 'grid에서 1은 땅이고 0은 물입니다. 상하좌우로 이어진 땅이 하나의 섬이며 처음에는 정확히 두 섬이 있습니다.', '두 섬을 연결하기 위해 땅으로 바꿔야 하는 물 칸의 최소 개수를 반환합니다.', '대각선으로 닿은 땅은 연결된 것으로 보지 않습니다. 이미 존재하는 땅의 개수나 전체 이동 거리가 아니라 새로 바꾸는 물 칸만 셉니다.'],
-433: ['시작 유전자 문자열을 목표 유전자 문자열로 바꾸는 데 필요한 최소 변이 횟수를 묻습니다.', 'startGene과 endGene은 A, C, G, T로 이루어진 길이 8의 문자열입니다. bank는 변이 후 허용되는 유전자 문자열 목록입니다.', '최소 변이 횟수를 반환하고 불가능하면 -1을 반환합니다.', '한 번의 변이에서는 정확히 한 위치의 문자만 바꿉니다. 변이로 만들어진 모든 문자열은 bank에 있어야 하지만 최초 문자열 자체는 bank에 없어도 됩니다.'],
-127: ['시작 단어에서 한 글자씩 바꾸어 목표 단어에 도달하는 가장 짧은 단어 연결을 묻습니다.', 'beginWord는 시작 단어, endWord는 목표 단어, wordList는 바꾼 뒤 사용할 수 있는 단어 목록입니다.', '가장 짧은 연결에 포함된 단어 수를 반환합니다. 시작과 끝 단어도 세며, 연결할 수 없으면 0을 반환합니다.', '한 단계에서 정확히 한 글자만 바꿉니다. 시작 단어는 목록에 없어도 되지만 이후 단어는 모두 목록에 있어야 합니다. 변환 횟수와 단어 수는 다릅니다.'],
-721: ['여러 계정 기록 중 같은 사람의 기록을 합쳐 이메일을 정리하는 문제입니다.', 'accounts의 각 항목은 이름, 이메일, 이메일, … 순서입니다. 이메일 주소를 공유하는 기록은 같은 사람의 기록입니다.', '각 사람의 이름 뒤에 중복을 제거하고 사전순으로 정렬한 이메일을 붙인 목록들을 반환합니다. 사람들 사이의 순서는 자유입니다.', '이름이 같다는 사실만으로 합치면 안 됩니다. 첫 기록과 둘째 기록이 이메일을 공유하고 둘째와 셋째도 공유하면 세 기록은 같은 사람입니다.'],
-990: ['주어진 등식과 부등식을 동시에 참으로 만들 수 있는지 묻습니다.', 'equations에는 a==b 또는 a!=b 형태의 문자열이 있습니다. 각 소문자는 정수 값을 가질 수 있는 변수입니다.', '모든 식을 동시에 만족하는 값 배정이 존재하면 True, 없으면 False를 반환합니다. 실제 값을 출력하지는 않습니다.', '같다는 관계는 이어집니다. 서로 다른 변수 이름이라고 반드시 다른 값을 가져야 하는 것은 아닙니다. 입력된 식은 선택 사항이 아니라 모두 지켜야 하는 조건입니다.'],
-1061: ['서로 같은 것으로 취급하는 문자 관계가 주어질 때, 원래 문자열을 사전순으로 가장 작게 표현하려고 합니다.', '같은 위치의 s1[i]와 s2[i]가 동등한 문자입니다. baseStr은 바꾸려는 문자열입니다.', 'baseStr의 각 문자를 동등한 문자로 바꿔 만들 수 있는 사전순 최소 문자열을 반환합니다.', '동등 관계는 양방향이며 이어집니다. a와 b가 동등하고 b와 c가 동등하면 a와 c도 동등합니다. 문자열의 길이나 문자 위치를 바꾸는 작업은 아닙니다.'],
-839: ['한 번의 자리 교환으로 서로 같아질 수 있는 문자열들의 연결 관계를 보고 그룹 수를 묻습니다.', 'strs의 문자열들은 길이가 같고 같은 문자들을 같은 개수만큼 포함합니다. 두 문자열이 이미 같거나, 한 문자열의 두 위치를 한 번 맞바꾸어 다른 문자열이 되면 유사합니다.', '유사 관계로 이어지는 그룹의 개수를 반환합니다.', '같은 그룹의 모든 쌍이 직접 유사할 필요는 없습니다. 중간 문자열을 통해 관계가 이어지면 같은 그룹입니다. 서로 다른 두 문자열 사이에서 문자를 교환하는 것은 아닙니다.'],
-207: ['선수 과목 조건을 모두 지키면서 전체 과목을 이수할 수 있는지 묻습니다.', 'numCourses는 과목 수입니다. prerequisites의 [a, b]는 a를 수강하기 전에 b를 먼저 마쳐야 한다는 뜻입니다.', '모든 과목을 이수할 수 있으면 True, 불가능하면 False를 반환합니다.', '과목 번호가 수강 순서는 아닙니다. 선수 조건이 없는 과목도 전체 과목에 포함됩니다. 하나의 과목에 여러 선수 조건이 있으면 모두 충족해야 합니다.'],
-210: ['선수 조건을 지키는 실제 과목 수강 순서 하나를 만들어야 합니다.', 'numCourses는 과목 수이며 prerequisites의 [a, b]는 b가 a보다 먼저 와야 한다는 뜻입니다.', '전체 과목 번호가 한 번씩 나오는 유효한 순서를 반환합니다. 가능한 순서가 여러 개면 어느 것이든 괜찮고, 불가능하면 빈 목록입니다.', '단순히 가능한지를 반환하는 문제가 아닙니다. 서로 관련 없는 과목들의 상대적인 순서는 자유롭지만 주어진 모든 선수 조건은 지켜야 합니다.'],
-269: ['알파벳 순서가 알려지지 않은 외계 언어의 사전을 보고 문자 순서를 알아내려는 문제입니다.', 'words는 외계 언어 기준으로 사전순 정렬되어 있다고 주어진 단어 목록입니다. 문자는 익숙한 소문자지만 순서는 영어와 다를 수 있습니다.', '등장한 서로 다른 문자를 각각 한 번씩 포함하는 가능한 문자 순서 문자열을 반환합니다. 여러 답이면 하나만, 모순이 있으면 빈 문자열을 반환합니다.', '사전순은 앞에서부터 비교하다 처음 다른 문자의 순서로 결정됩니다. 한 단어가 다른 단어의 접두사이면 짧은 단어가 먼저여야 합니다. 이 규칙이 외계 언어에도 적용됩니다.'],
-1203: ['항목의 선행 조건과 그룹별 연속 배치 조건을 동시에 만족하도록 전체 항목을 나열합니다.', 'n은 항목 수, m은 그룹 수입니다. group[i]는 소속 그룹이며 -1은 소속 없음입니다. beforeItems[i]에는 i보다 먼저 나와야 하는 항목들이 들어 있습니다.', '모든 항목이 정확히 한 번 나오는 유효한 순서를 반환합니다. 만들 수 없으면 빈 목록을 반환합니다.', '같은 그룹의 항목 사이에 다른 그룹의 항목이 끼면 안 됩니다. 소속 없는 항목들은 서로 붙어 있을 필요가 없습니다. 그룹 안팎의 선행 조건을 모두 지켜야 합니다.'],
-1857: ['방향 있는 길을 따라 방문한 정점들의 색을 셀 때, 한 색이 가장 많이 등장할 수 있는 횟수를 묻습니다.', 'colors[i]는 i번 정점의 색입니다. edges의 [a, b]는 a에서 b로 가는 길입니다. 경로의 색 값은 그 경로에서 가장 자주 등장한 색의 등장 횟수입니다.', '가능한 경로 중 가장 큰 색 값을 반환합니다. 그래프 어느 곳에든 방향을 따라 순환하는 구조가 있으면 -1입니다.', '정점 수나 서로 다른 색 수를 세는 것이 아닙니다. 경로는 원하는 정점에서 시작할 수 있으며, 떨어져 있는 부분의 순환도 -1 조건에 포함됩니다.'],
-787: ['경유 횟수 제한 안에서 출발 도시에서 도착 도시까지 가장 저렴하게 비행하려고 합니다.', 'n은 도시 수, flights의 [from, to, price]는 편도 항공편과 가격입니다. src는 출발지, dst는 도착지, k는 허용되는 최대 중간 경유지 수입니다.', '조건을 만족하는 최저 총요금을 반환합니다. 가능한 항공편 연결이 없으면 -1입니다.', '직항은 경유 0회입니다. 경유지 수에 출발지와 목적지는 포함하지 않습니다. 요금이 더 싸더라도 경유 제한을 넘는 여정은 허용되지 않습니다.'],
-1514: ['연결마다 성공 확률이 있을 때 시작점에서 끝점까지 이동할 성공 확률이 가장 높은 경로를 묻습니다.', 'edges는 양방향 연결이고 succProb[i]는 i번째 연결의 성공 확률입니다. start와 end는 출발점과 도착점입니다.', '최대 성공 확률을 수로 반환합니다. 연결된 경로가 없으면 0이며 허용 오차는 1e-5입니다.', '한 경로의 성공 확률은 지나간 연결들의 확률을 모두 곱한 값입니다. 확률을 더하거나 단순히 길의 수만 비교하는 조건이 아닙니다.'],
-505: ['미로에서 계속 굴러가는 공을 목표 칸에 정확히 멈추게 하는 최소 이동 거리를 묻습니다.', 'maze에서 0은 빈칸, 1은 벽입니다. start와 destination은 [행, 열] 좌표입니다. 공은 상하좌우로 굴릴 수 있습니다.', '목표 칸에 멈추는 데 필요한 최소 이동 칸 수를 반환하고 불가능하면 -1입니다.', '공은 벽이나 경계 직전까지 계속 굴러가며 멈춘 뒤에만 방향을 바꿉니다. 목표 칸을 지나가기만 하면 성공이 아닙니다. 출발 칸은 거리에서 제외합니다.'],
-499: ['굴러가는 공을 구멍에 넣는 가장 짧은 이동을 찾고 그 방향 명령을 반환합니다.', 'maze의 0은 빈칸, 1은 벽입니다. ball은 시작 좌표이고 hole은 구멍 좌표입니다. 명령 문자는 아래 d, 왼쪽 l, 오른쪽 r, 위 u입니다.', '최소 이동 거리의 명령 문자열을 반환합니다. 거리가 같으면 사전순으로 가장 작은 문자열, 불가능하면 impossible입니다.', '벽이나 경계까지 구르지만 도중에 구멍을 만나면 즉시 빠집니다. 명령 수가 아니라 실제 지나간 칸 수가 거리입니다. 동률에서만 명령 문자열의 사전순을 비교합니다.'],
-1135: ['후보 연결 중 일부를 선택해 모든 도시를 연결하되 총비용을 최소로 만들려고 합니다.', '도시 번호는 1부터 n까지입니다. connections의 [x, y, cost]는 두 도시를 양방향으로 연결하는 데 드는 비용입니다.', '모든 도시를 연결하는 최소 총비용을 반환합니다. 주어진 후보로 불가능하면 -1입니다.', '모든 도시 쌍을 직접 연결할 필요는 없습니다. 다른 도시를 거쳐 갈 수 있어도 연결된 것입니다. 선택한 연결 비용은 각각 한 번씩 부담합니다.'],
-1584: ['평면의 모든 점을 연결하는 선들을 선택해 총비용을 최소로 만들려고 합니다.', 'points[i]는 [x, y] 좌표입니다. 두 점을 연결하는 비용은 가로 좌표 차이의 절댓값과 세로 좌표 차이의 절댓값을 더한 맨해튼 거리입니다.', '모든 점이 연결되고 각 두 점 사이에 단순 경로가 정확히 하나인 연결 구조의 최소 총비용을 반환합니다.', '직선의 기하학적 길이가 비용은 아닙니다. 임의의 두 점을 연결할 수 있으며, 반환하는 것은 선 목록이나 경로가 아니라 비용 하나입니다.'],
-1489: ['모든 정점을 최소 비용으로 연결하는 구조에서 반드시 필요한 간선과 경우에 따라 포함할 수 있는 간선을 분류합니다.', 'edges의 [a, b, weight]는 가중치가 있는 양방향 간선입니다. 간선 번호는 입력 목록에서의 원래 위치입니다. 최소 신장 트리는 모든 정점을 순환 없이 연결하면서 총가중치가 최소인 구조입니다.', '[필수 간선 번호 목록, 준필수 간선 번호 목록]을 반환합니다. 각 목록 내부의 순서는 상관없습니다.', '필수 간선은 모든 최소 신장 트리에 포함됩니다. 준필수 간선은 어떤 최소 신장 트리에는 포함되지만 다른 최소 신장 트리에는 포함되지 않습니다. 간선의 양 끝 정점 대신 원래 간선 번호를 반환합니다.'],
-1168: ['각 집에 우물을 파거나 집 사이에 관을 설치해서 마을 전체에 물을 공급하려고 합니다.', '집 번호는 1부터 n까지입니다. wells[i - 1]은 i번 집에 우물을 파는 비용이고 pipes의 [a, b, cost]는 두 집 사이의 양방향 관 설치 비용입니다.', '모든 집에 물을 공급하기 위한 우물과 관의 최소 총 설치비를 반환합니다.', '모든 집에 우물이 있어야 하는 것은 아닙니다. 우물이 있는 집으로부터 관을 통해 물을 공급받아도 됩니다. 같은 두 집 사이에 가격이 다른 관 후보가 여러 개 있을 수 있습니다.']
-};
-export function installAnimations(anchor, getProblem) {
- const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
- const button=el('button','문제 설명 · 한국어');button.id='problem-guide-button';button.lang='ko';button.title='풀이 없이 문제 상황과 입력·출력, 조건 이해하기';button.setAttribute('aria-haspopup','dialog');anchor.before(button);
- const dialog=el('dialog');dialog.id='problem-guide-dialog';dialog.className='animation-dialog';dialog.lang='ko';dialog.setAttribute('aria-labelledby','problem-guide-title');document.body.append(dialog);
- const close=()=>{if(dialog.open)dialog.close();};window.workspaceAnimationClose=close;
- button.onclick=()=>{
-  const p=getProblem();if(!p)return;const data=descriptions[p.id];
-  const head=el('div');head.className='editorial-head';const title=el('h2',p.id+' · 문제 이해하기');title.id='problem-guide-title';const x=el('button','닫기 ×');x.onclick=close;head.append(title,x);
-  const body=el('div');body.className='editorial-body';body.style.cssText='font-size:16pt;line-height:1.85;overflow-wrap:anywhere';
-  body.append(el('p',p.title),el('p','문제의 요구사항만 설명합니다. 정답, 풀이 방법, 알고리즘 힌트는 포함하지 않습니다.'));
-  if(data){['어떤 상황인가요?','입력은 무엇을 뜻하나요?','무엇을 반환하나요?','조건을 정확히 읽어 봐요'].forEach((label,i)=>{const s=el('section');s.append(el('h3',label),el('p',data[i]));body.append(s);});}
-  else body.append(el('p','이 문제의 한국어 설명은 아직 준비되지 않았습니다. 왼쪽 원문을 확인해 주세요.'));
-  if(p.id===1376){const s=el('section');s.append(el('h3','조직도 입력을 읽는 예시'),el('p','n = 4, headID = 0, manager = [-1, 0, 0, 1], informTime = [2, 3, 0, 0]이라고 해 볼게요. 0번은 대표이고, 1번과 2번의 상사는 0번입니다. 3번의 상사는 1번입니다.'),el('p','informTime[0] = 2는 대표가 직속 부하인 1번과 2번에게 소식을 전달하는 데 2분이 걸린다는 뜻입니다. informTime[1] = 3은 1번이 소식을 받은 뒤 자신의 부하인 3번에게 전달하는 데 3분이 걸린다는 뜻입니다. 1번이 소식을 받기 전에는 전달을 시작할 수 없습니다.'),el('p','마지막으로 소식을 듣는 직원까지 포함하여 회사 전체에 전달이 끝나는 시점을 묻습니다. 이 예시의 최종 정답과 계산 방법은 표시하지 않습니다.'));body.append(s);}
-  const example=el('section');example.append(el('h3','현재 문제의 첫 번째 예시 입력'),el('p','아래는 함수에 전달되는 인수들을 순서대로 표시한 것입니다. 예상 반환값은 숨겼습니다.'));
-  const signature=(p.starter||'').split('\n').find(line=>line.trim().startsWith('def '));if(signature)example.append(el('pre',signature.trim()));
-  const input=el('pre',JSON.stringify(p.tests[0].args,null,2));input.style.cssText='white-space:pre-wrap;max-height:320px;overflow:auto';example.append(input);body.append(example);
-  dialog.replaceChildren(head,body);dialog.showModal();
+// Guided example visualizations, separate from execution of the user's Python.
+export function installAnimations(anchor,getProblem){
+ const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
+ const button=el('button','▶ Animate example','animation-launch');button.id='animation-button';button.title='Explore example 1 step by step in English';anchor.before(button);
+ const dialog=el('dialog',undefined,'animation-dialog');dialog.lang='en';dialog.setAttribute('aria-labelledby','animation-title');document.body.append(dialog);
+ let dataPromise,scene,index=0,timer=null,draw,play,slider,prev,next,counter,speed,request=0;
+ const pause=()=>{clearTimeout(timer);timer=null;if(play)play.textContent='▶ Play';};
+ const close=()=>{request++;pause();if(dialog.open)dialog.close();};window.workspaceAnimationClose=close;
+ dialog.addEventListener('close',pause);dialog.addEventListener('cancel',pause);document.addEventListener('visibilitychange',()=>{if(document.hidden)pause();});
+ const tick=()=>{timer=setTimeout(()=>{index++;draw();if(index<scene.steps.length-1)tick();else pause();},Number(speed.value));};
+ button.onclick=async()=>{
+  const p=getProblem();if(!p)return;close();const token=++request;
+  dialog.replaceChildren();const head=el('div',undefined,'editorial-head');const title=el('h2',p.id+' · '+p.title);title.id='animation-title';const x=el('button','Close ×');x.onclick=close;head.append(title,x);
+  const body=el('div',undefined,'animation-body');body.textContent='Loading animation…';dialog.append(head,body);dialog.showModal();
+  try{
+   dataPromise ||=fetch('animations.json?v=readable-en-v1').then(r=>{if(!r.ok)throw Error('Could not load the animation.');return r.json();}).catch(e=>{dataPromise=null;throw e;});
+   const all=await dataPromise;if(token!==request||!dialog.open)return;scene=all[String(p.id)];if(!scene)throw Error('No animation was found for this problem.');index=0;body.replaceChildren();
+   body.append(el('p','EXAMPLE 01 / UNDERSTAND THE PROBLEM','animation-kicker'),el('p','This guide explains the first example. Use Run or Debug to inspect the execution of your own code.','note'));
+   const stage=el('div',undefined,'animation-stage');const caption=el('p',undefined,'animation-caption');caption.setAttribute('aria-live','polite');
+   const controls=el('div',undefined,'animation-controls');const reset=el('button','↺ Restart');prev=el('button','← Previous');play=el('button','▶ Play');next=el('button','Next →');
+   speed=el('select');speed.setAttribute('aria-label','Playback speed');[[3200,'Slow'],[2000,'Normal'],[1000,'Fast']].forEach(([v,t])=>speed.add(new Option(t,v)));speed.value='2000';speed.onchange=()=>{if(timer){pause();play.textContent='Ⅱ Pause';tick();}};
+   counter=el('span');slider=el('input');slider.type='range';slider.min=0;slider.max=scene.steps.length-1;slider.value=0;slider.setAttribute('aria-label','Animation step');
+   const jump=n=>{pause();index=n;draw();};reset.onclick=()=>jump(0);prev.onclick=()=>jump(Math.max(0,index-1));next.onclick=()=>jump(Math.min(scene.steps.length-1,index+1));slider.oninput=()=>jump(Number(slider.value));
+   play.onclick=()=>{if(timer){pause();return;}if(index===scene.steps.length-1){index=0;draw();}play.textContent='Ⅱ Pause';tick();};
+   controls.append(reset,prev,play,next,speed,counter);body.append(stage,caption,controls,slider);
+   const details=el('details');details.append(el('summary','Example input / output'));details.append(el('pre','Arguments: '+JSON.stringify(scene.input)+'\nExpected: '+JSON.stringify(scene.expected)));body.append(details);
+   body.append(el('p','Highlights show the nodes, edges, or cells being discussed. This guide does not enumerate every possible search path.','note'));
+   draw=()=>{const f=scene.steps[index];caption.textContent=f.text;counter.textContent=`${index+1} / ${scene.steps.length}`;slider.value=index;prev.disabled=index===0;next.disabled=index===scene.steps.length-1;stage.replaceChildren(scene.grid?renderGrid(scene,f,el):renderGraph(scene,f));};draw();
+  }catch(e){if(token===request)body.textContent=e.message;}
  };
+}
+function renderGrid(scene,frame,el){
+ const grid=el('div',undefined,'animation-grid');grid.style.gridTemplateColumns=`repeat(${scene.grid[0].length}, minmax(30px, 64px))`;grid.setAttribute('role','img');grid.setAttribute('aria-label','Example grid. '+frame.text);
+ scene.grid.forEach((row,r)=>row.forEach((v,c)=>{const key=r+','+c,wall=scene.gridKind!=='islands'&&(v===1||v==='+');const cell=el('div',wall?'■':key,'animation-cell'+(wall?' wall':'')+(scene.gridKind==='islands'&&v===1?' land':'')+(frame.active.includes(key)?' active':''));cell.title=`(${r},${c})${wall?' Wall':scene.gridKind==='islands'?(v===1?' Land':' Water'):' Empty cell'}`;grid.append(cell);}));return grid;
+}
+function renderGraph(scene,frame){
+ const ns='http://www.w3.org/2000/svg';const svg=(tag,attrs={},text)=>{const n=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,v);if(text!==undefined)n.textContent=text;return n;};
+ const root=svg('svg',{viewBox:'0 0 800 400',role:'img','aria-label':frame.text});
+ const defs=svg('defs');for(const [id,color]of [['arrow-dim','#64748b'],['arrow-hot','#63e6be']]){const marker=svg('marker',{id,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:6,markerHeight:6,orient:'auto-start-reverse'});marker.append(svg('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:color}));defs.append(marker);}root.append(defs);
+ const n=scene.nodes.length;const points=scene.nodes.map((_,i)=>{const a=-Math.PI/2+2*Math.PI*i/n;return n===1?[400,200]:[400+280*Math.cos(a),200+140*Math.sin(a)];});
+ scene.edges.forEach(([u,v,label],i)=>{const a=points[u],b=points[v],dx=b[0]-a[0],dy=b[1]-a[1],d=Math.hypot(dx,dy)||1,hot=frame.edges.includes(i);const line=svg('line',{x1:a[0]+dx/d*28,y1:a[1]+dy/d*28,x2:b[0]-dx/d*32,y2:b[1]-dy/d*32,class:hot?'animation-highlight':'',stroke:hot?'#63e6be':label==='red'?'#d16d77':'#64748b','stroke-width':hot?5:2,...(scene.directed?{'marker-end':`url(#arrow-${hot?'hot':'dim'})`}:{})});root.append(line);if(label!==undefined){const text=svg('text',{x:(a[0]+b[0])/2,y:(a[1]+b[1])/2-9,'text-anchor':'middle',class:'animation-edge-label'},label);root.append(text);}});
+ scene.nodes.forEach((label,i)=>{const [x,y]=points[i],hot=frame.active.includes(label);root.append(svg('circle',{class:hot?'animation-highlight':'',cx:x,cy:y,r:27,fill:hot?'#174d43':'#202d3d',stroke:hot?'#63e6be':'#64748b','stroke-width':hot?3:1.5}));root.append(svg('text',{x,y:y+(label.length>8?46:5),'text-anchor':'middle',class:'animation-node-label'},label));});return root;
 }
