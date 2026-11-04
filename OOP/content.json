@@ -1,0 +1,2118 @@
+[
+  {
+    "id": "class-and-object",
+    "group": "OOP 기초",
+    "en": "Class and Object",
+    "ko": "클래스와 객체",
+    "idea": "클래스는 데이터와 행동을 정의한 설계이고, 객체는 그 설계로 만든 실제 인스턴스예요.",
+    "example": "Account라는 설계로 선우 계좌와 코돌이 계좌를 만들면 잔액은 각각 따로 저장돼요.",
+    "before": [
+      "Account 클래스",
+      "잔액·입금 규칙"
+    ],
+    "after": [
+      "선우 계좌: 30",
+      "코돌이 계좌: 50"
+    ],
+    "caution": "클래스 변수로 잔액을 두면 모든 객체가 공유할 수 있어요. 인스턴스 상태와 구분해요."
+  },
+  {
+    "id": "encapsulation",
+    "group": "OOP 기초",
+    "en": "Encapsulation",
+    "ko": "캡슐화",
+    "idea": "상태를 바꾸는 통로를 좁혀 객체가 자기 규칙을 지키게 해요.",
+    "example": "잔액에 아무 숫자나 대입하지 않고 withdraw()에서 금액과 잔액을 확인해요.",
+    "before": [
+      "외부에서 잔액 수정",
+      "음수 잔액 발생"
+    ],
+    "after": [
+      "출금 요청",
+      "검증",
+      "잔액 변경"
+    ],
+    "caution": "Python의 밑줄은 접근 제한을 강제하는 보안 장치가 아니라 사용 약속이에요."
+  },
+  {
+    "id": "abstraction",
+    "group": "OOP 기초",
+    "en": "Abstraction",
+    "ko": "추상화",
+    "idea": "사용하는 쪽에는 필요한 약속만 보여주고 세부 구현은 감춰요.",
+    "example": "알림을 보내는 서비스는 send(text)만 알면 돼요. 이메일 서버 연결법까지 알 필요는 없어요.",
+    "before": [
+      "업무 코드",
+      "SMTP 설정",
+      "메시지 인코딩"
+    ],
+    "after": [
+      "업무 코드",
+      "send(text) 약속",
+      "이메일 구현"
+    ],
+    "caution": "추상화는 단순히 클래스를 추가하는 일이 아니에요. 무엇을 감출지 먼저 정해요."
+  },
+  {
+    "id": "inheritance",
+    "group": "OOP 기초",
+    "en": "Inheritance",
+    "ko": "상속",
+    "idea": "기존 타입의 약속을 유지하면서 특별한 타입을 정의해요.",
+    "example": "SavingsAccount가 Account로 쓰이는 모든 곳에서 정상 동작해야 해요.",
+    "before": [
+      "Account",
+      "공통 잔액 조회"
+    ],
+    "after": [
+      "SavingsAccount",
+      "공통 조회 + 이자 계산"
+    ],
+    "caution": "코드를 재사용하려고만 상속하면 부모의 불필요한 기능까지 받게 돼요."
+  },
+  {
+    "id": "polymorphism",
+    "group": "OOP 기초",
+    "en": "Polymorphism",
+    "ko": "다형성",
+    "idea": "같은 호출을 서로 다른 객체가 자기 방식으로 처리해요.",
+    "example": "Email과 SMS 모두 send()를 제공하면 반복문에서 종류를 검사하지 않고 보낼 수 있어요.",
+    "before": [
+      "종류 확인",
+      "이메일 분기",
+      "문자 분기"
+    ],
+    "after": [
+      "send() 호출",
+      "Email 또는 SMS 구현"
+    ],
+    "caution": "메서드 이름만 같아도 충분한 것은 아니에요. 입력·출력과 실패 방식의 약속도 맞아야 해요."
+  },
+  {
+    "id": "composition",
+    "group": "OOP 기초",
+    "en": "Composition",
+    "ko": "합성",
+    "idea": "다른 객체를 멤버로 가지고 그 객체에게 일을 맡겨요.",
+    "example": "ReportService가 PDFExporter를 받아 사용하면 exporter만 바꿔 CSV도 만들 수 있어요.",
+    "before": [
+      "PDFReport 상속",
+      "CSVReport 상속"
+    ],
+    "after": [
+      "ReportService",
+      "교체 가능한 Exporter"
+    ],
+    "caution": "부품의 생명주기와 소유권도 정해야 해요. 모든 참조 관계가 엄밀한 UML 합성은 아니에요."
+  },
+  {
+    "id": "association-and-dependency",
+    "group": "OOP 기초",
+    "en": "Association and Dependency",
+    "ko": "연관과 의존",
+    "idea": "연관은 지속적으로 알고 지내는 관계, 의존은 어떤 작업에서 사용하는 관계로 생각해요.",
+    "example": "직원이 부서 참조를 보관하면 연관이고, 함수 안에서 일회성 변환기를 쓰면 의존이에요.",
+    "before": [
+      "직원",
+      "부서 참조 보관"
+    ],
+    "after": [
+      "작업 함수",
+      "변환기를 잠깐 사용"
+    ],
+    "caution": "도식의 선만 외우지 말고 누가 누구를 얼마나 오래 알아야 하는지 물어봐요."
+  },
+  {
+    "id": "interface",
+    "group": "OOP 기초",
+    "en": "Interface",
+    "ko": "인터페이스",
+    "idea": "교체 가능한 구현들이 지켜야 할 공통 계약이에요.",
+    "example": "저장소는 save(record)를 약속하고, 메모리 저장소와 SQL 저장소가 각각 구현해요.",
+    "before": [
+      "서비스",
+      "SQL 직접 호출"
+    ],
+    "after": [
+      "서비스",
+      "Repository 계약",
+      "SQL 또는 메모리"
+    ],
+    "caution": "Python에서는 Protocol, ABC 또는 덕 타이핑으로 표현할 수 있어요."
+  },
+  {
+    "id": "coupling-and-cohesion",
+    "group": "OOP 기초",
+    "en": "Coupling and Cohesion",
+    "ko": "결합도와 응집도",
+    "idea": "함께 변하는 책임은 모으고, 서로의 내부 사정은 적게 알도록 해요.",
+    "example": "대출 계산은 계산 모듈에 모으고 이메일 템플릿과 섞지 않아요.",
+    "before": [
+      "계산 + 이메일 + DB",
+      "변경이 전파됨"
+    ],
+    "after": [
+      "계산 책임",
+      "발송 책임",
+      "저장 책임"
+    ],
+    "caution": "결합도를 무조건 0으로 만들 수는 없어요. 안정적인 작은 계약으로 연결하는 것이 목표예요."
+  },
+  {
+    "id": "refactoring-basics",
+    "group": "OOP 기초",
+    "en": "Refactoring Basics",
+    "ko": "리팩터링의 기본",
+    "idea": "관찰 가능한 동작은 유지하면서 내부 구조를 더 이해하기 쉽게 바꿔요.",
+    "example": "계산 결과를 검증하는 테스트를 먼저 두고 큰 함수를 작은 함수로 나눠요.",
+    "before": [
+      "기존 동작 확인",
+      "복잡한 코드"
+    ],
+    "after": [
+      "작은 변경",
+      "같은 결과 검증",
+      "반복"
+    ],
+    "caution": "버그 수정이나 새 기능 추가와 분리하면 무엇이 잘못됐는지 찾기 쉬워요."
+  },
+  {
+    "id": "single-responsibility",
+    "group": "SOLID",
+    "en": "Single Responsibility",
+    "ko": "단일 책임 원칙 · SRP",
+    "idea": "한 모듈이 서로 다른 이유로 자주 바뀐다면 책임을 나눌 신호예요.",
+    "example": "금리 정책 변경과 PDF 서식 변경이 같은 Loan 클래스를 건드리지 않게 해요.",
+    "before": [
+      "Loan: 계산 + PDF"
+    ],
+    "after": [
+      "LoanCalculator",
+      "PDFRenderer"
+    ],
+    "caution": "메서드가 하나여야 한다는 뜻은 아니에요. 같은 변경 이유를 가진 기능은 함께 있어도 돼요."
+  },
+  {
+    "id": "open-closed",
+    "group": "SOLID",
+    "en": "Open Closed",
+    "ko": "개방 폐쇄 원칙 · OCP",
+    "idea": "예상되는 변화는 새 구현을 추가하여 처리할 수 있게 경계를 만들어요.",
+    "example": "할인 규칙을 함수로 주입하면 결제 본문을 매번 고치지 않아도 돼요.",
+    "before": [
+      "결제 안의 종류별 if"
+    ],
+    "after": [
+      "결제",
+      "Discount 계약",
+      "새 할인 구현"
+    ],
+    "caution": "모든 미래를 예측해서 추상화하지 말고 실제 반복되는 변경을 근거로 해요."
+  },
+  {
+    "id": "liskov-substitution",
+    "group": "SOLID",
+    "en": "Liskov Substitution",
+    "ko": "리스코프 치환 원칙 · LSP",
+    "idea": "하위 타입은 상위 타입을 기대하는 코드의 약속을 깨면 안 돼요.",
+    "example": "읽기 전용 저장소를 쓰기 가능한 저장소의 자식으로 두면 save()에서 계약이 깨져요.",
+    "before": [
+      "WritableStore",
+      "ReadOnly 자식: 저장 실패"
+    ],
+    "after": [
+      "Reader 계약",
+      "Writer 계약 분리"
+    ],
+    "caution": "하위 타입이 더 강한 입력 조건을 요구하거나 더 약한 결과를 주는지 확인해요."
+  },
+  {
+    "id": "interface-segregation",
+    "group": "SOLID",
+    "en": "Interface Segregation",
+    "ko": "인터페이스 분리 원칙 · ISP",
+    "idea": "사용하지 않는 기능까지 의존하게 만들지 않아요.",
+    "example": "파일 조회만 하는 화면에 삭제·업로드 메서드까지 구현하라고 강요하지 않아요.",
+    "before": [
+      "조회 + 쓰기 + 삭제 계약"
+    ],
+    "after": [
+      "Reader",
+      "Writer",
+      "Deleter"
+    ],
+    "caution": "모든 메서드를 별도 인터페이스로 쪼개라는 뜻은 아니에요. 실제 사용자의 역할로 나눠요."
+  },
+  {
+    "id": "dependency-inversion",
+    "group": "SOLID",
+    "en": "Dependency Inversion",
+    "ko": "의존성 역전 원칙 · DIP",
+    "idea": "핵심 업무 규칙이 특정 기술 구현이 아니라 작은 계약에 의존하게 해요.",
+    "example": "대출 서비스는 저장소 계약을 받고, 앱을 조립하는 곳에서 SQL 구현을 넣어요.",
+    "before": [
+      "LoanService",
+      "SQLDriver 직접 생성"
+    ],
+    "after": [
+      "LoanService",
+      "Repository 계약",
+      "SQL 구현"
+    ],
+    "caution": "의존성 주입은 이를 구현하는 방법 중 하나예요. 주입만 했다고 항상 DIP를 지키는 것은 아니에요."
+  },
+  {
+    "id": "factory-method",
+    "group": "생성 패턴",
+    "en": "Factory Method",
+    "ko": "팩토리 메서드",
+    "idea": "객체를 만드는 메서드를 확장 지점으로 두고 하위 클래스가 생성할 구체 타입을 선택해요.",
+    "example": "공통 보고서 작업은 create_exporter()를 호출하고 PDF 작업과 CSV 작업이 서로 다른 exporter를 만들어요.",
+    "before": [
+      "공통 작업",
+      "PDFExporter 직접 생성"
+    ],
+    "after": [
+      "공통 작업",
+      "생성 메서드",
+      "하위 클래스의 Exporter"
+    ],
+    "caution": "단순히 if문으로 타입을 고르는 함수와 GoF Factory Method를 구분해요."
+  },
+  {
+    "id": "abstract-factory",
+    "group": "생성 패턴",
+    "en": "Abstract Factory",
+    "ko": "추상 팩토리",
+    "idea": "함께 쓰는 제품 묶음을 일관된 계열로 생성해요.",
+    "example": "앱 테마 팩토리가 버튼과 대화상자를 함께 만들면 밝은 테마와 어두운 테마가 섞이지 않아요.",
+    "before": [
+      "밝은 버튼",
+      "어두운 창"
+    ],
+    "after": [
+      "ThemeFactory",
+      "같은 테마 버튼",
+      "같은 테마 창"
+    ],
+    "caution": "제품 종류 자체가 늘어나면 모든 팩토리 계약을 수정할 수 있어요."
+  },
+  {
+    "id": "builder",
+    "group": "생성 패턴",
+    "en": "Builder",
+    "ko": "빌더",
+    "idea": "복잡한 객체를 단계적으로 조립하고 마지막에 완성해요.",
+    "example": "보고서에 제목, 표, 주석을 순서대로 추가한 후 build()로 결과를 받아요.",
+    "before": [
+      "긴 생성자",
+      "수많은 옵션"
+    ],
+    "after": [
+      "제목 설정",
+      "표 추가",
+      "보고서 완성"
+    ],
+    "caution": "간단한 객체에는 기본 인자나 데이터 클래스가 더 쉬울 수 있어요."
+  },
+  {
+    "id": "prototype",
+    "group": "생성 패턴",
+    "en": "Prototype",
+    "ko": "프로토타입",
+    "idea": "이미 준비된 객체를 복제해서 새 객체의 출발점으로 써요.",
+    "example": "기본 대시보드 설정을 복제하고 팀 이름만 바꿔요.",
+    "before": [
+      "설정 처음부터 작성",
+      "반복 초기화"
+    ],
+    "after": [
+      "기본 설정",
+      "복제",
+      "팀별 수정"
+    ],
+    "caution": "얕은 복사는 내부 리스트를 공유할 수 있어요. 깊은 복사도 연결·잠금 같은 자원에는 적합하지 않아요."
+  },
+  {
+    "id": "singleton",
+    "group": "생성 패턴",
+    "en": "Singleton",
+    "ko": "싱글턴",
+    "idea": "정해진 범위 안에서 인스턴스 하나만 사용하게 하고 접근 지점을 제공해요.",
+    "example": "프로세스 내 설정 레지스트리를 한 곳에서 읽게 할 수 있어요.",
+    "before": [
+      "각 코드의 별도 설정 객체"
+    ],
+    "after": [
+      "공통 접근점",
+      "하나의 설정 객체"
+    ],
+    "caution": "전역 상태와 테스트 격리가 어려워져요. 여러 프로세스까지 하나가 되는 것은 아니며 동시 초기화도 고려해요."
+  },
+  {
+    "id": "adapter",
+    "group": "구조 패턴",
+    "en": "Adapter",
+    "ko": "어댑터",
+    "idea": "이미 있는 객체의 사용법을 호출자가 원하는 인터페이스로 바꿔요.",
+    "example": "외부 SMS의 dispatch(number, body)를 우리 send(message) 계약에 맞춰 감싸요.",
+    "before": [
+      "우리 send()",
+      "외부 dispatch() 불일치"
+    ],
+    "after": [
+      "우리 코드",
+      "SMSAdapter",
+      "외부 SMS"
+    ],
+    "caution": "데이터 형식뿐 아니라 오류와 단위 변환까지 맞아야 해요."
+  },
+  {
+    "id": "bridge",
+    "group": "구조 패턴",
+    "en": "Bridge",
+    "ko": "브리지",
+    "idea": "독립적으로 변하는 두 축을 상속 대신 연결된 객체로 분리해요.",
+    "example": "보고서 종류와 출력 방식이 각각 늘어나면 Report가 Renderer를 보유하게 해요.",
+    "before": [
+      "월간PDF",
+      "월간HTML",
+      "연간PDF"
+    ],
+    "after": [
+      "월간·연간 Report",
+      "Renderer 연결",
+      "PDF·HTML"
+    ],
+    "caution": "Adapter는 기존 불일치를 맞추는 목적이고 Bridge는 두 변화 축을 분리하려는 설계예요."
+  },
+  {
+    "id": "composite",
+    "group": "구조 패턴",
+    "en": "Composite",
+    "ko": "컴포지트",
+    "idea": "개별 항목과 항목의 묶음을 같은 계약으로 다뤄 트리를 처리해요.",
+    "example": "파일의 size()와 폴더의 size()를 똑같이 호출하고 폴더는 자식 크기를 합쳐요.",
+    "before": [
+      "파일 전용 처리",
+      "폴더 전용 처리"
+    ],
+    "after": [
+      "공통 Node",
+      "File 잎",
+      "Folder 자식들"
+    ],
+    "caution": "순환 참조를 허용하면 재귀가 끝나지 않을 수 있어요."
+  },
+  {
+    "id": "decorator",
+    "group": "구조 패턴",
+    "en": "Decorator",
+    "ko": "데코레이터",
+    "idea": "같은 계약을 유지하는 래퍼로 객체의 기능을 겹겹이 추가해요.",
+    "example": "알림 객체를 로깅 래퍼와 재시도 래퍼로 감싸요.",
+    "before": [
+      "기본 알림",
+      "기능 조합별 클래스"
+    ],
+    "after": [
+      "로그 래퍼",
+      "재시도 래퍼",
+      "기본 알림"
+    ],
+    "caution": "감싸는 순서에 따라 동작이 달라져요. Python @ 문법 전체와 동일한 개념은 아니에요."
+  },
+  {
+    "id": "facade",
+    "group": "구조 패턴",
+    "en": "Facade",
+    "ko": "퍼사드",
+    "idea": "복잡한 하위 시스템의 자주 쓰는 작업을 단순한 진입점으로 묶어요.",
+    "example": "close_month()가 대사, 검증, 보고서 생성을 조율하면 화면은 각 단계의 세부 API를 몰라도 돼요.",
+    "before": [
+      "화면",
+      "대사·검증·출력 각각 호출"
+    ],
+    "after": [
+      "화면",
+      "월마감 Facade",
+      "여러 하위 서비스"
+    ],
+    "caution": "모든 업무 로직을 한 퍼사드에 넣어 거대한 클래스로 만들지 않아요."
+  },
+  {
+    "id": "flyweight",
+    "group": "구조 패턴",
+    "en": "Flyweight",
+    "ko": "플라이웨이트",
+    "idea": "많은 객체가 가진 동일하고 변하지 않는 데이터를 공유해요.",
+    "example": "지도 마커 수만 개가 같은 아이콘을 공유하고 위치만 각자 보관해요.",
+    "before": [
+      "마커마다 아이콘 복사"
+    ],
+    "after": [
+      "공유 아이콘",
+      "마커별 좌표"
+    ],
+    "caution": "공유 상태를 수정하면 모두에게 영향이 가요. 실제 메모리 이득을 확인해요."
+  },
+  {
+    "id": "proxy",
+    "group": "구조 패턴",
+    "en": "Proxy",
+    "ko": "프록시",
+    "idea": "실제 객체와 같은 계약을 제공하면서 접근 시점이나 권한을 제어해요.",
+    "example": "보고서 프록시가 권한을 확인한 뒤 실제 보고서를 읽어요.",
+    "before": [
+      "호출자",
+      "실제 보고서 직접 접근"
+    ],
+    "after": [
+      "호출자",
+      "권한 Proxy",
+      "실제 보고서"
+    ],
+    "caution": "Decorator는 기능 추가, Proxy는 접근 통제가 주된 의도예요. 구조가 비슷해도 목적이 달라요."
+  },
+  {
+    "id": "chain-of-responsibility",
+    "group": "행동 패턴",
+    "en": "Chain of Responsibility",
+    "ko": "책임 연쇄",
+    "idea": "요청을 여러 처리자에 순서대로 넘기며 처리하거나 중단할 수 있게 해요.",
+    "example": "요청을 인증, 형식 검사, 한도 검사에 통과시켜요.",
+    "before": [
+      "하나의 거대한 검증 함수"
+    ],
+    "after": [
+      "인증 처리자",
+      "형식 처리자",
+      "한도 처리자"
+    ],
+    "caution": "첫 처리자만 응답하는 체인과 모든 단계가 수행되는 체인의 규칙을 분명히 해요."
+  },
+  {
+    "id": "command",
+    "group": "행동 패턴",
+    "en": "Command",
+    "ko": "커맨드",
+    "idea": "수행할 작업과 필요한 인자를 하나의 객체로 묶어요.",
+    "example": "이체 요청을 명령 객체로 만들면 대기열이나 감사 기록에 넣기 쉬워요.",
+    "before": [
+      "버튼에서 업무 직접 실행"
+    ],
+    "after": [
+      "버튼",
+      "TransferCommand",
+      "실행 담당자"
+    ],
+    "caution": "명령 객체만으로 재실행 안전성이나 롤백이 보장되지는 않아요."
+  },
+  {
+    "id": "iterator",
+    "group": "행동 패턴",
+    "en": "Iterator",
+    "ko": "이터레이터",
+    "idea": "내부 저장 방식과 상관없이 요소를 순서대로 꺼내는 계약을 제공해요.",
+    "example": "페이지 단위 API 결과도 for문에서는 레코드가 차례로 나오는 것처럼 다룰 수 있어요.",
+    "before": [
+      "호출자가 페이지·인덱스 관리"
+    ],
+    "after": [
+      "호출자의 반복",
+      "Iterator",
+      "다음 요소"
+    ],
+    "caution": "반복 중 컬렉션 수정과 네트워크 실패가 어떻게 처리되는지 정해요."
+  },
+  {
+    "id": "mediator",
+    "group": "행동 패턴",
+    "en": "Mediator",
+    "ko": "중재자",
+    "idea": "여러 객체 사이의 상호작용을 중재 객체에 모아요.",
+    "example": "대출 폼에서 소득 입력 변경이 버튼과 경고에 미치는 영향을 FormMediator가 조율해요.",
+    "before": [
+      "입력창끼리 직접 연결",
+      "변경 전파 복잡"
+    ],
+    "after": [
+      "입력창",
+      "FormMediator",
+      "버튼·경고"
+    ],
+    "caution": "중재자 자체가 모든 책임을 가진 거대 객체가 되지 않게 해요."
+  },
+  {
+    "id": "memento",
+    "group": "행동 패턴",
+    "en": "Memento",
+    "ko": "메멘토",
+    "idea": "객체의 내부 표현을 외부에 노출하지 않고 상태를 저장하고 복원해요.",
+    "example": "편집기가 자기 스냅샷을 만들고 히스토리는 그 스냅샷을 보관해요.",
+    "before": [
+      "히스토리가 내부 필드 직접 복사"
+    ],
+    "after": [
+      "편집기",
+      "불투명 스냅샷",
+      "복원"
+    ],
+    "caution": "큰 상태를 매번 복제하면 비싸고 민감한 정보도 스냅샷에 남을 수 있어요."
+  },
+  {
+    "id": "observer",
+    "group": "행동 패턴",
+    "en": "Observer",
+    "ko": "옵서버",
+    "idea": "한 객체의 변화에 관심 있는 여러 구독자가 알림을 받아요.",
+    "example": "주문 상태가 바뀌면 화면과 알림 서비스가 각각 갱신돼요.",
+    "before": [
+      "주문 코드가 모든 화면 직접 호출"
+    ],
+    "after": [
+      "주문 이벤트",
+      "구독 목록",
+      "각 구독자 알림"
+    ],
+    "caution": "구독 해제, 알림 순서, 실패 격리를 정해요. 분산 메시지 전달 보장과는 별개예요."
+  },
+  {
+    "id": "state",
+    "group": "행동 패턴",
+    "en": "State",
+    "ko": "상태",
+    "idea": "현재 상태에 따른 행동을 상태 객체에 맡겨요.",
+    "example": "초안 대출은 제출 가능하지만 심사 중 대출은 철회 규칙이 다르게 적용돼요.",
+    "before": [
+      "상태별 if문 반복"
+    ],
+    "after": [
+      "Application",
+      "현재 State",
+      "상태별 행동·전이"
+    ],
+    "caution": "Strategy와 달리 상태 전이와 생명주기가 핵심이에요."
+  },
+  {
+    "id": "strategy",
+    "group": "행동 패턴",
+    "en": "Strategy",
+    "ko": "전략",
+    "idea": "같은 일을 하는 여러 알고리즘을 교체 가능한 객체나 함수로 분리해요.",
+    "example": "경로 계산에 최단 거리와 최소 환승 전략을 선택해요.",
+    "before": [
+      "한 함수에 알고리즘 분기"
+    ],
+    "after": [
+      "경로 서비스",
+      "선택된 Strategy",
+      "계산 결과"
+    ],
+    "caution": "전략 선택 책임은 보통 호출자나 설정에 있어요. 작은 경우 함수 전달로 충분해요."
+  },
+  {
+    "id": "template-method",
+    "group": "행동 패턴",
+    "en": "Template Method",
+    "ko": "템플릿 메서드",
+    "idea": "작업의 큰 순서는 부모가 정하고 일부 단계를 하위 클래스가 구현해요.",
+    "example": "파일 읽기, 변환, 저장 순서는 고정하고 CSV와 JSON 읽기 단계만 바꿔요.",
+    "before": [
+      "전체 흐름을 매번 복사"
+    ],
+    "after": [
+      "고정된 처리 순서",
+      "교체 가능한 단계"
+    ],
+    "caution": "상속 기반이라 변경 영향이 커질 수 있어요. 단계가 자주 바뀌면 합성을 검토해요."
+  },
+  {
+    "id": "visitor",
+    "group": "행동 패턴",
+    "en": "Visitor",
+    "ko": "비지터",
+    "idea": "객체 구조는 유지하면서 구조를 순회하는 새 연산을 별도 객체로 추가해요.",
+    "example": "문서의 표와 문단에 대해 글자 수 계산과 HTML 출력을 서로 다른 Visitor로 구현해요.",
+    "before": [
+      "노드마다 모든 연산 추가"
+    ],
+    "after": [
+      "노드 accept",
+      "Visitor",
+      "타입별 연산"
+    ],
+    "caution": "새 연산 추가는 쉽지만 새 노드 타입 추가 시 여러 Visitor가 바뀔 수 있어요."
+  },
+  {
+    "id": "long-method",
+    "group": "코드 스멜",
+    "en": "Long Method",
+    "ko": "긴 메서드",
+    "idea": "한 함수에 너무 많은 설명과 단계가 들어 있어 의도를 따라가기 어려워요.",
+    "example": "대출 심사 함수에 검증, 점수 계산, 메일 발송이 붙어 있어요.",
+    "before": [
+      "긴 심사 함수"
+    ],
+    "after": [
+      "검증",
+      "점수 계산",
+      "결과 발송"
+    ],
+    "caution": "줄 수만으로 판단하지 말고 하나의 목적과 읽기 난이도를 봐요."
+  },
+  {
+    "id": "large-class",
+    "group": "코드 스멜",
+    "en": "Large Class",
+    "ko": "거대한 클래스",
+    "idea": "하나의 클래스가 서로 관계없는 데이터와 행동을 너무 많이 맡아요.",
+    "example": "Customer가 고객 정보, 청구서 PDF, 마케팅 발송까지 맡아요.",
+    "before": [
+      "Customer 모든 책임"
+    ],
+    "after": [
+      "Customer",
+      "InvoiceRenderer",
+      "CampaignSender"
+    ],
+    "caution": "관련된 책임끼리 묶어서 분리하고 호출 계약을 작게 유지해요."
+  },
+  {
+    "id": "primitive-obsession",
+    "group": "코드 스멜",
+    "en": "Primitive Obsession",
+    "ko": "기본 타입 집착",
+    "idea": "의미와 규칙이 있는 값을 문자열이나 숫자로만 다뤄 검증이 흩어져요.",
+    "example": "금액과 통화를 따로 전달해 서로 다른 통화를 더하게 돼요.",
+    "before": [
+      "amount 숫자",
+      "currency 문자열"
+    ],
+    "after": [
+      "Money 값 객체",
+      "금액·통화·검증"
+    ],
+    "caution": "모든 정수를 객체로 감싸지는 않아요. 반복되는 규칙이 있는지 먼저 확인해요."
+  },
+  {
+    "id": "long-parameter-list",
+    "group": "코드 스멜",
+    "en": "Long Parameter List",
+    "ko": "긴 매개변수 목록",
+    "idea": "인자가 많아 순서와 조합을 기억하기 어려워요.",
+    "example": "검색에 시작일, 종료일, 정렬, 상태, 페이지 등을 매번 나열해요.",
+    "before": [
+      "많은 위치 인자"
+    ],
+    "after": [
+      "SearchOptions",
+      "이름 있는 옵션"
+    ],
+    "caution": "객체 하나에 무관한 인자까지 모두 넣으면 문제를 숨기기만 해요."
+  },
+  {
+    "id": "data-clumps",
+    "group": "코드 스멜",
+    "en": "Data Clumps",
+    "ko": "데이터 뭉치",
+    "idea": "같은 값들이 여러 곳에서 늘 함께 등장해요.",
+    "example": "시작일과 종료일이 보고서, 검색, 내보내기에 반복돼요.",
+    "before": [
+      "start·end 반복",
+      "start·end 반복"
+    ],
+    "after": [
+      "DateRange",
+      "공통 기간 검증"
+    ],
+    "caution": "항상 함께 바뀌고 의미가 하나일 때 묶어요."
+  },
+  {
+    "id": "switch-statements",
+    "group": "코드 스멜",
+    "en": "Switch Statements",
+    "ko": "반복되는 타입 분기",
+    "idea": "같은 종류 구분이 여러 작업에 흩어져 새 타입마다 모두 수정해요.",
+    "example": "계좌 타입별 금리 분기가 계산·예측·보고서에 반복돼요.",
+    "before": [
+      "타입별 if 반복"
+    ],
+    "after": [
+      "Account 정책",
+      "타입별 구현"
+    ],
+    "caution": "단순하고 안정적인 분기 하나는 충분히 읽기 좋아요. 무조건 패턴으로 바꾸지 않아요."
+  },
+  {
+    "id": "temporary-field",
+    "group": "코드 스멜",
+    "en": "Temporary Field",
+    "ko": "임시 필드",
+    "idea": "특정 작업 중에만 의미가 있는 값이 객체의 상시 상태로 남아요.",
+    "example": "평소 None인 중간 점수 필드가 calculate() 호출 중에만 쓰여요.",
+    "before": [
+      "상시 객체",
+      "임시 점수 필드"
+    ],
+    "after": [
+      "계산 전용 객체",
+      "지역 상태"
+    ],
+    "caution": "동시 호출 시 임시 상태가 섞이는지도 확인해요."
+  },
+  {
+    "id": "refused-bequest",
+    "group": "코드 스멜",
+    "en": "Refused Bequest",
+    "ko": "거부된 유산",
+    "idea": "하위 클래스가 부모의 기능을 쓰지 못하거나 거부해요.",
+    "example": "읽기 전용 파일이 부모의 write()를 항상 오류로 끝내요.",
+    "before": [
+      "Writable 부모",
+      "ReadOnly 자식"
+    ],
+    "after": [
+      "읽기 계약",
+      "쓰기 계약"
+    ],
+    "caution": "계약을 재설계하거나 상속을 위임으로 바꿔요."
+  },
+  {
+    "id": "alternative-classes-with-different-interfaces",
+    "group": "코드 스멜",
+    "en": "Alternative Classes with Different Interfaces",
+    "ko": "서로 다른 인터페이스",
+    "idea": "비슷한 일을 하는 클래스들의 메서드 모양이 달라 교체가 어려워요.",
+    "example": "한 발송기는 send(), 다른 발송기는 deliver_now()를 사용해요.",
+    "before": [
+      "send",
+      "deliver_now"
+    ],
+    "after": [
+      "공통 Sender",
+      "각 구현 연결"
+    ],
+    "caution": "이름만 같게 하지 말고 반환값과 오류 계약도 맞춰요."
+  },
+  {
+    "id": "divergent-change",
+    "group": "코드 스멜",
+    "en": "Divergent Change",
+    "ko": "발산적 변경",
+    "idea": "하나의 모듈이 여러 종류의 변경 때문에 계속 수정돼요.",
+    "example": "세법 변경과 CSV 열 순서 변경이 같은 클래스에 들어와요.",
+    "before": [
+      "한 클래스",
+      "서로 다른 변경 이유"
+    ],
+    "after": [
+      "세금 계산",
+      "CSV 표현"
+    ],
+    "caution": "Shotgun Surgery와 방향이 반대예요. 여기서는 한 곳에 책임이 몰려 있어요."
+  },
+  {
+    "id": "shotgun-surgery",
+    "group": "코드 스멜",
+    "en": "Shotgun Surgery",
+    "ko": "산탄총 수술",
+    "idea": "작은 정책 변경 하나가 여러 파일의 자잘한 수정을 요구해요.",
+    "example": "수수료 규칙 하나를 고치려 화면·서버·보고서를 각각 수정해요.",
+    "before": [
+      "한 정책 변경",
+      "여러 파일 수정"
+    ],
+    "after": [
+      "공통 FeePolicy",
+      "사용하는 곳들"
+    ],
+    "caution": "단순히 파일 수를 줄이지 말고 동일한 지식이 중복되는 원인을 찾아요."
+  },
+  {
+    "id": "parallel-inheritance-hierarchies",
+    "group": "코드 스멜",
+    "en": "Parallel Inheritance Hierarchies",
+    "ko": "평행 상속 계층",
+    "idea": "한 계층에 타입을 추가할 때 다른 계층에도 대응 타입을 꼭 추가해요.",
+    "example": "고객 종류마다 전용 리포터 하위 클래스도 함께 늘어요.",
+    "before": [
+      "고객 상속 계층",
+      "리포터 상속 계층"
+    ],
+    "after": [
+      "고객 데이터",
+      "조합 가능한 출력기"
+    ],
+    "caution": "합성이나 전략으로 두 변화 축의 결합을 줄일 수 있어요."
+  },
+  {
+    "id": "comments",
+    "group": "코드 스멜",
+    "en": "Comments",
+    "ko": "설명을 대신하는 주석",
+    "idea": "복잡한 코드의 의미를 긴 주석으로만 설명하고 있어요.",
+    "example": "주석은 연체 여부 검사라고 쓰여 있지만 조건식은 길고 불분명해요.",
+    "before": [
+      "긴 조건식",
+      "해석용 주석"
+    ],
+    "after": [
+      "is_overdue()",
+      "의도가 보이는 이름"
+    ],
+    "caution": "왜 이런 결정을 했는지, 외부 제약이 무엇인지를 설명하는 주석은 가치 있어요."
+  },
+  {
+    "id": "duplicate-code",
+    "group": "코드 스멜",
+    "en": "Duplicate Code",
+    "ko": "중복 코드",
+    "idea": "같은 규칙을 여러 곳에 복사해 수정할 때 서로 어긋날 수 있어요.",
+    "example": "원화 반올림 규칙이 영수증과 보고서에 각각 구현돼요.",
+    "before": [
+      "영수증 반올림",
+      "보고서 반올림"
+    ],
+    "after": [
+      "공통 금액 규칙",
+      "두 호출자"
+    ],
+    "caution": "겉모양만 비슷하고 변경 이유가 다르면 성급히 묶지 않아요."
+  },
+  {
+    "id": "lazy-class",
+    "group": "코드 스멜",
+    "en": "Lazy Class",
+    "ko": "역할이 빈약한 클래스",
+    "idea": "이름과 연결 비용에 비해 의미 있는 책임이 거의 없어요.",
+    "example": "한 필드를 그대로 전달하기만 하는 중간 클래스를 거쳐요.",
+    "before": [
+      "호출자",
+      "빈 중간 계층",
+      "대상"
+    ],
+    "after": [
+      "호출자",
+      "대상"
+    ],
+    "caution": "도메인 의미나 안정적인 경계를 제공한다면 작은 클래스도 충분히 유용해요."
+  },
+  {
+    "id": "data-class",
+    "group": "코드 스멜",
+    "en": "Data Class",
+    "ko": "데이터만 있는 클래스",
+    "idea": "데이터 규칙을 외부 코드가 반복적으로 조작하고 있어요.",
+    "example": "기간 객체는 날짜만 담고 유효성 검사는 여러 서비스가 복사해요.",
+    "before": [
+      "날짜 데이터",
+      "외부 검증 반복"
+    ],
+    "after": [
+      "DateRange",
+      "내부 검증"
+    ],
+    "caution": "DTO나 불변 레코드처럼 데이터 전달 자체가 목적이면 문제가 아니에요."
+  },
+  {
+    "id": "dead-code",
+    "group": "코드 스멜",
+    "en": "Dead Code",
+    "ko": "죽은 코드",
+    "idea": "더 이상 도달하거나 사용되지 않는 코드가 남아 혼란을 줘요.",
+    "example": "폐기된 API의 변환 함수가 아무 호출 없이 남아 있어요.",
+    "before": [
+      "현재 경로",
+      "사용 안 하는 분기"
+    ],
+    "after": [
+      "현재 경로만 유지"
+    ],
+    "caution": "동적 로딩과 외부 호출 여부를 확인하고 삭제해요. 복구는 버전 관리에 맡겨요."
+  },
+  {
+    "id": "speculative-generality",
+    "group": "코드 스멜",
+    "en": "Speculative Generality",
+    "ko": "추측성 일반화",
+    "idea": "확인되지 않은 미래 기능을 위해 복잡한 확장 장치를 만들어 둬요.",
+    "example": "구현이 하나뿐인데 사용하지 않는 계층이 여러 단계 있어요.",
+    "before": [
+      "미래용 추상 계층",
+      "실제 구현"
+    ],
+    "after": [
+      "현재 필요한 계약",
+      "실제 구현"
+    ],
+    "caution": "실제 확장 필요가 생기면 그때 근거를 가지고 추가해요."
+  },
+  {
+    "id": "feature-envy",
+    "group": "코드 스멜",
+    "en": "Feature Envy",
+    "ko": "다른 객체 탐내기",
+    "idea": "어떤 메서드가 자기 데이터보다 다른 객체의 내부 데이터를 더 많이 사용해요.",
+    "example": "배송비 계산이 Parcel의 여러 필드를 계속 꺼내요.",
+    "before": [
+      "외부 계산",
+      "Parcel 필드 반복 조회"
+    ],
+    "after": [
+      "Parcel 근처의 계산",
+      "작은 결과 계약"
+    ],
+    "caution": "서로 독립적인 정책이면 Strategy처럼 분리된 객체가 적합할 수도 있어요."
+  },
+  {
+    "id": "inappropriate-intimacy",
+    "group": "코드 스멜",
+    "en": "Inappropriate Intimacy",
+    "ko": "부적절한 친밀함",
+    "idea": "두 클래스가 서로의 내부 구현을 너무 자세히 알고 있어요.",
+    "example": "서비스가 저장소의 내부 캐시 딕셔너리를 직접 고쳐요.",
+    "before": [
+      "서로 내부 필드 수정"
+    ],
+    "after": [
+      "공개 메서드",
+      "책임 경계"
+    ],
+    "caution": "단순히 getter를 추가해도 내부 구조를 그대로 노출하면 문제가 남아요."
+  },
+  {
+    "id": "message-chains",
+    "group": "코드 스멜",
+    "en": "Message Chains",
+    "ko": "메시지 체인",
+    "idea": "연속된 탐색 호출로 여러 객체의 내부 연결을 알아야 해요.",
+    "example": "loan.customer.branch.manager.email을 화면이 직접 읽어요.",
+    "before": [
+      "화면",
+      "고객",
+      "지점",
+      "관리자"
+    ],
+    "after": [
+      "화면",
+      "loan.contact_email()"
+    ],
+    "caution": "탐색용 데이터 구조라면 자연스러울 수도 있어요. 변경이 전파되는지를 봐요."
+  },
+  {
+    "id": "middle-man",
+    "group": "코드 스멜",
+    "en": "Middle Man",
+    "ko": "중개자",
+    "idea": "대부분의 메서드가 아무 의미 없이 다른 객체로 전달만 해요.",
+    "example": "서비스의 거의 모든 메서드가 DAO 메서드를 그대로 호출해요.",
+    "before": [
+      "호출자",
+      "전달 전용 객체",
+      "대상"
+    ],
+    "after": [
+      "호출자",
+      "명확한 대상 계약"
+    ],
+    "caution": "접근 통제나 안정적인 API 경계라면 위임이 중요한 역할일 수 있어요."
+  },
+  {
+    "id": "incomplete-library-class",
+    "group": "코드 스멜",
+    "en": "Incomplete Library Class",
+    "ko": "불완전한 라이브러리 클래스",
+    "idea": "수정할 수 없는 외부 타입에 필요한 동작이 빠져 있어요.",
+    "example": "외부 날짜 타입에 업무일 계산이 없어요.",
+    "before": [
+      "외부 타입",
+      "곳곳의 보조 계산"
+    ],
+    "after": [
+      "로컬 래퍼",
+      "업무일 기능"
+    ],
+    "caution": "원본을 무리하게 패치하지 말고 작은 함수나 로컬 확장으로 관리해요."
+  },
+  {
+    "id": "extract-method",
+    "group": "메서드 정리",
+    "en": "Extract Method",
+    "ko": "메서드 추출",
+    "idea": "의미가 하나인 코드 덩어리를 이름 붙인 함수로 옮겨요.",
+    "example": "보고서 함수 안의 합계 계산을 total_amount()로 꺼내요.",
+    "before": [
+      "보고서 안의 합계 계산"
+    ],
+    "after": [
+      "보고서",
+      "total_amount() 호출"
+    ],
+    "caution": "필요한 입력과 출력이 명확한 덩어리부터 시작해요."
+  },
+  {
+    "id": "inline-method",
+    "group": "메서드 정리",
+    "en": "Inline Method",
+    "ko": "메서드 인라인",
+    "idea": "함수 이름보다 본문이 더 명확하고 별도 책임도 없다면 호출 위치에 합쳐요.",
+    "example": "is_more_than_zero()가 단지 x > 0만 반환하며 의미를 더하지 않아요.",
+    "before": [
+      "호출",
+      "불필요한 한 줄 함수"
+    ],
+    "after": [
+      "의도가 분명한 직접 표현"
+    ],
+    "caution": "중복되거나 정책 이름을 제공하는 함수라면 유지해요."
+  },
+  {
+    "id": "extract-variable",
+    "group": "메서드 정리",
+    "en": "Extract Variable",
+    "ko": "변수 추출",
+    "idea": "복잡한 표현식의 일부에 이름을 붙여 읽기 쉽게 해요.",
+    "example": "소득에서 지출을 뺀 값을 disposable_income으로 표현해요.",
+    "before": [
+      "긴 산술식"
+    ],
+    "after": [
+      "가처분 소득 계산",
+      "조건에서 이름 사용"
+    ],
+    "caution": "표현식 평가 횟수가 바뀌어 부수 효과가 달라지지 않게 해요."
+  },
+  {
+    "id": "inline-temp",
+    "group": "메서드 정리",
+    "en": "Inline Temp",
+    "ko": "임시 변수 인라인",
+    "idea": "의미를 더하지 않는 임시 변수를 단순한 표현식으로 치환해요.",
+    "example": "한 번 쓰는 total = order.total()을 호출 위치에 넣어요.",
+    "before": [
+      "임시 변수",
+      "한 번 사용"
+    ],
+    "after": [
+      "직접 표현식 사용"
+    ],
+    "caution": "비용이 큰 계산을 여러 번 수행하게 만들지 않아요."
+  },
+  {
+    "id": "replace-temp-with-query",
+    "group": "메서드 정리",
+    "en": "Replace Temp with Query",
+    "ko": "임시 변수를 질의로",
+    "idea": "여러 곳에서 필요한 계산을 상태를 바꾸지 않는 메서드로 추출해요.",
+    "example": "소계 지역 변수 대신 subtotal()을 사용해 계산 의도를 공유해요.",
+    "before": [
+      "긴 함수의 임시 소계"
+    ],
+    "after": [
+      "subtotal()",
+      "여러 사용 위치"
+    ],
+    "caution": "매 호출마다 계산하므로 성능과 일관된 스냅샷 여부를 확인해요."
+  },
+  {
+    "id": "split-temporary-variable",
+    "group": "메서드 정리",
+    "en": "Split Temporary Variable",
+    "ko": "임시 변수 분리",
+    "idea": "서로 다른 의미로 재사용한 변수를 목적별 이름으로 나눠요.",
+    "example": "temp에 둘레를 저장했다가 면적을 저장하지 않아요.",
+    "before": [
+      "temp: 둘레",
+      "temp: 면적"
+    ],
+    "after": [
+      "perimeter",
+      "area"
+    ],
+    "caution": "누적 합계나 반복 인덱스처럼 의도적으로 변하는 변수와 구분해요."
+  },
+  {
+    "id": "remove-assignments-to-parameters",
+    "group": "메서드 정리",
+    "en": "Remove Assignments to Parameters",
+    "ko": "매개변수 재대입 제거",
+    "idea": "입력값과 계산 중 상태가 혼동되지 않게 별도 지역 변수를 써요.",
+    "example": "amount를 덮어쓰지 않고 discounted_amount를 만들어요.",
+    "before": [
+      "입력 amount",
+      "amount 덮어쓰기"
+    ],
+    "after": [
+      "원래 amount",
+      "계산 결과 변수"
+    ],
+    "caution": "객체 내부를 수정하는 것과 지역 이름을 재바인딩하는 것은 달라요."
+  },
+  {
+    "id": "replace-method-with-method-object",
+    "group": "메서드 정리",
+    "en": "Replace Method with Method Object",
+    "ko": "메서드를 객체로",
+    "idea": "얽힌 지역 상태 때문에 분리하기 힘든 계산을 전용 객체에 옮겨요.",
+    "example": "복잡한 대사 계산의 입력과 중간값을 ReconciliationRun에 두고 단계로 나눠요.",
+    "before": [
+      "지역 변수 얽힌 큰 함수"
+    ],
+    "after": [
+      "계산 객체",
+      "검증",
+      "매칭",
+      "집계"
+    ],
+    "caution": "계산 실행 간 상태가 섞이지 않도록 실행별 객체를 사용해요."
+  },
+  {
+    "id": "substitute-algorithm",
+    "group": "메서드 정리",
+    "en": "Substitute Algorithm",
+    "ko": "알고리즘 교체",
+    "idea": "같은 계약을 더 명확한 알고리즘으로 구현해요.",
+    "example": "중복 확인의 중첩 루프를 집합 기반 검사로 바꿔요.",
+    "before": [
+      "중첩 탐색"
+    ],
+    "after": [
+      "집합 구성",
+      "포함 여부 확인"
+    ],
+    "caution": "순서, 중복, 비교 규칙과 메모리 사용이 달라지는지 검증해요."
+  },
+  {
+    "id": "move-method",
+    "group": "책임 이동",
+    "en": "Move Method",
+    "ko": "메서드 이동",
+    "idea": "메서드를 가장 관련 있는 데이터와 책임 가까이 옮겨요.",
+    "example": "배송물의 무게만 다루는 계산을 관련 객체로 옮겨요.",
+    "before": [
+      "다른 클래스",
+      "배송물 필드 조회"
+    ],
+    "after": [
+      "배송물",
+      "계산 메서드"
+    ],
+    "caution": "기존 호출 경로는 임시 위임으로 유지한 뒤 점진적으로 바꿔요."
+  },
+  {
+    "id": "move-field",
+    "group": "책임 이동",
+    "en": "Move Field",
+    "ko": "필드 이동",
+    "idea": "값을 실제로 관리하고 사용하는 객체로 옮겨요.",
+    "example": "계좌별 이율을 고객 객체에서 계좌 객체로 옮겨요.",
+    "before": [
+      "Customer.interest_rate"
+    ],
+    "after": [
+      "Account.interest_rate"
+    ],
+    "caution": "저장 형식과 직렬화 호환성까지 확인해요."
+  },
+  {
+    "id": "extract-class",
+    "group": "책임 이동",
+    "en": "Extract Class",
+    "ko": "클래스 추출",
+    "idea": "서로 독립적인 책임의 묶음을 새 클래스로 분리해요.",
+    "example": "고객의 주소 필드와 주소 검증을 Address로 묶어요.",
+    "before": [
+      "Customer: 고객 + 주소 규칙"
+    ],
+    "after": [
+      "Customer",
+      "Address"
+    ],
+    "caution": "분리 후 양쪽이 서로 내부를 계속 알아야 하면 경계를 재검토해요."
+  },
+  {
+    "id": "inline-class",
+    "group": "책임 이동",
+    "en": "Inline Class",
+    "ko": "클래스 인라인",
+    "idea": "의미 있는 책임이 사라진 클래스를 사용하는 쪽에 합쳐요.",
+    "example": "작업을 전달만 하는 작은 보조 클래스를 제거해요.",
+    "before": [
+      "서비스",
+      "빈 보조 객체"
+    ],
+    "after": [
+      "서비스에 간단한 기능 통합"
+    ],
+    "caution": "공개 API나 외부 의존이 있는지 먼저 확인해요."
+  },
+  {
+    "id": "hide-delegate",
+    "group": "책임 이동",
+    "en": "Hide Delegate",
+    "ko": "위임 숨기기",
+    "idea": "호출자가 중간 객체의 연결 구조를 몰라도 되게 필요한 작업을 제공해요.",
+    "example": "직원에게 manager()를 물으면 부서 경로를 알 필요가 없어요.",
+    "before": [
+      "호출자",
+      "직원",
+      "부서",
+      "관리자"
+    ],
+    "after": [
+      "호출자",
+      "직원.manager()"
+    ],
+    "caution": "전달 메서드가 끝없이 늘면 Middle Man이 되는지 점검해요."
+  },
+  {
+    "id": "remove-middle-man",
+    "group": "책임 이동",
+    "en": "Remove Middle Man",
+    "ko": "중개자 제거",
+    "idea": "의미 없는 전달 계층을 줄이고 실제 대상과 직접 협력하게 해요.",
+    "example": "파일 서비스가 모든 저장소 메서드를 그대로 전달한다면 계약을 직접 제공해요.",
+    "before": [
+      "호출자",
+      "전달 계층",
+      "저장소"
+    ],
+    "after": [
+      "호출자",
+      "저장소 계약"
+    ],
+    "caution": "숨기려던 내부 구현을 외부에 노출하는 비용도 고려해요."
+  },
+  {
+    "id": "introduce-foreign-method",
+    "group": "책임 이동",
+    "en": "Introduce Foreign Method",
+    "ko": "외부 메서드 도입",
+    "idea": "수정할 수 없는 타입에 필요한 작은 동작을 별도 함수로 제공해요.",
+    "example": "외부 날짜 객체를 받아 다음 업무일을 계산하는 함수를 만들어요.",
+    "before": [
+      "곳곳의 날짜 보조 계산"
+    ],
+    "after": [
+      "next_business_day(date)"
+    ],
+    "caution": "보조 기능이 많아지면 로컬 확장이나 래퍼를 검토해요."
+  },
+  {
+    "id": "introduce-local-extension",
+    "group": "책임 이동",
+    "en": "Introduce Local Extension",
+    "ko": "로컬 확장 도입",
+    "idea": "외부 타입에 필요한 여러 동작을 로컬 래퍼나 적절한 하위 타입에 모아요.",
+    "example": "외부 문서 API를 감싸 검색과 페이지 조작 기능을 추가해요.",
+    "before": [
+      "외부 타입",
+      "흩어진 보조 함수"
+    ],
+    "after": [
+      "LocalDocument",
+      "외부 객체 위임"
+    ],
+    "caution": "외부 타입이 상속을 전제로 설계되지 않았다면 래퍼가 안전할 수 있어요."
+  },
+  {
+    "id": "self-encapsulate-field",
+    "group": "데이터 정리",
+    "en": "Self Encapsulate Field",
+    "ko": "자기 필드 캡슐화",
+    "idea": "클래스 내부에서도 필드 접근을 일정한 통로로 모아요.",
+    "example": "정규화가 필요한 이름을 내부에서도 property로 읽게 해요.",
+    "before": [
+      "내부의 직접 필드 접근"
+    ],
+    "after": [
+      "내부 코드",
+      "접근 메서드",
+      "필드"
+    ],
+    "caution": "단순 필드에 기계적으로 getter를 만드는 것보다 실제 변화 이유를 봐요."
+  },
+  {
+    "id": "replace-data-value-with-object",
+    "group": "데이터 정리",
+    "en": "Replace Data Value with Object",
+    "ko": "데이터 값을 객체로",
+    "idea": "검증이나 행동이 붙은 값을 작은 객체로 표현해요.",
+    "example": "문자열 이메일 주소를 검증하는 EmailAddress를 만들어요.",
+    "before": [
+      "문자열",
+      "반복 검증"
+    ],
+    "after": [
+      "EmailAddress",
+      "생성 시 검증"
+    ],
+    "caution": "불변성과 값 동등성 정책을 정해요."
+  },
+  {
+    "id": "change-value-to-reference",
+    "group": "데이터 정리",
+    "en": "Change Value to Reference",
+    "ko": "값을 참조로",
+    "idea": "같은 실체를 나타내는 중복 객체 대신 공유되는 동일한 실체를 가리켜요.",
+    "example": "여러 주문이 독립 복사된 고객 대신 ID로 관리되는 고객을 참조해요.",
+    "before": [
+      "주문별 고객 복사"
+    ],
+    "after": [
+      "주문들",
+      "공통 Customer"
+    ],
+    "caution": "변경이 여러 곳에 보이므로 동시성과 생명주기를 관리해요."
+  },
+  {
+    "id": "change-reference-to-value",
+    "group": "데이터 정리",
+    "en": "Change Reference to Value",
+    "ko": "참조를 값으로",
+    "idea": "식별성보다 내용이 중요한 객체를 독립적인 값으로 다뤄요.",
+    "example": "좌표를 공유 가변 객체 대신 불변 x,y 값으로 다뤄요.",
+    "before": [
+      "공유 가변 좌표"
+    ],
+    "after": [
+      "독립 불변 좌표",
+      "내용 비교"
+    ],
+    "caution": "객체 정체성이 중요한 고객·계좌에는 무작정 적용하지 않아요."
+  },
+  {
+    "id": "replace-array-with-object",
+    "group": "데이터 정리",
+    "en": "Replace Array with Object",
+    "ko": "배열을 객체로",
+    "idea": "위치마다 의미가 다른 배열을 이름 있는 필드로 바꿔요.",
+    "example": "row[0], row[1] 대신 Trade.price, Trade.quantity를 써요.",
+    "before": [
+      "위치 0",
+      "위치 1"
+    ],
+    "after": [
+      "price",
+      "quantity"
+    ],
+    "caution": "동일 종류의 데이터 목록은 여전히 배열이 적합해요."
+  },
+  {
+    "id": "duplicate-observed-data",
+    "group": "데이터 정리",
+    "en": "Duplicate Observed Data",
+    "ko": "관찰 데이터 복제",
+    "idea": "화면에 묶인 도메인 상태를 모델로 분리하고 화면은 동기화된 표현을 유지해요.",
+    "example": "입력창 문자열과 계산용 금액 모델을 분리하고 변경 알림으로 갱신해요.",
+    "before": [
+      "화면 위젯이 업무 상태 소유"
+    ],
+    "after": [
+      "업무 모델",
+      "변경 알림",
+      "화면 표현"
+    ],
+    "caution": "두 개의 독립적인 진실을 만들지 말고 기준 상태와 동기화 방향을 정해요."
+  },
+  {
+    "id": "change-unidirectional-association-to-bidirectional",
+    "group": "데이터 정리",
+    "en": "Change Unidirectional Association to Bidirectional",
+    "ko": "단방향을 양방향으로",
+    "idea": "역방향 탐색이 실제로 필요할 때 반대쪽 참조도 관리해요.",
+    "example": "팀에서 직원을 찾고 직원에서도 소속 팀을 바로 찾게 해요.",
+    "before": [
+      "팀이 직원 목록 보유"
+    ],
+    "after": [
+      "팀 ↔ 직원",
+      "양쪽 관계 갱신"
+    ],
+    "caution": "추가와 삭제를 한 통로에서 처리해 양쪽 관계가 어긋나지 않게 해요."
+  },
+  {
+    "id": "change-bidirectional-association-to-unidirectional",
+    "group": "데이터 정리",
+    "en": "Change Bidirectional Association to Unidirectional",
+    "ko": "양방향을 단방향으로",
+    "idea": "사용하지 않는 역참조를 제거해 관계와 갱신 규칙을 단순하게 해요.",
+    "example": "주문이 고객을 알면 충분한 경우 고객의 전체 주문 참조를 제거해요.",
+    "before": [
+      "고객 ↔ 주문"
+    ],
+    "after": [
+      "주문",
+      "고객 참조"
+    ],
+    "caution": "역탐색 요구가 있으면 별도 조회 방법과 비용을 검토해요."
+  },
+  {
+    "id": "replace-magic-number-with-symbolic-constant",
+    "group": "데이터 정리",
+    "en": "Replace Magic Number with Symbolic Constant",
+    "ko": "매직 넘버를 상수로",
+    "idea": "업무 의미가 있는 숫자에 이름을 붙여요.",
+    "example": "86400 대신 SECONDS_PER_DAY를 써 단위를 드러내요.",
+    "before": [
+      "의미 불명 숫자"
+    ],
+    "after": [
+      "이름 있는 상수",
+      "사용 위치"
+    ],
+    "caution": "정책이 자주 변하면 상수보다 설정이나 정책 객체가 적합할 수 있어요."
+  },
+  {
+    "id": "encapsulate-field",
+    "group": "데이터 정리",
+    "en": "Encapsulate Field",
+    "ko": "필드 캡슐화",
+    "idea": "외부에서 직접 바꾸던 값을 통제된 메서드나 property 뒤에 둬요.",
+    "example": "재고 수량은 remove_stock()을 통해 음수 여부를 검사해요.",
+    "before": [
+      "외부의 재고 대입"
+    ],
+    "after": [
+      "검증 메서드",
+      "내부 재고"
+    ],
+    "caution": "setter가 아무 값이나 받으면 핵심 규칙을 보호하지 못해요."
+  },
+  {
+    "id": "encapsulate-collection",
+    "group": "데이터 정리",
+    "en": "Encapsulate Collection",
+    "ko": "컬렉션 캡슐화",
+    "idea": "내부 컬렉션을 마음대로 수정하지 못하게 조회와 변경 통로를 나눠요.",
+    "example": "팀 멤버는 읽기용 복사본으로 주고 추가는 add_member()로 해요.",
+    "before": [
+      "내부 리스트 외부 노출"
+    ],
+    "after": [
+      "읽기용 뷰",
+      "add·remove 메서드"
+    ],
+    "caution": "얕은 복사 안의 요소가 가변이면 요소 변경은 여전히 전파될 수 있어요."
+  },
+  {
+    "id": "replace-type-code-with-class",
+    "group": "데이터 정리",
+    "en": "Replace Type Code with Class",
+    "ko": "타입 코드를 클래스로",
+    "idea": "의미 없는 숫자 코드 대신 이름과 제약이 있는 타입을 사용해요.",
+    "example": "상태 1,2 대신 명시적인 Status 값 객체나 열거형을 사용해요.",
+    "before": [
+      "숫자 1·2·3"
+    ],
+    "after": [
+      "Status",
+      "유효한 값"
+    ],
+    "caution": "행동이 타입마다 다르면 상태·전략 또는 다형성이 더 적합할 수 있어요."
+  },
+  {
+    "id": "replace-type-code-with-subclasses",
+    "group": "데이터 정리",
+    "en": "Replace Type Code with Subclasses",
+    "ko": "타입 코드를 하위 클래스로",
+    "idea": "타입별 행동 차이를 하위 타입으로 분리해요.",
+    "example": "고정된 상품 유형마다 계산 방식이 다르면 각각 구현해요.",
+    "before": [
+      "종류 필드",
+      "반복 분기"
+    ],
+    "after": [
+      "공통 Product",
+      "유형별 구현"
+    ],
+    "caution": "실행 중 유형이 바뀌는 객체에는 상속보다 State나 Strategy를 검토해요."
+  },
+  {
+    "id": "replace-type-code-with-state-strategy",
+    "group": "데이터 정리",
+    "en": "Replace Type Code with State Strategy",
+    "ko": "타입 코드를 상태·전략으로",
+    "idea": "바뀔 수 있는 종류별 행동을 별도 객체에 맡겨요.",
+    "example": "심사 상태에 따라 가능한 작업을 State로 분리해요.",
+    "before": [
+      "state 문자열",
+      "반복 분기"
+    ],
+    "after": [
+      "Context",
+      "현재 State 또는 Strategy"
+    ],
+    "caution": "상태 전이가 중심인지 알고리즘 선택이 중심인지 구분해요."
+  },
+  {
+    "id": "replace-subclass-with-fields",
+    "group": "데이터 정리",
+    "en": "Replace Subclass with Fields",
+    "ko": "하위 클래스를 필드로",
+    "idea": "행동은 같고 고정값만 다른 하위 타입을 데이터로 표현해요.",
+    "example": "등급별 배지 클래스가 색만 다르면 Badge(color)로 표현해요.",
+    "before": [
+      "RedBadge",
+      "BlueBadge"
+    ],
+    "after": [
+      "Badge",
+      "color 필드"
+    ],
+    "caution": "등급마다 고유 규칙이 있다면 단순 필드화가 오히려 분기를 늘릴 수 있어요."
+  },
+  {
+    "id": "decompose-conditional",
+    "group": "조건식 정리",
+    "en": "Decompose Conditional",
+    "ko": "조건문 분해",
+    "idea": "조건의 의미와 각 분기의 동작에 이름을 붙여요.",
+    "example": "날짜 범위를 확인하는 긴 식을 is_peak_season()으로 바꿔요.",
+    "before": [
+      "긴 조건",
+      "복잡한 두 분기"
+    ],
+    "after": [
+      "의미 있는 조건",
+      "성수기 계산",
+      "일반 계산"
+    ],
+    "caution": "이름은 코드를 그대로 읽는 수준보다 업무 의도를 드러내요."
+  },
+  {
+    "id": "consolidate-conditional-expression",
+    "group": "조건식 정리",
+    "en": "Consolidate Conditional Expression",
+    "ko": "조건식 통합",
+    "idea": "같은 결과를 만드는 여러 조건을 하나의 의미로 묶어요.",
+    "example": "미성년 또는 비활성 회원이면 신청 불가라는 규칙을 모아요.",
+    "before": [
+      "조건 A: 거절",
+      "조건 B: 거절"
+    ],
+    "after": [
+      "is_ineligible()",
+      "거절"
+    ],
+    "caution": "조건 평가 순서와 부수 효과가 달라지지 않는지 확인해요."
+  },
+  {
+    "id": "consolidate-duplicate-conditional-fragments",
+    "group": "조건식 정리",
+    "en": "Consolidate Duplicate Conditional Fragments",
+    "ko": "중복 분기 코드 통합",
+    "idea": "양쪽 분기에서 똑같이 수행하는 코드를 밖으로 이동해요.",
+    "example": "성공·실패 분기 끝의 동일한 기록 작업을 합쳐요.",
+    "before": [
+      "분기 A + 기록",
+      "분기 B + 기록"
+    ],
+    "after": [
+      "분기별 작업",
+      "공통 기록"
+    ],
+    "caution": "예외 발생 시에도 호출되는지 등 실행 의미가 달라질 수 있어요."
+  },
+  {
+    "id": "remove-control-flag",
+    "group": "조건식 정리",
+    "en": "Remove Control Flag",
+    "ko": "제어 플래그 제거",
+    "idea": "흐름을 우회적으로 관리하는 불리언 대신 명확한 종료를 사용해요.",
+    "example": "found 플래그를 매번 검사하는 대신 찾으면 return해요.",
+    "before": [
+      "flag 갱신",
+      "반복 검사"
+    ],
+    "after": [
+      "조건 만족",
+      "즉시 반환"
+    ],
+    "caution": "중첩 루프의 break 범위와 정리 작업을 확인해요."
+  },
+  {
+    "id": "replace-nested-conditional-with-guard-clauses",
+    "group": "조건식 정리",
+    "en": "Replace Nested Conditional with Guard Clauses",
+    "ko": "중첩 조건을 가드 절로",
+    "idea": "예외적인 경우를 먼저 종료하고 정상 흐름을 평평하게 해요.",
+    "example": "회원 없음, 정지 상태를 먼저 반환한 뒤 정상 계산을 수행해요.",
+    "before": [
+      "if 안의 if 안의 계산"
+    ],
+    "after": [
+      "없음 검사",
+      "정지 검사",
+      "정상 계산"
+    ],
+    "caution": "종료 전에 반드시 해야 하는 자원 정리가 빠지지 않게 해요."
+  },
+  {
+    "id": "replace-conditional-with-polymorphism",
+    "group": "조건식 정리",
+    "en": "Replace Conditional with Polymorphism",
+    "ko": "조건문을 다형성으로",
+    "idea": "반복되는 타입별 행동 분기를 각 구현으로 옮겨요.",
+    "example": "배송 유형에 따른 cost()를 Express와 Standard가 각각 구현해요.",
+    "before": [
+      "배송 유형별 if"
+    ],
+    "after": [
+      "Shipment.cost()",
+      "유형별 구현"
+    ],
+    "caution": "분기가 작고 안정적이라면 기존 코드가 더 간단할 수 있어요."
+  },
+  {
+    "id": "introduce-null-object",
+    "group": "조건식 정리",
+    "en": "Introduce Null Object",
+    "ko": "널 객체 도입",
+    "idea": "없음이라는 상태에 일관된 기본 행동을 주는 객체를 사용해요.",
+    "example": "알림이 꺼져 있으면 send()가 아무것도 하지 않는 SilentNotifier를 넣어요.",
+    "before": [
+      "매번 None 검사"
+    ],
+    "after": [
+      "Notifier 계약",
+      "SilentNotifier"
+    ],
+    "caution": "필수 데이터 누락을 조용히 숨기는 데 사용하면 안 돼요."
+  },
+  {
+    "id": "introduce-assertion",
+    "group": "조건식 정리",
+    "en": "Introduce Assertion",
+    "ko": "단언 도입",
+    "idea": "내부 코드가 반드시 지켜야 하는 가정을 실행 가능한 형태로 적어요.",
+    "example": "정렬 완료 후 내부 개발 검증에서 순서 불변식을 확인해요.",
+    "before": [
+      "암묵적인 내부 가정"
+    ],
+    "after": [
+      "명시적 assert",
+      "불변식 위반 발견"
+    ],
+    "caution": "Python assert는 최적화 시 제거될 수 있어요. 사용자 입력 검증에는 명시적 예외를 써요."
+  },
+  {
+    "id": "rename-method",
+    "group": "호출 정리",
+    "en": "Rename Method",
+    "ko": "메서드 이름 변경",
+    "idea": "호출만 읽어도 무엇을 하는지 알 수 있게 이름을 바꿔요.",
+    "example": "process()를 calculate_monthly_fee()로 구체화해요.",
+    "before": [
+      "모호한 process()"
+    ],
+    "after": [
+      "calculate_monthly_fee()"
+    ],
+    "caution": "공개 API 사용자를 위해 이전 이름의 호환 기간이 필요할 수 있어요."
+  },
+  {
+    "id": "add-parameter",
+    "group": "호출 정리",
+    "en": "Add Parameter",
+    "ko": "매개변수 추가",
+    "idea": "작업에 필요한 정보를 명시적인 입력으로 전달해요.",
+    "example": "외부 전역 언어 대신 render(language)를 사용해요.",
+    "before": [
+      "숨은 전역 설정"
+    ],
+    "after": [
+      "명시적 language 입력"
+    ],
+    "caution": "매개변수가 계속 늘면 책임이나 객체 경계를 다시 봐요."
+  },
+  {
+    "id": "remove-parameter",
+    "group": "호출 정리",
+    "en": "Remove Parameter",
+    "ko": "매개변수 제거",
+    "idea": "더 이상 사용하지 않는 입력을 계약에서 없애요.",
+    "example": "안 쓰는 debug 인자를 삭제해 호출자의 부담을 줄여요.",
+    "before": [
+      "미사용 인자 전달"
+    ],
+    "after": [
+      "필요한 입력만 전달"
+    ],
+    "caution": "외부 클라이언트와 오버라이드 메서드도 함께 확인해요."
+  },
+  {
+    "id": "separate-query-from-modifier",
+    "group": "호출 정리",
+    "en": "Separate Query from Modifier",
+    "ko": "조회와 변경 분리",
+    "idea": "값을 조회하는 동작과 상태를 바꾸는 동작을 구분해요.",
+    "example": "잔액 조회가 거래를 확정하지 않게 balance()와 settle()을 나눠요.",
+    "before": [
+      "조회 호출",
+      "숨은 상태 변경"
+    ],
+    "after": [
+      "balance() 조회",
+      "settle() 변경"
+    ],
+    "caution": "원자적 조회·변경이 필요한 작업은 별도 계약으로 유지해야 할 수 있어요."
+  },
+  {
+    "id": "parameterize-method",
+    "group": "호출 정리",
+    "en": "Parameterize Method",
+    "ko": "메서드 매개변수화",
+    "idea": "같은 처리에서 값만 다른 메서드를 하나로 합쳐요.",
+    "example": "increase_by_five()와 increase_by_ten()을 increase(amount)로 바꿔요.",
+    "before": [
+      "5 증가",
+      "10 증가"
+    ],
+    "after": [
+      "increase(amount)"
+    ],
+    "caution": "값의 의미나 정책이 다른 경우까지 무리하게 합치지 않아요."
+  },
+  {
+    "id": "replace-parameter-with-explicit-methods",
+    "group": "호출 정리",
+    "en": "Replace Parameter with Explicit Methods",
+    "ko": "매개변수를 명시적 메서드로",
+    "idea": "인자가 서로 다른 작업을 선택한다면 의미 있는 별도 메서드로 나눠요.",
+    "example": "set_enabled(True/False) 대신 enable()과 disable()을 제공해요.",
+    "before": [
+      "의미가 약한 불리언 호출"
+    ],
+    "after": [
+      "enable()",
+      "disable()"
+    ],
+    "caution": "유형이 계속 늘어나는 상황에서는 전략이 더 적합할 수 있어요."
+  },
+  {
+    "id": "preserve-whole-object",
+    "group": "호출 정리",
+    "en": "Preserve Whole Object",
+    "ko": "객체 전체 전달",
+    "idea": "이미 하나의 객체에 있는 관련 값들을 따로 꺼내 전달하지 않아요.",
+    "example": "범위의 min과 max 대신 range 객체를 넘겨요.",
+    "before": [
+      "range.min",
+      "range.max 인자"
+    ],
+    "after": [
+      "Range 객체",
+      "필요한 정보 조회"
+    ],
+    "caution": "사용하지 않는 거대한 객체 전체를 넘겨 결합을 키우지 않아요."
+  },
+  {
+    "id": "replace-parameter-with-method-call",
+    "group": "호출 정리",
+    "en": "Replace Parameter with Method Call",
+    "ko": "매개변수를 메서드 호출로",
+    "idea": "수신 객체가 안정적으로 계산할 수 있는 값은 내부에서 얻어요.",
+    "example": "객체의 주문 항목으로 계산 가능한 소계를 외부에서 전달하지 않아요.",
+    "before": [
+      "외부 소계 계산",
+      "인자로 전달"
+    ],
+    "after": [
+      "내부 subtotal()",
+      "계산에 사용"
+    ],
+    "caution": "숨은 외부 I/O나 시간 의존성이 생기면 오히려 테스트가 어려워질 수 있어요."
+  },
+  {
+    "id": "introduce-parameter-object",
+    "group": "호출 정리",
+    "en": "Introduce Parameter Object",
+    "ko": "매개변수 객체 도입",
+    "idea": "함께 움직이는 입력값을 의미 있는 하나의 객체로 묶어요.",
+    "example": "시작·종료 날짜를 DateRange로 묶어 유효성도 함께 관리해요.",
+    "before": [
+      "여러 함수의 start·end"
+    ],
+    "after": [
+      "DateRange",
+      "여러 함수"
+    ],
+    "caution": "임의의 인자 모음이 아니라 하나의 개념으로 묶어요."
+  },
+  {
+    "id": "remove-setting-method",
+    "group": "호출 정리",
+    "en": "Remove Setting Method",
+    "ko": "설정 메서드 제거",
+    "idea": "생성 후 바뀌면 안 되는 값의 수정 통로를 없애요.",
+    "example": "거래 식별자는 생성 시 정하고 나중에 바꿀 수 없게 해요.",
+    "before": [
+      "생성",
+      "ID setter"
+    ],
+    "after": [
+      "생성 시 ID",
+      "읽기 전용"
+    ],
+    "caution": "중첩 가변 객체가 있으면 setter 제거만으로 완전한 불변이 되지 않아요."
+  },
+  {
+    "id": "hide-method",
+    "group": "호출 정리",
+    "en": "Hide Method",
+    "ko": "메서드 숨기기",
+    "idea": "외부에서 사용할 필요가 없는 구현 세부를 공개 계약에서 줄여요.",
+    "example": "내부 파싱 단계를 사용자가 직접 호출하지 않게 해요.",
+    "before": [
+      "불필요한 공개 parse_step()"
+    ],
+    "after": [
+      "공개 parse()",
+      "내부 단계"
+    ],
+    "caution": "Python 밑줄은 관례이므로 문서와 사용 범위도 함께 관리해요."
+  },
+  {
+    "id": "replace-constructor-with-factory-method",
+    "group": "호출 정리",
+    "en": "Replace Constructor with Factory Method",
+    "ko": "생성자를 팩토리 메서드로",
+    "idea": "객체 생성에 의미 있는 이름과 선택 로직을 부여해요.",
+    "example": "Account.from_record(row)로 변환 규칙을 생성 입구에 모아요.",
+    "before": [
+      "복잡한 생성자 인자"
+    ],
+    "after": [
+      "이름 있는 생성 메서드",
+      "객체"
+    ],
+    "caution": "이 기법은 반드시 GoF Factory Method의 상속 구조를 요구하지 않아요."
+  },
+  {
+    "id": "replace-error-code-with-exception",
+    "group": "호출 정리",
+    "en": "Replace Error Code with Exception",
+    "ko": "오류 코드를 예외로",
+    "idea": "실패를 정상 반환값과 섞지 않고 별도 제어 흐름으로 표현해요.",
+    "example": "저장 실패를 -1 대신 명시적인 StorageError로 전달해요.",
+    "before": [
+      "결과값 또는 -1"
+    ],
+    "after": [
+      "정상 결과",
+      "실패 예외"
+    ],
+    "caution": "예외를 잡을 책임과 복구 방법을 정해요. 정상적인 비즈니스 결과와 오류를 구분해요."
+  },
+  {
+    "id": "replace-exception-with-test",
+    "group": "호출 정리",
+    "en": "Replace Exception with Test",
+    "ko": "예외를 사전 검사로",
+    "idea": "정상적으로 예상되는 조건은 미리 확인하고 분기해요.",
+    "example": "빈 목록에서 첫 항목 접근 예외를 잡는 대신 비어 있는지 검사해요.",
+    "before": [
+      "접근 시도",
+      "예외로 빈 값 처리"
+    ],
+    "after": [
+      "빈 목록 확인",
+      "정상 접근"
+    ],
+    "caution": "동시성이나 외부 자원에서는 검사 후 상태가 바뀔 수 있어 예외 처리도 필요해요."
+  },
+  {
+    "id": "pull-up-field",
+    "group": "상속 정리",
+    "en": "Pull Up Field",
+    "ko": "필드 올리기",
+    "idea": "여러 하위 클래스에 같은 의미로 존재하는 필드를 상위로 모아요.",
+    "example": "모든 직원 타입의 employee_id를 공통 부모에 둬요.",
+    "before": [
+      "하위 타입별 ID 중복"
+    ],
+    "after": [
+      "Employee.employee_id"
+    ],
+    "caution": "이름만 같고 의미나 수명이 다른 값은 합치지 않아요."
+  },
+  {
+    "id": "pull-up-method",
+    "group": "상속 정리",
+    "en": "Pull Up Method",
+    "ko": "메서드 올리기",
+    "idea": "하위 타입들의 동일한 행동을 상위 타입에 모아요.",
+    "example": "여러 계좌의 같은 잔액 조회 메서드를 부모에 둬요.",
+    "before": [
+      "여러 동일 balance()"
+    ],
+    "after": [
+      "Account.balance()"
+    ],
+    "caution": "새 부모 메서드가 모든 자식에 적합한지 확인해요."
+  },
+  {
+    "id": "pull-up-constructor-body",
+    "group": "상속 정리",
+    "en": "Pull Up Constructor Body",
+    "ko": "생성자 본문 올리기",
+    "idea": "공통 초기화 단계를 상위 생성자에 모아요.",
+    "example": "공통 이름과 ID 초기화를 super()로 처리해요.",
+    "before": [
+      "자식별 동일 초기화"
+    ],
+    "after": [
+      "부모 초기화",
+      "자식 고유 초기화"
+    ],
+    "caution": "초기화 순서와 오버라이드 메서드 호출에 주의해요."
+  },
+  {
+    "id": "push-down-method",
+    "group": "상속 정리",
+    "en": "Push Down Method",
+    "ko": "메서드 내리기",
+    "idea": "일부 자식에만 필요한 행동을 해당 자식으로 옮겨요.",
+    "example": "모든 직원이 아닌 영업 직원만 commission()을 가져요.",
+    "before": [
+      "Employee.commission()"
+    ],
+    "after": [
+      "SalesEmployee.commission()"
+    ],
+    "caution": "부모 타입 사용자에게 해당 동작이 필요한지 먼저 살펴봐요."
+  },
+  {
+    "id": "push-down-field",
+    "group": "상속 정리",
+    "en": "Push Down Field",
+    "ko": "필드 내리기",
+    "idea": "일부 타입에만 의미 있는 데이터를 해당 타입으로 옮겨요.",
+    "example": "영업 목표를 공통 직원 대신 영업 직원에 둬요.",
+    "before": [
+      "모든 직원의 sales_target"
+    ],
+    "after": [
+      "영업 직원의 sales_target"
+    ],
+    "caution": "직렬화·DB 매핑에서 빈 값 처리 방식이 바뀔 수 있어요."
+  },
+  {
+    "id": "extract-subclass",
+    "group": "상속 정리",
+    "en": "Extract Subclass",
+    "ko": "하위 클래스 추출",
+    "idea": "안정적인 특별 유형의 고유 행동을 하위 타입으로 분리해요.",
+    "example": "특수 장비만 제공하는 보정 기능을 해당 하위 타입에 둬요.",
+    "before": [
+      "기본·특수 기능 한 클래스"
+    ],
+    "after": [
+      "기본 타입",
+      "특수 타입"
+    ],
+    "caution": "실행 중 유형이 자주 바뀌면 합성을 우선 검토해요."
+  },
+  {
+    "id": "extract-superclass",
+    "group": "상속 정리",
+    "en": "Extract Superclass",
+    "ko": "상위 클래스 추출",
+    "idea": "실제로 공통 계약과 행동이 있는 타입들의 공통 부분을 뽑아요.",
+    "example": "같은 식별 규칙과 조회 행동이 있는 항목을 공통 타입으로 묶어요.",
+    "before": [
+      "타입 A 공통 코드",
+      "타입 B 공통 코드"
+    ],
+    "after": [
+      "공통 부모",
+      "A",
+      "B"
+    ],
+    "caution": "우연한 코드 유사성만으로 상속 관계를 만들지 않아요."
+  },
+  {
+    "id": "extract-interface",
+    "group": "상속 정리",
+    "en": "Extract Interface",
+    "ko": "인터페이스 추출",
+    "idea": "사용자가 필요로 하는 작은 계약을 구현과 분리해요.",
+    "example": "대출 서비스가 필요한 save()만 Repository 계약에 둬요.",
+    "before": [
+      "서비스",
+      "구체 SQL 저장소"
+    ],
+    "after": [
+      "서비스",
+      "Repository",
+      "구현"
+    ],
+    "caution": "현재 구현의 모든 메서드를 복사한 인터페이스는 경계가 너무 클 수 있어요."
+  },
+  {
+    "id": "collapse-hierarchy",
+    "group": "상속 정리",
+    "en": "Collapse Hierarchy",
+    "ko": "상속 계층 합치기",
+    "idea": "부모와 자식의 구분이 의미 없어졌다면 한 타입으로 합쳐요.",
+    "example": "정책 차이가 사라진 전용 하위 클래스를 부모에 통합해요.",
+    "before": [
+      "차이 없는 부모·자식"
+    ],
+    "after": [
+      "하나의 명확한 타입"
+    ],
+    "caution": "외부에서 하위 타입을 식별자로 사용하는지 확인해요."
+  },
+  {
+    "id": "form-template-method",
+    "group": "상속 정리",
+    "en": "Form Template Method",
+    "ko": "템플릿 메서드 만들기",
+    "idea": "유사한 알고리즘의 공통 순서를 모으고 다른 단계를 확장점으로 남겨요.",
+    "example": "CSV와 JSON 처리의 읽기·검증·저장 흐름을 통일해요.",
+    "before": [
+      "각 타입의 유사한 처리 흐름"
+    ],
+    "after": [
+      "공통 순서",
+      "타입별 읽기 단계"
+    ],
+    "caution": "순서까지 자주 달라지면 상속보다 함수 조합이 더 쉬울 수 있어요."
+  },
+  {
+    "id": "replace-inheritance-with-delegation",
+    "group": "상속 정리",
+    "en": "Replace Inheritance with Delegation",
+    "ko": "상속을 위임으로",
+    "idea": "부모의 일부 기능만 필요하면 해당 객체를 보유하고 호출해요.",
+    "example": "목록을 상속한 큐 대신 내부 리스트를 가진 Queue를 만들어요.",
+    "before": [
+      "Queue가 List 상속"
+    ],
+    "after": [
+      "Queue",
+      "내부 List",
+      "필요한 기능만 공개"
+    ],
+    "caution": "기존 상위 타입으로 사용하던 코드와의 호환성을 확인해요."
+  },
+  {
+    "id": "replace-delegation-with-inheritance",
+    "group": "상속 정리",
+    "en": "Replace Delegation with Inheritance",
+    "ko": "위임을 상속으로",
+    "idea": "진짜 하위 타입 관계이고 부모 계약 전체를 지킬 수 있다면 상속으로 정리해요.",
+    "example": "모든 도형 계약을 만족하는 Circle의 중복 전달을 정리해요.",
+    "before": [
+      "진짜 하위 타입의 반복 전달"
+    ],
+    "after": [
+      "Shape",
+      "Circle 상속"
+    ],
+    "caution": "코드 몇 줄을 줄이려 LSP를 깨지 않도록 해요. 합성 유지가 더 나을 수도 있어요."
+  }
+]
