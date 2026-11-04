@@ -125,7 +125,7 @@ const editorialButton=document.createElement('button');
 editorialButton.id='editorial-button';editorialButton.textContent='Solutions · 3 approaches';
 editorialButton.title='English explanations, three Python solutions, and time/space complexity';
 $('run').after(editorialButton);
-import('./animations.js?v=readable-en-v1').then(m=>m.installAnimations(editorialButton,()=>current)).catch(e=>console.error('Animation player unavailable',e));
+import('./animations.js?v=korean-guide-v1').then(m=>m.installAnimations(editorialButton,()=>current)).catch(e=>console.error('Problem guide unavailable',e));
 const editorialDialog=document.createElement('dialog');
 editorialDialog.id='editorial-dialog';editorialDialog.lang='en';
 editorialDialog.setAttribute('aria-labelledby','editorial-title');
