@@ -9,7 +9,7 @@ function save(){if(!current)return;try{localStorage.setItem('graph-workspace:'+c
 function refreshLines(){const text=value();$('gutter').textContent=text.split('\n').map((_,i)=>i+1).join('\n');const p=$('code').selectionStart;const before=text.slice(0,p).split('\n');$('position').textContent=`Ln ${before.length}, Col ${before.at(-1).length+1}`;}
 function buttons(){for(const id of ['run','debug','submit'])$(id).disabled=!current||busy;$('stop').disabled=!busy&&!(!ready&&worker);$('case').disabled=busy;}
 function resetTrace(){frames=[];$('trace-controls').hidden=true;$('variables').hidden=true;if(aceEditor&&marker!=null){aceEditor.session.removeMarker(marker);marker=null;}}
-function openProblem(p){window.workspaceAnimationClose?.();if(busy){pendingMode=null;stop('Execution stopped: module changed.');boot();}save();current=p;setLanguage(p);editorialButton.hidden=p.hasEditorial===false;const animationButton=$('animation-button');if(animationButton)animationButton.hidden=p.hasAnimation===false;if(editorialDialog.open)editorialDialog.close();leetcodeLink.href='https://leetcode.com/problems/'+(p.slug||leetcodeSlugs[p.id])+'/description/';leetcodeLink.hidden=!(p.slug||leetcodeSlugs[p.id]);resetTrace();$('filename').textContent=p.file;$('crumb').textContent=p.file;$('pid').textContent='#'+p.id;$('problem-title').textContent=p.title;$('rules').replaceChildren(...p.rules.map(r=>{const li=document.createElement('li');li.textContent=r;return li;}));$('examples').textContent=p.examples;renderExampleImages(p);$('constraints').textContent=p.constraints;$('custom').value=JSON.stringify(p.tests[0].args);$('test-count').textContent=`${p.tests.length} examples · ${p.extra.length} edge cases`;renderEdgeCases(p);
+function openProblem(p){window.workspaceAnimationClose?.();if(busy){pendingMode=null;stop('Execution stopped: module changed.');boot();}save();current=p;setLanguage(p);editorialButton.hidden=p.hasEditorial===false;const animationButton=$('animation-button');if(animationButton)animationButton.hidden=p.hasAnimation===false;if(editorialDialog.open)editorialDialog.close();leetcodeLink.href='https://leetcode.com/problems/'+(p.slug||leetcodeSlugs[p.id])+'/description/';leetcodeLink.hidden=!(p.slug||leetcodeSlugs[p.id]);resetTrace();$('filename').textContent=p.file;$('crumb').textContent=p.file;$('pid').textContent='#'+p.id;$('problem-title').textContent=p.title;$('rules').replaceChildren(...p.rules.map(r=>{const li=document.createElement('li');li.textContent=r;return li;}));$('examples').textContent=p.examples;renderSqlExamples(p);renderExampleImages(p);$('constraints').textContent=p.constraints;$('custom').value=JSON.stringify(p.tests[0].args);$('test-count').textContent=`${p.tests.length} examples · ${p.extra.length} edge cases`;renderEdgeCases(p);
 let draft;try{draft=localStorage.getItem('graph-workspace:'+p.id);}catch(e){}$('code').value=draft??p.starter;if(aceEditor)aceEditor.setValue($('code').value,-1);refreshLines();$('output').textContent=`${p.file} ready. ${p.language==='sql'?'Write a SQLite SELECT / WITH query.':'Implement Solution.'+p.method+'().'}`;history.replaceState(null,'','#'+p.id);renderFiles();}
 
 function renderEdgeCases(p) {
@@ -50,7 +50,7 @@ function renderEdgeCases(p) {
       $('output').textContent = label + ' selected. Click Run or Debug.';
       select.scrollIntoView({block:'nearest'});
     });
-    detail.append(heading, pre, use);
+    detail.append(heading, p.language==='sql'?sqlCaseTables(p,test):pre, use);
     panel.append(detail);
   });
   $('custom').hidden = true;
@@ -59,7 +59,7 @@ function renderEdgeCases(p) {
 function renderFiles(){const q=$('search').value.toLowerCase();$('files').replaceChildren(...problems.filter(p=>(p.file+p.title+p.id).toLowerCase().includes(q)).map(p=>{const b=document.createElement('button');b.className='file'+(current?.id===p.id?' active':'');b.title=p.id+'. '+p.title;const icon=document.createElement('span');icon.className='python';icon.textContent=p.language==='sql'?'SQL':'Py';const name=document.createElement('span');name.textContent=p.file;b.append(icon,name);b.onclick=()=>openProblem(p);return b;}));}
 function runtimeFailure(message){clearTimeout(timer);if(worker)worker.terminate();worker=null;ready=false;busy=false;if(runtimeAttempt+1<runtimeSources.length){runtimeAttempt++;$('output').textContent=message+'\n다른 다운로드 경로로 자동 재시도 중…';boot();}else{pendingMode=null;status('Runtime unavailable · click Run to retry');$('output').textContent=message+'\n실행 엔진을 불러오지 못했습니다. Run / Debug / Submit을 누르면 다시 시도합니다. 작성한 코드는 보존됩니다.';buttons();}}
 function boot(){if(worker)worker.terminate();ready=false;busy=false;status('Python loading…');worker=new Worker('worker.js?v=runtime-fix-v1&source='+runtimeAttempt,{type:'module'});buttons();clearTimeout(timer);timer=setTimeout(()=>runtimeFailure('Runtime loading timed out.'),30000);
-worker.onmessage=({data:m})=>{if(m.type==='progress'){status(m.message);return;}if(m.type==='ready'){clearTimeout(timer);ready=true;status('Python / SQLite · ready');buttons();if(pendingMode){const mode=pendingMode;pendingMode=null;run(mode);}return;}if(m.type==='error'){if(!ready){runtimeFailure(m.error);return;}clearTimeout(timer);busy=false;status('Runtime error');$('output').textContent=m.error;buttons();return;}if(m.type==='result'){clearTimeout(timer);busy=false;buttons();const d=m.data;const passed=d.results.filter(x=>x.ok===true).length;const lines=d.results.map(r=>`[${r.ok===null?'RESULT':r.ok?'PASS':'FAIL'}] case ${r.case}${r.label?' · '+r.label:''}\n`+(r.error?r.error:`  actual: ${JSON.stringify(r.actual)}${r.ok===null?'':'\n  expected: '+JSON.stringify(r.expected)}`));let summary=runMode==='submit'?`LOCAL SUBMISSION: ${passed===runProblem.tests.length+runProblem.extra.length?'PASSED':'FAILED'} (${passed}/${runProblem.tests.length+runProblem.extra.length})\nExamples + additional local tests; not the official LeetCode judge.\n`:'';$('output').textContent=summary+lines.join('\n\n')+(d.output?'\n\nSTDOUT\n'+d.output:'')+`\n\nCompleted in ${d.elapsed} ms.`;status(current?.language==='sql'?'SQLite · ready':'Python · ready');if(runMode==='submit'){try{const k='graph-submissions:'+runProblem.id;const old=JSON.parse(localStorage.getItem(k)||'[]');old.unshift({date:new Date().toISOString(),passed,total:runProblem.tests.length+runProblem.extra.length,code:runCode});localStorage.setItem(k,JSON.stringify(old.slice(0,10)));}catch(e){status('Results not saved — storage unavailable');}}if(runMode==='debug'&&d.frames.length){frames=d.frames;frameIndex=0;$('trace-case').replaceChildren();const seenCases=new Set();frames.forEach((f,i)=>{if(!seenCases.has(f.case)){seenCases.add(f.case);$('trace-case').add(new Option('Case '+f.case+' · '+f.label,String(i)));}});$('trace-controls').hidden=false;$('variables').hidden=false;showFrame();if(d.traceTruncated)$('output').textContent+='\nTrace capped at 2,500 events per case; all results are still reported.';}}};worker.onerror=()=>runtimeFailure('Unable to load the execution engine.');}
+worker.onmessage=({data:m})=>{if(m.type==='progress'){status(m.message);return;}if(m.type==='ready'){clearTimeout(timer);ready=true;status('Python / SQLite · ready');buttons();if(pendingMode){const mode=pendingMode;pendingMode=null;run(mode);}return;}if(m.type==='error'){if(!ready){runtimeFailure(m.error);return;}clearTimeout(timer);busy=false;status('Runtime error');$('output').textContent=m.error;buttons();return;}if(m.type==='result'){clearTimeout(timer);busy=false;buttons();const d=m.data;const passed=d.results.filter(x=>x.ok===true).length;const lines=d.results.map(r=>`[${r.ok===null?'RESULT':r.ok?'PASS':'FAIL'}] case ${r.case}${r.label?' · '+r.label:''}\n`+(r.error?r.error:`  actual: ${JSON.stringify(r.actual)}${r.ok===null?'':'\n  expected: '+JSON.stringify(r.expected)}`));let summary=runMode==='submit'?`LOCAL SUBMISSION: ${passed===runProblem.tests.length+runProblem.extra.length?'PASSED':'FAILED'} (${passed}/${runProblem.tests.length+runProblem.extra.length})\nExamples + additional local tests; not the official LeetCode judge.\n`:'';$('output').textContent=summary+lines.join('\n\n')+(d.output?'\n\nSTDOUT\n'+d.output:'')+`\n\nCompleted in ${d.elapsed} ms.`;if(runProblem.language==='sql')renderSqlResults(d,runMode);status(current?.language==='sql'?'SQLite · ready':'Python · ready');if(runMode==='submit'){try{const k='graph-submissions:'+runProblem.id;const old=JSON.parse(localStorage.getItem(k)||'[]');old.unshift({date:new Date().toISOString(),passed,total:runProblem.tests.length+runProblem.extra.length,code:runCode});localStorage.setItem(k,JSON.stringify(old.slice(0,10)));}catch(e){status('Results not saved — storage unavailable');}}if(runMode==='debug'&&d.frames.length){frames=d.frames;frameIndex=0;$('trace-case').replaceChildren();const seenCases=new Set();frames.forEach((f,i)=>{if(!seenCases.has(f.case)){seenCases.add(f.case);$('trace-case').add(new Option('Case '+f.case+' · '+f.label,String(i)));}});$('trace-controls').hidden=false;$('variables').hidden=false;showFrame();if(d.traceTruncated)$('output').textContent+='\nTrace capped at 2,500 events per case; all results are still reported.';}}};worker.onerror=()=>runtimeFailure('Unable to load the execution engine.');}
 function stop(message='Execution cancelled. Reloading Python…'){if(worker)worker.terminate();clearTimeout(timer);worker=null;busy=false;ready=false;buttons();$('output').textContent=message;status('Stopped · reload page to restart');}
 function run(mode){if(busy)return;if(!ready){pendingMode=mode;$('output').textContent='실행 엔진을 준비하고 있어요. 준비되면 '+mode+'을 자동으로 실행합니다…';if(!worker){runtimeAttempt=0;boot();}return;}let tests=[...current.tests,...current.extra];const selection=$('case').value;if(selection==='examples')tests=current.tests;if(selection==='edges')tests=current.extra;if(selection.startsWith('edge:'))tests=[current.extra[Number(selection.slice(5))]];if(mode!=='submit'&&$('case').value==='custom'){try{const args=JSON.parse($('custom').value);if(!Array.isArray(args)||args.length!==current.tests[0].args.length)throw new Error('Use a JSON array containing '+current.tests[0].args.length+' function arguments.');tests=[{args}];}catch(e){$('output').textContent='Invalid custom arguments: '+e.message;return;}}if(mode==='submit')tests=[...current.tests,...current.extra];save();resetTrace();runMode=mode;runProblem=current;runCode=value();busy=true;buttons();status(current.language==='sql'?'SQLite · running':'Python · running');$('output').textContent=mode==='debug'?(current.language==='sql'?'Running queries and recording query plans for ':'Recording execution of ')+tests.length+' test cases…':'Running '+tests.length+' test cases…';worker.postMessage({code:runCode,problem:current.id,method:current.method,language:current.language,schema:current.schema,columns:current.columns,ordered:current.ordered,tests,mode});timer=setTimeout(()=>{stop('Execution timed out after 12 seconds. Python is restarting…');boot();},12000);}
 function showFrame(){const f=frames[frameIndex];$('trace-case').value=String(frames.findIndex(x=>x.case===f.case));$('step').max=frames.length;$('step').value=frameIndex+1;$('trace-label').textContent=` / ${frames.length} · case ${f.case} · line ${f.line} · ${f.event}`;$('variables').textContent=`Case ${f.case} · ${f.label}\nRecorded ${f.function}() · before line execution (return events are after)\n`+Object.entries(f.locals).map(([k,v])=>`${k} = ${v}`).join('\n');$('prev').disabled=frameIndex===0;$('next').disabled=frameIndex===frames.length-1;if(aceEditor){if(marker!=null)aceEditor.session.removeMarker(marker);const Range=ace.require('ace/range').Range;marker=aceEditor.session.addMarker(new Range(f.line-1,0,f.line-1,1),'trace-line','fullLine');aceEditor.gotoLine(f.line,0,false);}else{const lines=value().split('\n');const start=lines.slice(0,f.line-1).join('\n').length+(f.line>1?1:0);$('code').focus();$('code').setSelectionRange(start,start+(lines[f.line-1]||'').length);$('code').scrollTop=Math.max(0,(f.line-5)*32);}}
@@ -189,3 +189,61 @@ function setLanguage(p){
  if(ready)status(sql?'SQLite · ready':'Python · ready');
  document.querySelector('footer > span:last-child').textContent=sql?'UTF-8 · SQL':'UTF-8 · Python';
 }
+
+function sqlTable(title,columns,rows,types){
+ const section=document.createElement('section');section.className='sql-sheet';
+ const label=document.createElement('h3');label.textContent=title+' · '+rows.length+' rows';section.append(label);
+ const wrap=document.createElement('div');wrap.className='sql-sheet-scroll';wrap.tabIndex=0;wrap.setAttribute('aria-label',title+' table');
+ const table=document.createElement('table');table.className='sql-data-table';
+ const caption=document.createElement('caption');caption.textContent=title;table.append(caption);
+ const head=document.createElement('thead'),hr=document.createElement('tr');
+ const corner=document.createElement('th');corner.textContent='#';corner.scope='col';hr.append(corner);
+ columns.forEach((name,i)=>{const th=document.createElement('th');th.scope='col';th.textContent=name;if(types){const small=document.createElement('small');small.textContent=types[i];th.append(small);}hr.append(th);});
+ head.append(hr);table.append(head);
+ const body=document.createElement('tbody');
+ rows.forEach((row,i)=>{const tr=document.createElement('tr'),idx=document.createElement('th');idx.scope='row';idx.textContent=i+1;tr.append(idx);row.forEach(value=>{const td=document.createElement('td');td.textContent=value===null?'NULL':String(value);if(value===null)td.className='sql-null';if(typeof value==='number')td.className='sql-number';tr.append(td);});body.append(tr);});
+ if(!rows.length){const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=columns.length+1;td.textContent='No rows';tr.append(td);body.append(tr);}
+ table.append(body);wrap.append(table);section.append(wrap);return section;
+}
+function sqlCaseTables(p,test){
+ const box=document.createElement('div');box.className='sql-case-tables';
+ for(const [name,cols] of Object.entries(p.schema))box.append(sqlTable(name,cols.map(c=>c[0]),test.args[0][name]||[],cols.map(c=>c[1])));
+ box.append(sqlTable('Expected result · 정답',p.columns,test.expected));
+ return box;
+}
+function renderSqlExamples(p){
+ let area=$('sql-examples');if(!area){area=document.createElement('div');area.id='sql-examples';$('examples').after(area);}
+ const sql=p.language==='sql';$('examples').hidden=sql;area.hidden=!sql;area.replaceChildren();
+ if(sql)p.tests.forEach((test,i)=>{const label=document.createElement('h2');label.textContent='Example '+(i+1);area.append(label,sqlCaseTables(p,test));});
+}
+function renderSqlResults(data,mode){
+ const output=$('output');output.replaceChildren();
+ const summary=document.createElement('div');summary.className='sql-result-summary';
+ const passed=data.results.filter(r=>r.ok===true).length;
+ summary.textContent=(mode==='submit'?'LOCAL SUBMISSION · ':'')+passed+'/'+data.results.length+' passed · '+data.elapsed+' ms';output.append(summary);
+ data.results.forEach(r=>{const section=document.createElement('section');section.className='sql-result-case';const h=document.createElement('h3');h.textContent=(r.ok===null?'RESULT':r.ok?'PASS':'FAIL')+' · Case '+r.case;section.append(h);
+ if(r.error){const e=document.createElement('pre');e.textContent=r.error;section.append(e);}
+ else{section.append(sqlTable('Actual result · 실행 결과',r.actual.columns,r.actual.rows));if(r.expected)section.append(sqlTable('Expected result · 정답',r.expected.columns,r.expected.rows));}output.append(section);});
+ if(data.output){const pre=document.createElement('pre');pre.textContent=data.output;output.append(pre);}
+}
+const sqlTableStyle=document.createElement('style');
+sqlTableStyle.textContent=`
+#sql-examples[hidden], #examples[hidden]{display:none!important}
+.sql-case-tables,.sql-sheet,.sql-result-case{white-space:normal;min-width:0;max-width:100%}
+.sql-sheet{margin:14px 0 20px}
+.sql-sheet h3{font:600 14px/1.5 system-ui,sans-serif;margin:0;padding:9px 12px;background:#213c35;color:#bcebd9;border:1px solid #436159;border-bottom:0;border-radius:6px 6px 0 0;overflow-wrap:anywhere}
+.sql-sheet-scroll{max-width:100%;overflow:auto;border:1px solid #436159;border-radius:0 0 6px 6px}
+.sql-data-table{border-collapse:collapse;width:100%;margin:0;font:14px/1.5 ui-monospace,monospace;color:#e1e8ef;background:#192129}
+.sql-data-table caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.sql-data-table th,.sql-data-table td{padding:8px 12px!important;border:1px solid #34424c!important;text-align:left;white-space:nowrap;font-size:14px!important}
+.sql-data-table thead th{background:#293d43;color:#d7f4e8;font-weight:600;position:sticky;top:0}
+.sql-data-table th small{display:block;font:10px/1.4 system-ui,sans-serif;color:#9ab6b5}
+.sql-data-table tbody th{width:30px;background:#202c34;color:#84959f;font-weight:400;text-align:right}
+.sql-data-table tbody tr:nth-child(even) td{background:#202b34}
+.sql-data-table tbody tr:hover td{background:#2d4247}
+.sql-data-table td.sql-number{text-align:right}
+.sql-data-table td.sql-null{color:#9ba7b2;font-style:italic}
+.sql-result-summary{white-space:normal;font-weight:600;padding:8px 0;color:#a7e3cb}
+#sql-examples>h2{font-size:16px;margin-top:12px}
+`;
+document.head.append(sqlTableStyle);
