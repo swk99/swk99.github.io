@@ -2,7 +2,7 @@ import {loadPyodide} from 'https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodid
 let py;
 try {
   py=await loadPyodide();
-  const response=await fetch('./runner.py');
+  const response=await fetch('./runner.py?v=sql31-v1');
   if(!response.ok) throw new Error('Could not load runner');
   py.runPython(await response.text());
   self.postMessage({type:'ready',version:py.runPython('sys.version.split()[0]')});
@@ -14,3 +14,4 @@ self.onmessage=async ({data})=>{
     self.postMessage({type:'result',data:JSON.parse(result)});
   } catch(e){self.postMessage({type:'error',error:e.message});}
 };
+

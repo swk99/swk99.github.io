@@ -1,0 +1,4155 @@
+[
+  {
+    "id": 570,
+    "title": "Managers with at Least 5 Direct Reports",
+    "slug": "managers-with-at-least-5-direct-reports",
+    "file": "managers_with_at_least_5_direct_reports.sql",
+    "language": "sql",
+    "category": "Joins",
+    "method": "__sql__",
+    "rules": [
+      "직속 부하 직원이 5명 이상인 관리자의 name을 반환하세요. 간접 보고는 세지 않습니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Employee (id INTEGER, name TEXT, department TEXT, managerId INTEGER);\n\nOutput columns: name",
+    "schema": {
+      "Employee": [
+        [
+          "id",
+          "INTEGER"
+        ],
+        [
+          "name",
+          "TEXT"
+        ],
+        [
+          "department",
+          "TEXT"
+        ],
+        [
+          "managerId",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "name"
+    ],
+    "ordered": false,
+    "starter": "-- Managers with at Least 5 Direct Reports\n-- SQLite · write one SELECT / WITH query below.\n-- Output: name\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Employee": [
+              [
+                1,
+                "Kim",
+                "A",
+                null
+              ],
+              [
+                2,
+                "E2",
+                "A",
+                1
+              ],
+              [
+                3,
+                "E3",
+                "A",
+                1
+              ],
+              [
+                4,
+                "E4",
+                "A",
+                1
+              ],
+              [
+                5,
+                "E5",
+                "A",
+                1
+              ],
+              [
+                6,
+                "E6",
+                "A",
+                1
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "Kim"
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Employee": [
+              [
+                1,
+                "Kim",
+                "A",
+                null
+              ],
+              [
+                2,
+                "E",
+                "A",
+                1
+              ],
+              [
+                3,
+                "E",
+                "A",
+                1
+              ],
+              [
+                4,
+                "E",
+                "A",
+                1
+              ],
+              [
+                5,
+                "E",
+                "A",
+                1
+              ],
+              [
+                6,
+                "Lee",
+                "B",
+                null
+              ],
+              [
+                7,
+                "E",
+                "B",
+                6
+              ],
+              [
+                8,
+                "E",
+                "B",
+                6
+              ],
+              [
+                9,
+                "E",
+                "B",
+                6
+              ],
+              [
+                10,
+                "E",
+                "B",
+                6
+              ],
+              [
+                11,
+                "E",
+                "B",
+                6
+              ],
+              [
+                12,
+                "E",
+                "B",
+                6
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "Lee"
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employee\": [\n    [\n      1,\n      \"Kim\",\n      \"A\",\n      null\n    ],\n    [\n      2,\n      \"E2\",\n      \"A\",\n      1\n    ],\n    [\n      3,\n      \"E3\",\n      \"A\",\n      1\n    ],\n    [\n      4,\n      \"E4\",\n      \"A\",\n      1\n    ],\n    [\n      5,\n      \"E5\",\n      \"A\",\n      1\n    ],\n    [\n      6,\n      \"E6\",\n      \"A\",\n      1\n    ]\n  ]\n}\n\nExpected columns: name\nExpected rows:\n[\n  [\n    \"Kim\"\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1934,
+    "title": "Confirmation Rate",
+    "slug": "confirmation-rate",
+    "file": "confirmation_rate.sql",
+    "language": "sql",
+    "category": "Joins",
+    "method": "__sql__",
+    "rules": [
+      "가입자마다 confirmed 횟수 / 전체 확인 요청 횟수를 소수 둘째 자리로 반올림하세요. 요청이 없으면 0입니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Signups (user_id INTEGER, time_stamp TEXT);\nCREATE TABLE Confirmations (user_id INTEGER, time_stamp TEXT, action TEXT);\n\nOutput columns: user_id, confirmation_rate",
+    "schema": {
+      "Signups": [
+        [
+          "user_id",
+          "INTEGER"
+        ],
+        [
+          "time_stamp",
+          "TEXT"
+        ]
+      ],
+      "Confirmations": [
+        [
+          "user_id",
+          "INTEGER"
+        ],
+        [
+          "time_stamp",
+          "TEXT"
+        ],
+        [
+          "action",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "user_id",
+      "confirmation_rate"
+    ],
+    "ordered": false,
+    "starter": "-- Confirmation Rate\n-- SQLite · write one SELECT / WITH query below.\n-- Output: user_id, confirmation_rate\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Signups": [
+              [
+                1,
+                "2020-01-01"
+              ],
+              [
+                2,
+                "2020-01-02"
+              ],
+              [
+                3,
+                "2020-01-03"
+              ]
+            ],
+            "Confirmations": [
+              [
+                1,
+                "2020-02-01",
+                "confirmed"
+              ],
+              [
+                1,
+                "2020-02-02",
+                "timeout"
+              ],
+              [
+                2,
+                "2020-02-01",
+                "confirmed"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            0.5
+          ],
+          [
+            2,
+            1.0
+          ],
+          [
+            3,
+            0.0
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Signups": [
+              [
+                4,
+                "2020-01-01"
+              ],
+              [
+                5,
+                "2020-01-02"
+              ]
+            ],
+            "Confirmations": [
+              [
+                4,
+                "a",
+                "timeout"
+              ],
+              [
+                4,
+                "b",
+                "timeout"
+              ],
+              [
+                4,
+                "c",
+                "confirmed"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            4,
+            0.33
+          ],
+          [
+            5,
+            0.0
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Signups\": [\n    [\n      1,\n      \"2020-01-01\"\n    ],\n    [\n      2,\n      \"2020-01-02\"\n    ],\n    [\n      3,\n      \"2020-01-03\"\n    ]\n  ],\n  \"Confirmations\": [\n    [\n      1,\n      \"2020-02-01\",\n      \"confirmed\"\n    ],\n    [\n      1,\n      \"2020-02-02\",\n      \"timeout\"\n    ],\n    [\n      2,\n      \"2020-02-01\",\n      \"confirmed\"\n    ]\n  ]\n}\n\nExpected columns: user_id, confirmation_rate\nExpected rows:\n[\n  [\n    1,\n    0.5\n  ],\n  [\n    2,\n    1.0\n  ],\n  [\n    3,\n    0.0\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 620,
+    "title": "Not Boring Movies",
+    "slug": "not-boring-movies",
+    "file": "not_boring_movies.sql",
+    "language": "sql",
+    "category": "Basic Aggregate Functions",
+    "method": "__sql__",
+    "rules": [
+      "id가 홀수이고 description이 boring이 아닌 영화를 모든 열로 반환하세요. rating 내림차순으로 정렬하세요.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Cinema (id INTEGER, movie TEXT, description TEXT, rating REAL);\n\nOutput columns: id, movie, description, rating",
+    "schema": {
+      "Cinema": [
+        [
+          "id",
+          "INTEGER"
+        ],
+        [
+          "movie",
+          "TEXT"
+        ],
+        [
+          "description",
+          "TEXT"
+        ],
+        [
+          "rating",
+          "REAL"
+        ]
+      ]
+    },
+    "columns": [
+      "id",
+      "movie",
+      "description",
+      "rating"
+    ],
+    "ordered": true,
+    "starter": "-- Not Boring Movies\n-- SQLite · write one SELECT / WITH query below.\n-- Output: id, movie, description, rating\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Cinema": [
+              [
+                1,
+                "A",
+                "great",
+                8.1
+              ],
+              [
+                2,
+                "B",
+                "great",
+                9.0
+              ],
+              [
+                3,
+                "C",
+                "boring",
+                8.5
+              ],
+              [
+                5,
+                "D",
+                "fun",
+                9.2
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            5,
+            "D",
+            "fun",
+            9.2
+          ],
+          [
+            1,
+            "A",
+            "great",
+            8.1
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Cinema": [
+              [
+                1,
+                "A",
+                "boring",
+                9.0
+              ],
+              [
+                2,
+                "B",
+                "fun",
+                8.0
+              ],
+              [
+                7,
+                "C",
+                "fun",
+                6.0
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            7,
+            "C",
+            "fun",
+            6.0
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Cinema\": [\n    [\n      1,\n      \"A\",\n      \"great\",\n      8.1\n    ],\n    [\n      2,\n      \"B\",\n      \"great\",\n      9.0\n    ],\n    [\n      3,\n      \"C\",\n      \"boring\",\n      8.5\n    ],\n    [\n      5,\n      \"D\",\n      \"fun\",\n      9.2\n    ]\n  ]\n}\n\nExpected columns: id, movie, description, rating\nExpected rows:\n[\n  [\n    5,\n    \"D\",\n    \"fun\",\n    9.2\n  ],\n  [\n    1,\n    \"A\",\n    \"great\",\n    8.1\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1251,
+    "title": "Average Selling Price",
+    "slug": "average-selling-price",
+    "file": "average_selling_price.sql",
+    "language": "sql",
+    "category": "Basic Aggregate Functions",
+    "method": "__sql__",
+    "rules": [
+      "상품마다 판매 기간에 해당하는 가격으로 총 매출 / 총 판매 수량을 구하고 소수 둘째 자리로 반올림하세요. 기간 양끝은 포함되며 같은 상품의 가격 기간은 겹치지 않습니다. 판매가 없으면 0입니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Prices (product_id INTEGER, start_date TEXT, end_date TEXT, price INTEGER);\nCREATE TABLE UnitsSold (product_id INTEGER, purchase_date TEXT, units INTEGER);\n\nOutput columns: product_id, average_price",
+    "schema": {
+      "Prices": [
+        [
+          "product_id",
+          "INTEGER"
+        ],
+        [
+          "start_date",
+          "TEXT"
+        ],
+        [
+          "end_date",
+          "TEXT"
+        ],
+        [
+          "price",
+          "INTEGER"
+        ]
+      ],
+      "UnitsSold": [
+        [
+          "product_id",
+          "INTEGER"
+        ],
+        [
+          "purchase_date",
+          "TEXT"
+        ],
+        [
+          "units",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "product_id",
+      "average_price"
+    ],
+    "ordered": false,
+    "starter": "-- Average Selling Price\n-- SQLite · write one SELECT / WITH query below.\n-- Output: product_id, average_price\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Prices": [
+              [
+                1,
+                "2020-01-01",
+                "2020-01-10",
+                10
+              ],
+              [
+                1,
+                "2020-01-11",
+                "2020-01-31",
+                20
+              ],
+              [
+                2,
+                "2020-01-01",
+                "2020-01-31",
+                5
+              ]
+            ],
+            "UnitsSold": [
+              [
+                1,
+                "2020-01-10",
+                2
+              ],
+              [
+                1,
+                "2020-01-11",
+                1
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            13.33
+          ],
+          [
+            2,
+            0
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Prices": [
+              [
+                1,
+                "2020-01-01",
+                "2020-01-31",
+                7
+              ],
+              [
+                2,
+                "2020-01-01",
+                "2020-01-31",
+                3
+              ]
+            ],
+            "UnitsSold": [
+              [
+                1,
+                "2020-01-01",
+                1
+              ],
+              [
+                1,
+                "2020-01-31",
+                2
+              ],
+              [
+                2,
+                "2020-01-15",
+                4
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            7.0
+          ],
+          [
+            2,
+            3.0
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Prices\": [\n    [\n      1,\n      \"2020-01-01\",\n      \"2020-01-10\",\n      10\n    ],\n    [\n      1,\n      \"2020-01-11\",\n      \"2020-01-31\",\n      20\n    ],\n    [\n      2,\n      \"2020-01-01\",\n      \"2020-01-31\",\n      5\n    ]\n  ],\n  \"UnitsSold\": [\n    [\n      1,\n      \"2020-01-10\",\n      2\n    ],\n    [\n      1,\n      \"2020-01-11\",\n      1\n    ]\n  ]\n}\n\nExpected columns: product_id, average_price\nExpected rows:\n[\n  [\n    1,\n    13.33\n  ],\n  [\n    2,\n    0\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1075,
+    "title": "Project Employees I",
+    "slug": "project-employees-i",
+    "file": "project_employees_i.sql",
+    "language": "sql",
+    "category": "Basic Aggregate Functions",
+    "method": "__sql__",
+    "rules": [
+      "프로젝트별 참여 직원의 평균 경력 연수를 소수 둘째 자리로 반올림하여 반환하세요.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Project (project_id INTEGER, employee_id INTEGER);\nCREATE TABLE Employee (employee_id INTEGER, name TEXT, experience_years INTEGER);\n\nOutput columns: project_id, average_years",
+    "schema": {
+      "Project": [
+        [
+          "project_id",
+          "INTEGER"
+        ],
+        [
+          "employee_id",
+          "INTEGER"
+        ]
+      ],
+      "Employee": [
+        [
+          "employee_id",
+          "INTEGER"
+        ],
+        [
+          "name",
+          "TEXT"
+        ],
+        [
+          "experience_years",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "project_id",
+      "average_years"
+    ],
+    "ordered": false,
+    "starter": "-- Project Employees I\n-- SQLite · write one SELECT / WITH query below.\n-- Output: project_id, average_years\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Project": [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                2
+              ]
+            ],
+            "Employee": [
+              [
+                1,
+                "A",
+                3
+              ],
+              [
+                2,
+                "B",
+                2
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            2.5
+          ],
+          [
+            2,
+            2.0
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Project": [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ]
+            ],
+            "Employee": [
+              [
+                1,
+                "A",
+                0
+              ],
+              [
+                2,
+                "B",
+                1
+              ],
+              [
+                3,
+                "C",
+                3
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            1.33
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Project\": [\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      2\n    ]\n  ],\n  \"Employee\": [\n    [\n      1,\n      \"A\",\n      3\n    ],\n    [\n      2,\n      \"B\",\n      2\n    ]\n  ]\n}\n\nExpected columns: project_id, average_years\nExpected rows:\n[\n  [\n    1,\n    2.5\n  ],\n  [\n    2,\n    2.0\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1633,
+    "title": "Percentage of Users Attended a Contest",
+    "slug": "percentage-of-users-attended-a-contest",
+    "file": "percentage_of_users_attended_a_contest.sql",
+    "language": "sql",
+    "category": "Basic Aggregate Functions",
+    "method": "__sql__",
+    "rules": [
+      "대회별 등록 사용자 수를 전체 사용자 수로 나눈 백분율을 소수 둘째 자리로 반올림하세요. percentage 내림차순, 동률이면 contest_id 오름차순입니다.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Users (user_id INTEGER, user_name TEXT);\nCREATE TABLE Register (contest_id INTEGER, user_id INTEGER);\n\nOutput columns: contest_id, percentage",
+    "schema": {
+      "Users": [
+        [
+          "user_id",
+          "INTEGER"
+        ],
+        [
+          "user_name",
+          "TEXT"
+        ]
+      ],
+      "Register": [
+        [
+          "contest_id",
+          "INTEGER"
+        ],
+        [
+          "user_id",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "contest_id",
+      "percentage"
+    ],
+    "ordered": true,
+    "starter": "-- Percentage of Users Attended a Contest\n-- SQLite · write one SELECT / WITH query below.\n-- Output: contest_id, percentage\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Users": [
+              [
+                1,
+                "A"
+              ],
+              [
+                2,
+                "B"
+              ],
+              [
+                3,
+                "C"
+              ]
+            ],
+            "Register": [
+              [
+                2,
+                1
+              ],
+              [
+                2,
+                2
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                3,
+                3
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            66.67
+          ],
+          [
+            2,
+            66.67
+          ],
+          [
+            3,
+            33.33
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Users": [
+              [
+                1,
+                "A"
+              ],
+              [
+                2,
+                "B"
+              ]
+            ],
+            "Register": [
+              [
+                9,
+                1
+              ],
+              [
+                8,
+                1
+              ],
+              [
+                8,
+                2
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            8,
+            100.0
+          ],
+          [
+            9,
+            50.0
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Users\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ],\n    [\n      3,\n      \"C\"\n    ]\n  ],\n  \"Register\": [\n    [\n      2,\n      1\n    ],\n    [\n      2,\n      2\n    ],\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      3,\n      3\n    ]\n  ]\n}\n\nExpected columns: contest_id, percentage\nExpected rows:\n[\n  [\n    1,\n    66.67\n  ],\n  [\n    2,\n    66.67\n  ],\n  [\n    3,\n    33.33\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1211,
+    "title": "Queries Quality and Percentage",
+    "slug": "queries-quality-and-percentage",
+    "file": "queries_quality_and_percentage.sql",
+    "language": "sql",
+    "category": "Basic Aggregate Functions",
+    "method": "__sql__",
+    "rules": [
+      "query_name별 quality는 rating / position의 평균입니다. poor_query_percentage는 rating < 3인 행의 비율(%)입니다. 둘 다 소수 둘째 자리로 반올림하세요. 중복 행도 각각 셉니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Queries (query_name TEXT, result TEXT, position INTEGER, rating INTEGER);\n\nOutput columns: query_name, quality, poor_query_percentage",
+    "schema": {
+      "Queries": [
+        [
+          "query_name",
+          "TEXT"
+        ],
+        [
+          "result",
+          "TEXT"
+        ],
+        [
+          "position",
+          "INTEGER"
+        ],
+        [
+          "rating",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "query_name",
+      "quality",
+      "poor_query_percentage"
+    ],
+    "ordered": false,
+    "starter": "-- Queries Quality and Percentage\n-- SQLite · write one SELECT / WITH query below.\n-- Output: query_name, quality, poor_query_percentage\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Queries": [
+              [
+                "A",
+                "x",
+                1,
+                5
+              ],
+              [
+                "A",
+                "y",
+                2,
+                2
+              ],
+              [
+                "B",
+                "z",
+                4,
+                4
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "A",
+            3.0,
+            50.0
+          ],
+          [
+            "B",
+            1.0,
+            0.0
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Queries": [
+              [
+                "A",
+                "x",
+                2,
+                1
+              ],
+              [
+                "A",
+                "x",
+                2,
+                1
+              ],
+              [
+                "A",
+                "z",
+                3,
+                5
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "A",
+            0.89,
+            66.67
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Queries\": [\n    [\n      \"A\",\n      \"x\",\n      1,\n      5\n    ],\n    [\n      \"A\",\n      \"y\",\n      2,\n      2\n    ],\n    [\n      \"B\",\n      \"z\",\n      4,\n      4\n    ]\n  ]\n}\n\nExpected columns: query_name, quality, poor_query_percentage\nExpected rows:\n[\n  [\n    \"A\",\n    3.0,\n    50.0\n  ],\n  [\n    \"B\",\n    1.0,\n    0.0\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1193,
+    "title": "Monthly Transactions I",
+    "slug": "monthly-transactions-i",
+    "file": "monthly_transactions_i.sql",
+    "language": "sql",
+    "category": "Basic Aggregate Functions",
+    "method": "__sql__",
+    "rules": [
+      "월(YYYY-MM)·국가별 전체 거래 수, approved 거래 수, 전체 금액 합계, approved 금액 합계를 반환하세요.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Transactions (id INTEGER, country TEXT, state TEXT, amount INTEGER, trans_date TEXT);\n\nOutput columns: month, country, trans_count, approved_count, trans_total_amount, approved_total_amount",
+    "schema": {
+      "Transactions": [
+        [
+          "id",
+          "INTEGER"
+        ],
+        [
+          "country",
+          "TEXT"
+        ],
+        [
+          "state",
+          "TEXT"
+        ],
+        [
+          "amount",
+          "INTEGER"
+        ],
+        [
+          "trans_date",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "month",
+      "country",
+      "trans_count",
+      "approved_count",
+      "trans_total_amount",
+      "approved_total_amount"
+    ],
+    "ordered": false,
+    "starter": "-- Monthly Transactions I\n-- SQLite · write one SELECT / WITH query below.\n-- Output: month, country, trans_count, approved_count, trans_total_amount, approved_total_amount\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Transactions": [
+              [
+                1,
+                "UK",
+                "approved",
+                100,
+                "2020-01-01"
+              ],
+              [
+                2,
+                "UK",
+                "declined",
+                50,
+                "2020-01-10"
+              ],
+              [
+                3,
+                "US",
+                "approved",
+                75,
+                "2020-02-01"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "2020-01",
+            "UK",
+            2,
+            1,
+            150,
+            100
+          ],
+          [
+            "2020-02",
+            "US",
+            1,
+            1,
+            75,
+            75
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Transactions": [
+              [
+                1,
+                null,
+                "declined",
+                9,
+                "2020-12-31"
+              ],
+              [
+                2,
+                null,
+                "approved",
+                11,
+                "2021-01-01"
+              ],
+              [
+                3,
+                "UK",
+                "declined",
+                5,
+                "2021-01-02"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "2020-12",
+            null,
+            1,
+            0,
+            9,
+            0
+          ],
+          [
+            "2021-01",
+            null,
+            1,
+            1,
+            11,
+            11
+          ],
+          [
+            "2021-01",
+            "UK",
+            1,
+            0,
+            5,
+            0
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Transactions\": [\n    [\n      1,\n      \"UK\",\n      \"approved\",\n      100,\n      \"2020-01-01\"\n    ],\n    [\n      2,\n      \"UK\",\n      \"declined\",\n      50,\n      \"2020-01-10\"\n    ],\n    [\n      3,\n      \"US\",\n      \"approved\",\n      75,\n      \"2020-02-01\"\n    ]\n  ]\n}\n\nExpected columns: month, country, trans_count, approved_count, trans_total_amount, approved_total_amount\nExpected rows:\n[\n  [\n    \"2020-01\",\n    \"UK\",\n    2,\n    1,\n    150,\n    100\n  ],\n  [\n    \"2020-02\",\n    \"US\",\n    1,\n    1,\n    75,\n    75\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1174,
+    "title": "Immediate Food Delivery II",
+    "slug": "immediate-food-delivery-ii",
+    "file": "immediate_food_delivery_ii.sql",
+    "language": "sql",
+    "category": "Basic Aggregate Functions",
+    "method": "__sql__",
+    "rules": [
+      "고객마다 가장 이른 첫 주문만 살펴보세요. 주문일과 희망 배송일이 같은 첫 주문의 비율(%)을 소수 둘째 자리로 반환하세요. 고객별 첫 주문은 유일합니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Delivery (delivery_id INTEGER, customer_id INTEGER, order_date TEXT, customer_pref_delivery_date TEXT);\n\nOutput columns: immediate_percentage",
+    "schema": {
+      "Delivery": [
+        [
+          "delivery_id",
+          "INTEGER"
+        ],
+        [
+          "customer_id",
+          "INTEGER"
+        ],
+        [
+          "order_date",
+          "TEXT"
+        ],
+        [
+          "customer_pref_delivery_date",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "immediate_percentage"
+    ],
+    "ordered": false,
+    "starter": "-- Immediate Food Delivery II\n-- SQLite · write one SELECT / WITH query below.\n-- Output: immediate_percentage\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Delivery": [
+              [
+                1,
+                1,
+                "2020-01-01",
+                "2020-01-02"
+              ],
+              [
+                2,
+                1,
+                "2020-01-03",
+                "2020-01-03"
+              ],
+              [
+                3,
+                2,
+                "2020-01-02",
+                "2020-01-02"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            50.0
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Delivery": [
+              [
+                1,
+                1,
+                "2020-01-01",
+                "2020-01-01"
+              ],
+              [
+                2,
+                2,
+                "2020-01-02",
+                "2020-01-04"
+              ],
+              [
+                3,
+                3,
+                "2020-01-03",
+                "2020-01-05"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            33.33
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Delivery\": [\n    [\n      1,\n      1,\n      \"2020-01-01\",\n      \"2020-01-02\"\n    ],\n    [\n      2,\n      1,\n      \"2020-01-03\",\n      \"2020-01-03\"\n    ],\n    [\n      3,\n      2,\n      \"2020-01-02\",\n      \"2020-01-02\"\n    ]\n  ]\n}\n\nExpected columns: immediate_percentage\nExpected rows:\n[\n  [\n    50.0\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 550,
+    "title": "Game Play Analysis IV",
+    "slug": "game-play-analysis-iv",
+    "file": "game_play_analysis_iv.sql",
+    "language": "sql",
+    "category": "Basic Aggregate Functions",
+    "method": "__sql__",
+    "rules": [
+      "첫 로그인 다음 날에도 로그인한 플레이어 수 / 전체 플레이어 수를 소수 둘째 자리로 반올림하여 fraction으로 반환하세요. games_played가 0이어도 로그인입니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Activity (player_id INTEGER, device_id INTEGER, event_date TEXT, games_played INTEGER);\n\nOutput columns: fraction",
+    "schema": {
+      "Activity": [
+        [
+          "player_id",
+          "INTEGER"
+        ],
+        [
+          "device_id",
+          "INTEGER"
+        ],
+        [
+          "event_date",
+          "TEXT"
+        ],
+        [
+          "games_played",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "fraction"
+    ],
+    "ordered": false,
+    "starter": "-- Game Play Analysis IV\n-- SQLite · write one SELECT / WITH query below.\n-- Output: fraction\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Activity": [
+              [
+                1,
+                1,
+                "2020-01-01",
+                0
+              ],
+              [
+                1,
+                2,
+                "2020-01-02",
+                1
+              ],
+              [
+                2,
+                1,
+                "2020-01-01",
+                1
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            0.5
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Activity": [
+              [
+                1,
+                1,
+                "2020-12-31",
+                1
+              ],
+              [
+                1,
+                1,
+                "2021-01-01",
+                1
+              ],
+              [
+                2,
+                1,
+                "2020-01-01",
+                1
+              ],
+              [
+                2,
+                1,
+                "2020-01-03",
+                1
+              ],
+              [
+                3,
+                1,
+                "2020-02-01",
+                0
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            0.33
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Activity\": [\n    [\n      1,\n      1,\n      \"2020-01-01\",\n      0\n    ],\n    [\n      1,\n      2,\n      \"2020-01-02\",\n      1\n    ],\n    [\n      2,\n      1,\n      \"2020-01-01\",\n      1\n    ]\n  ]\n}\n\nExpected columns: fraction\nExpected rows:\n[\n  [\n    0.5\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 2356,
+    "title": "Number of Unique Subjects Taught by Each Teacher",
+    "slug": "number-of-unique-subjects-taught-by-each-teacher",
+    "file": "number_of_unique_subjects_taught_by_each_teacher.sql",
+    "language": "sql",
+    "category": "Sorting and Grouping",
+    "method": "__sql__",
+    "rules": [
+      "교사마다 서로 다른 subject_id의 개수를 cnt로 반환하세요. 같은 과목을 여러 학과에서 가르쳐도 한 번입니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Teacher (teacher_id INTEGER, subject_id INTEGER, dept_id INTEGER);\n\nOutput columns: teacher_id, cnt",
+    "schema": {
+      "Teacher": [
+        [
+          "teacher_id",
+          "INTEGER"
+        ],
+        [
+          "subject_id",
+          "INTEGER"
+        ],
+        [
+          "dept_id",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "teacher_id",
+      "cnt"
+    ],
+    "ordered": false,
+    "starter": "-- Number of Unique Subjects Taught by Each Teacher\n-- SQLite · write one SELECT / WITH query below.\n-- Output: teacher_id, cnt\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Teacher": [
+              [
+                1,
+                1,
+                1
+              ],
+              [
+                1,
+                1,
+                2
+              ],
+              [
+                1,
+                2,
+                1
+              ],
+              [
+                2,
+                1,
+                1
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Teacher": [
+              [
+                5,
+                3,
+                1
+              ],
+              [
+                5,
+                3,
+                2
+              ],
+              [
+                6,
+                4,
+                1
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            5,
+            1
+          ],
+          [
+            6,
+            1
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Teacher\": [\n    [\n      1,\n      1,\n      1\n    ],\n    [\n      1,\n      1,\n      2\n    ],\n    [\n      1,\n      2,\n      1\n    ],\n    [\n      2,\n      1,\n      1\n    ]\n  ]\n}\n\nExpected columns: teacher_id, cnt\nExpected rows:\n[\n  [\n    1,\n    2\n  ],\n  [\n    2,\n    1\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1141,
+    "title": "User Activity for the Past 30 Days I",
+    "slug": "user-activity-for-the-past-30-days-i",
+    "file": "user_activity_for_the_past_30_days_i.sql",
+    "language": "sql",
+    "category": "Sorting and Grouping",
+    "method": "__sql__",
+    "rules": [
+      "2019-07-27까지 포함한 30일 동안 날짜별 활동 사용자 수를 반환하세요. 같은 날 여러 활동을 해도 한 명이며 활동 없는 날짜는 제외합니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Activity (user_id INTEGER, session_id INTEGER, activity_date TEXT, activity_type TEXT);\n\nOutput columns: day, active_users",
+    "schema": {
+      "Activity": [
+        [
+          "user_id",
+          "INTEGER"
+        ],
+        [
+          "session_id",
+          "INTEGER"
+        ],
+        [
+          "activity_date",
+          "TEXT"
+        ],
+        [
+          "activity_type",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "day",
+      "active_users"
+    ],
+    "ordered": false,
+    "starter": "-- User Activity for the Past 30 Days I\n-- SQLite · write one SELECT / WITH query below.\n-- Output: day, active_users\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Activity": [
+              [
+                1,
+                1,
+                "2019-07-27",
+                "open_session"
+              ],
+              [
+                1,
+                1,
+                "2019-07-27",
+                "scroll_down"
+              ],
+              [
+                2,
+                2,
+                "2019-07-27",
+                "open_session"
+              ],
+              [
+                3,
+                3,
+                "2019-06-27",
+                "open_session"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "2019-07-27",
+            2
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Activity": [
+              [
+                1,
+                1,
+                "2019-06-28",
+                "open_session"
+              ],
+              [
+                2,
+                2,
+                "2019-07-28",
+                "open_session"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "2019-06-28",
+            1
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Activity\": [\n    [\n      1,\n      1,\n      \"2019-07-27\",\n      \"open_session\"\n    ],\n    [\n      1,\n      1,\n      \"2019-07-27\",\n      \"scroll_down\"\n    ],\n    [\n      2,\n      2,\n      \"2019-07-27\",\n      \"open_session\"\n    ],\n    [\n      3,\n      3,\n      \"2019-06-27\",\n      \"open_session\"\n    ]\n  ]\n}\n\nExpected columns: day, active_users\nExpected rows:\n[\n  [\n    \"2019-07-27\",\n    2\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1070,
+    "title": "Product Sales Analysis III",
+    "slug": "product-sales-analysis-iii",
+    "file": "product_sales_analysis_iii.sql",
+    "language": "sql",
+    "category": "Sorting and Grouping",
+    "method": "__sql__",
+    "rules": [
+      "각 상품이 처음 판매된 연도의 판매 행을 반환하세요. 같은 첫해에 여러 판매 행이 있으면 모두 포함합니다. year의 출력 이름은 first_year입니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Sales (sale_id INTEGER, product_id INTEGER, year INTEGER, quantity INTEGER, price INTEGER);\nCREATE TABLE Product (product_id INTEGER, product_name TEXT);\n\nOutput columns: product_id, first_year, quantity, price",
+    "schema": {
+      "Sales": [
+        [
+          "sale_id",
+          "INTEGER"
+        ],
+        [
+          "product_id",
+          "INTEGER"
+        ],
+        [
+          "year",
+          "INTEGER"
+        ],
+        [
+          "quantity",
+          "INTEGER"
+        ],
+        [
+          "price",
+          "INTEGER"
+        ]
+      ],
+      "Product": [
+        [
+          "product_id",
+          "INTEGER"
+        ],
+        [
+          "product_name",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "product_id",
+      "first_year",
+      "quantity",
+      "price"
+    ],
+    "ordered": false,
+    "starter": "-- Product Sales Analysis III\n-- SQLite · write one SELECT / WITH query below.\n-- Output: product_id, first_year, quantity, price\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Sales": [
+              [
+                1,
+                1,
+                2019,
+                2,
+                10
+              ],
+              [
+                2,
+                1,
+                2020,
+                3,
+                20
+              ],
+              [
+                3,
+                2,
+                2020,
+                1,
+                5
+              ]
+            ],
+            "Product": [
+              [
+                1,
+                "A"
+              ],
+              [
+                2,
+                "B"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            2019,
+            2,
+            10
+          ],
+          [
+            2,
+            2020,
+            1,
+            5
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Sales": [
+              [
+                1,
+                1,
+                2018,
+                1,
+                8
+              ],
+              [
+                2,
+                1,
+                2018,
+                2,
+                9
+              ],
+              [
+                3,
+                1,
+                2019,
+                5,
+                7
+              ]
+            ],
+            "Product": [
+              [
+                1,
+                "A"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            2018,
+            1,
+            8
+          ],
+          [
+            1,
+            2018,
+            2,
+            9
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Sales\": [\n    [\n      1,\n      1,\n      2019,\n      2,\n      10\n    ],\n    [\n      2,\n      1,\n      2020,\n      3,\n      20\n    ],\n    [\n      3,\n      2,\n      2020,\n      1,\n      5\n    ]\n  ],\n  \"Product\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ]\n  ]\n}\n\nExpected columns: product_id, first_year, quantity, price\nExpected rows:\n[\n  [\n    1,\n    2019,\n    2,\n    10\n  ],\n  [\n    2,\n    2020,\n    1,\n    5\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 596,
+    "title": "Classes With at Least 5 Students",
+    "slug": "classes-with-at-least-5-students",
+    "file": "classes_with_at_least_5_students.sql",
+    "language": "sql",
+    "category": "Sorting and Grouping",
+    "method": "__sql__",
+    "rules": [
+      "학생이 최소 5명인 class를 반환하세요. (student, class)는 유일합니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Courses (student TEXT, class TEXT);\n\nOutput columns: class",
+    "schema": {
+      "Courses": [
+        [
+          "student",
+          "TEXT"
+        ],
+        [
+          "class",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "class"
+    ],
+    "ordered": false,
+    "starter": "-- Classes With at Least 5 Students\n-- SQLite · write one SELECT / WITH query below.\n-- Output: class\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Courses": [
+              [
+                "0",
+                "Math"
+              ],
+              [
+                "1",
+                "Math"
+              ],
+              [
+                "2",
+                "Math"
+              ],
+              [
+                "3",
+                "Math"
+              ],
+              [
+                "4",
+                "Math"
+              ],
+              [
+                "A",
+                "CS"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "Math"
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Courses": [
+              [
+                "0",
+                "A"
+              ],
+              [
+                "1",
+                "A"
+              ],
+              [
+                "2",
+                "A"
+              ],
+              [
+                "3",
+                "A"
+              ],
+              [
+                "0",
+                "B"
+              ],
+              [
+                "1",
+                "B"
+              ],
+              [
+                "2",
+                "B"
+              ],
+              [
+                "3",
+                "B"
+              ],
+              [
+                "4",
+                "B"
+              ],
+              [
+                "5",
+                "B"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "B"
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Courses\": [\n    [\n      \"0\",\n      \"Math\"\n    ],\n    [\n      \"1\",\n      \"Math\"\n    ],\n    [\n      \"2\",\n      \"Math\"\n    ],\n    [\n      \"3\",\n      \"Math\"\n    ],\n    [\n      \"4\",\n      \"Math\"\n    ],\n    [\n      \"A\",\n      \"CS\"\n    ]\n  ]\n}\n\nExpected columns: class\nExpected rows:\n[\n  [\n    \"Math\"\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1729,
+    "title": "Find Followers Count",
+    "slug": "find-followers-count",
+    "file": "find_followers_count.sql",
+    "language": "sql",
+    "category": "Sorting and Grouping",
+    "method": "__sql__",
+    "rules": [
+      "user_id별 팔로워 수를 followers_count로 반환하고 user_id 오름차순으로 정렬하세요.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Followers (user_id INTEGER, follower_id INTEGER);\n\nOutput columns: user_id, followers_count",
+    "schema": {
+      "Followers": [
+        [
+          "user_id",
+          "INTEGER"
+        ],
+        [
+          "follower_id",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "user_id",
+      "followers_count"
+    ],
+    "ordered": true,
+    "starter": "-- Find Followers Count\n-- SQLite · write one SELECT / WITH query below.\n-- Output: user_id, followers_count\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Followers": [
+              [
+                2,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                3
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            2
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Followers": [
+              [
+                5,
+                9
+              ],
+              [
+                3,
+                9
+              ],
+              [
+                3,
+                8
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            3,
+            2
+          ],
+          [
+            5,
+            1
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Followers\": [\n    [\n      2,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      3\n    ]\n  ]\n}\n\nExpected columns: user_id, followers_count\nExpected rows:\n[\n  [\n    1,\n    1\n  ],\n  [\n    2,\n    2\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 619,
+    "title": "Biggest Single Number",
+    "slug": "biggest-single-number",
+    "file": "biggest_single_number.sql",
+    "language": "sql",
+    "category": "Sorting and Grouping",
+    "method": "__sql__",
+    "rules": [
+      "테이블에서 정확히 한 번 등장하는 수 중 가장 큰 수를 num으로 반환하세요. 없으면 NULL 한 행을 반환하세요.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE MyNumbers (num INTEGER);\n\nOutput columns: num",
+    "schema": {
+      "MyNumbers": [
+        [
+          "num",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "num"
+    ],
+    "ordered": false,
+    "starter": "-- Biggest Single Number\n-- SQLite · write one SELECT / WITH query below.\n-- Output: num\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "MyNumbers": [
+              [
+                8
+              ],
+              [
+                8
+              ],
+              [
+                3
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            3
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "MyNumbers": [
+              [
+                1
+              ],
+              [
+                1
+              ],
+              [
+                2
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            null
+          ]
+        ]
+      },
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "MyNumbers": [
+              [
+                -1
+              ],
+              [
+                -2
+              ],
+              [
+                -2
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            -1
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"MyNumbers\": [\n    [\n      8\n    ],\n    [\n      8\n    ],\n    [\n      3\n    ],\n    [\n      2\n    ]\n  ]\n}\n\nExpected columns: num\nExpected rows:\n[\n  [\n    3\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1045,
+    "title": "Customers Who Bought All Products",
+    "slug": "customers-who-bought-all-products",
+    "file": "customers_who_bought_all_products.sql",
+    "language": "sql",
+    "category": "Sorting and Grouping",
+    "method": "__sql__",
+    "rules": [
+      "Product에 있는 모든 상품을 구매한 customer_id를 반환하세요. 같은 상품을 여러 번 구매해도 한 종류입니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Customer (customer_id INTEGER, product_key INTEGER);\nCREATE TABLE Product (product_key INTEGER);\n\nOutput columns: customer_id",
+    "schema": {
+      "Customer": [
+        [
+          "customer_id",
+          "INTEGER"
+        ],
+        [
+          "product_key",
+          "INTEGER"
+        ]
+      ],
+      "Product": [
+        [
+          "product_key",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "customer_id"
+    ],
+    "ordered": false,
+    "starter": "-- Customers Who Bought All Products\n-- SQLite · write one SELECT / WITH query below.\n-- Output: customer_id\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Customer": [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                1
+              ]
+            ],
+            "Product": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Customer": [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                2,
+                1
+              ],
+              [
+                2,
+                2
+              ],
+              [
+                2,
+                2
+              ]
+            ],
+            "Product": [
+              [
+                1
+              ],
+              [
+                2
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            2
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Customer\": [\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      1\n    ]\n  ],\n  \"Product\": [\n    [\n      1\n    ],\n    [\n      2\n    ]\n  ]\n}\n\nExpected columns: customer_id\nExpected rows:\n[\n  [\n    1\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1731,
+    "title": "The Number of Employees Which Report to Each Employee",
+    "slug": "the-number-of-employees-which-report-to-each-employee",
+    "file": "the_number_of_employees_which_report_to_each_employee.sql",
+    "language": "sql",
+    "category": "Advanced Select and Joins",
+    "method": "__sql__",
+    "rules": [
+      "직속 부하가 있는 직원의 employee_id, name, reports_count, 부하들의 평균 나이를 반올림한 average_age를 반환하세요. employee_id 오름차순입니다.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Employees (employee_id INTEGER, name TEXT, reports_to INTEGER, age INTEGER);\n\nOutput columns: employee_id, name, reports_count, average_age",
+    "schema": {
+      "Employees": [
+        [
+          "employee_id",
+          "INTEGER"
+        ],
+        [
+          "name",
+          "TEXT"
+        ],
+        [
+          "reports_to",
+          "INTEGER"
+        ],
+        [
+          "age",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "employee_id",
+      "name",
+      "reports_count",
+      "average_age"
+    ],
+    "ordered": true,
+    "starter": "-- The Number of Employees Which Report to Each Employee\n-- SQLite · write one SELECT / WITH query below.\n-- Output: employee_id, name, reports_count, average_age\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Employees": [
+              [
+                1,
+                "A",
+                null,
+                50
+              ],
+              [
+                2,
+                "B",
+                1,
+                20
+              ],
+              [
+                3,
+                "C",
+                1,
+                21
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            "A",
+            2,
+            21.0
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Employees": [
+              [
+                1,
+                "A",
+                null,
+                50
+              ],
+              [
+                2,
+                "B",
+                1,
+                30
+              ],
+              [
+                3,
+                "C",
+                2,
+                19
+              ],
+              [
+                4,
+                "D",
+                2,
+                20
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            "A",
+            1,
+            30.0
+          ],
+          [
+            2,
+            "B",
+            2,
+            20.0
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employees\": [\n    [\n      1,\n      \"A\",\n      null,\n      50\n    ],\n    [\n      2,\n      \"B\",\n      1,\n      20\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      21\n    ]\n  ]\n}\n\nExpected columns: employee_id, name, reports_count, average_age\nExpected rows:\n[\n  [\n    1,\n    \"A\",\n    2,\n    21.0\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1789,
+    "title": "Primary Department for Each Employee",
+    "slug": "primary-department-for-each-employee",
+    "file": "primary_department_for_each_employee.sql",
+    "language": "sql",
+    "category": "Advanced Select and Joins",
+    "method": "__sql__",
+    "rules": [
+      "직원마다 대표 부서를 반환하세요. 부서가 여러 개면 primary_flag=Y인 부서를, 하나뿐이면 그 부서를 반환합니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Employee (employee_id INTEGER, department_id INTEGER, primary_flag TEXT);\n\nOutput columns: employee_id, department_id",
+    "schema": {
+      "Employee": [
+        [
+          "employee_id",
+          "INTEGER"
+        ],
+        [
+          "department_id",
+          "INTEGER"
+        ],
+        [
+          "primary_flag",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "employee_id",
+      "department_id"
+    ],
+    "ordered": false,
+    "starter": "-- Primary Department for Each Employee\n-- SQLite · write one SELECT / WITH query below.\n-- Output: employee_id, department_id\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Employee": [
+              [
+                1,
+                1,
+                "N"
+              ],
+              [
+                2,
+                1,
+                "Y"
+              ],
+              [
+                2,
+                2,
+                "N"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            1
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Employee": [
+              [
+                3,
+                2,
+                "N"
+              ],
+              [
+                4,
+                1,
+                "N"
+              ],
+              [
+                4,
+                3,
+                "Y"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            3,
+            2
+          ],
+          [
+            4,
+            3
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employee\": [\n    [\n      1,\n      1,\n      \"N\"\n    ],\n    [\n      2,\n      1,\n      \"Y\"\n    ],\n    [\n      2,\n      2,\n      \"N\"\n    ]\n  ]\n}\n\nExpected columns: employee_id, department_id\nExpected rows:\n[\n  [\n    1,\n    1\n  ],\n  [\n    2,\n    1\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 610,
+    "title": "Triangle Judgement",
+    "slug": "triangle-judgement",
+    "file": "triangle_judgement.sql",
+    "language": "sql",
+    "category": "Advanced Select and Joins",
+    "method": "__sql__",
+    "rules": [
+      "각 행의 세 변으로 넓이가 양수인 삼각형을 만들 수 있으면 triangle=Yes, 아니면 No를 반환하세요. x,y,z도 출력합니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Triangle (x INTEGER, y INTEGER, z INTEGER);\n\nOutput columns: x, y, z, triangle",
+    "schema": {
+      "Triangle": [
+        [
+          "x",
+          "INTEGER"
+        ],
+        [
+          "y",
+          "INTEGER"
+        ],
+        [
+          "z",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "x",
+      "y",
+      "z",
+      "triangle"
+    ],
+    "ordered": false,
+    "starter": "-- Triangle Judgement\n-- SQLite · write one SELECT / WITH query below.\n-- Output: x, y, z, triangle\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Triangle": [
+              [
+                3,
+                4,
+                5
+              ],
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            3,
+            4,
+            5,
+            "Yes"
+          ],
+          [
+            1,
+            2,
+            3,
+            "No"
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Triangle": [
+              [
+                2,
+                2,
+                2
+              ],
+              [
+                10,
+                1,
+                1
+              ],
+              [
+                1,
+                10,
+                1
+              ],
+              [
+                1,
+                1,
+                10
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            2,
+            2,
+            2,
+            "Yes"
+          ],
+          [
+            10,
+            1,
+            1,
+            "No"
+          ],
+          [
+            1,
+            10,
+            1,
+            "No"
+          ],
+          [
+            1,
+            1,
+            10,
+            "No"
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Triangle\": [\n    [\n      3,\n      4,\n      5\n    ],\n    [\n      1,\n      2,\n      3\n    ]\n  ]\n}\n\nExpected columns: x, y, z, triangle\nExpected rows:\n[\n  [\n    3,\n    4,\n    5,\n    \"Yes\"\n  ],\n  [\n    1,\n    2,\n    3,\n    \"No\"\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 180,
+    "title": "Consecutive Numbers",
+    "slug": "consecutive-numbers",
+    "file": "consecutive_numbers.sql",
+    "language": "sql",
+    "category": "Advanced Select and Joins",
+    "method": "__sql__",
+    "rules": [
+      "연속된 id 3개 이상에서 같은 num이 나타나면 그 수를 ConsecutiveNums로 한 번씩 반환하세요.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Logs (id INTEGER, num TEXT);\n\nOutput columns: ConsecutiveNums",
+    "schema": {
+      "Logs": [
+        [
+          "id",
+          "INTEGER"
+        ],
+        [
+          "num",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "ConsecutiveNums"
+    ],
+    "ordered": false,
+    "starter": "-- Consecutive Numbers\n-- SQLite · write one SELECT / WITH query below.\n-- Output: ConsecutiveNums\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Logs": [
+              [
+                1,
+                "1"
+              ],
+              [
+                2,
+                "1"
+              ],
+              [
+                3,
+                "1"
+              ],
+              [
+                4,
+                "2"
+              ],
+              [
+                5,
+                "1"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "1"
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Logs": [
+              [
+                1,
+                "2"
+              ],
+              [
+                2,
+                "2"
+              ],
+              [
+                3,
+                "2"
+              ],
+              [
+                4,
+                "2"
+              ],
+              [
+                5,
+                "3"
+              ],
+              [
+                6,
+                "3"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "2"
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Logs\": [\n    [\n      1,\n      \"1\"\n    ],\n    [\n      2,\n      \"1\"\n    ],\n    [\n      3,\n      \"1\"\n    ],\n    [\n      4,\n      \"2\"\n    ],\n    [\n      5,\n      \"1\"\n    ]\n  ]\n}\n\nExpected columns: ConsecutiveNums\nExpected rows:\n[\n  [\n    \"1\"\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1164,
+    "title": "Product Price at a Given Date",
+    "slug": "product-price-at-a-given-date",
+    "file": "product_price_at_a_given_date.sql",
+    "language": "sql",
+    "category": "Advanced Select and Joins",
+    "method": "__sql__",
+    "rules": [
+      "2019-08-16 시점의 각 상품 가격을 반환하세요. 그날까지 변경된 마지막 가격을 사용하고, 이전 변경이 없으면 초기 가격 10입니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Products (product_id INTEGER, new_price INTEGER, change_date TEXT);\n\nOutput columns: product_id, price",
+    "schema": {
+      "Products": [
+        [
+          "product_id",
+          "INTEGER"
+        ],
+        [
+          "new_price",
+          "INTEGER"
+        ],
+        [
+          "change_date",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "product_id",
+      "price"
+    ],
+    "ordered": false,
+    "starter": "-- Product Price at a Given Date\n-- SQLite · write one SELECT / WITH query below.\n-- Output: product_id, price\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Products": [
+              [
+                1,
+                20,
+                "2019-08-14"
+              ],
+              [
+                1,
+                30,
+                "2019-08-16"
+              ],
+              [
+                2,
+                50,
+                "2019-08-17"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            30
+          ],
+          [
+            2,
+            10
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Products": [
+              [
+                1,
+                5,
+                "2019-08-15"
+              ],
+              [
+                1,
+                99,
+                "2019-08-17"
+              ],
+              [
+                2,
+                7,
+                "2019-08-16"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            7
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Products\": [\n    [\n      1,\n      20,\n      \"2019-08-14\"\n    ],\n    [\n      1,\n      30,\n      \"2019-08-16\"\n    ],\n    [\n      2,\n      50,\n      \"2019-08-17\"\n    ]\n  ]\n}\n\nExpected columns: product_id, price\nExpected rows:\n[\n  [\n    1,\n    30\n  ],\n  [\n    2,\n    10\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1204,
+    "title": "Last Person to Fit in the Bus",
+    "slug": "last-person-to-fit-in-the-bus",
+    "file": "last_person_to_fit_in_the_bus.sql",
+    "language": "sql",
+    "category": "Advanced Select and Joins",
+    "method": "__sql__",
+    "rules": [
+      "turn 오름차순으로 탑승하며 누적 무게는 1000kg 이하여야 합니다. 제한을 넘기기 직전 마지막으로 탑승한 사람의 person_name을 반환하세요. 첫 사람은 탑승 가능합니다.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Queue (person_id INTEGER, person_name TEXT, weight INTEGER, turn INTEGER);\n\nOutput columns: person_name",
+    "schema": {
+      "Queue": [
+        [
+          "person_id",
+          "INTEGER"
+        ],
+        [
+          "person_name",
+          "TEXT"
+        ],
+        [
+          "weight",
+          "INTEGER"
+        ],
+        [
+          "turn",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "person_name"
+    ],
+    "ordered": true,
+    "starter": "-- Last Person to Fit in the Bus\n-- SQLite · write one SELECT / WITH query below.\n-- Output: person_name\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Queue": [
+              [
+                1,
+                "A",
+                400,
+                1
+              ],
+              [
+                2,
+                "B",
+                600,
+                2
+              ],
+              [
+                3,
+                "C",
+                1,
+                3
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "B"
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Queue": [
+              [
+                2,
+                "B",
+                600,
+                2
+              ],
+              [
+                1,
+                "A",
+                500,
+                1
+              ],
+              [
+                3,
+                "C",
+                100,
+                3
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "A"
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Queue\": [\n    [\n      1,\n      \"A\",\n      400,\n      1\n    ],\n    [\n      2,\n      \"B\",\n      600,\n      2\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      3\n    ]\n  ]\n}\n\nExpected columns: person_name\nExpected rows:\n[\n  [\n    \"B\"\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1907,
+    "title": "Count Salary Categories",
+    "slug": "count-salary-categories",
+    "file": "count_salary_categories.sql",
+    "language": "sql",
+    "category": "Advanced Select and Joins",
+    "method": "__sql__",
+    "rules": [
+      "income < 20000은 Low Salary, 20000~50000은 Average Salary, > 50000은 High Salary입니다. 직원 수가 0이어도 세 범주 모두 출력하세요.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Accounts (account_id INTEGER, income INTEGER);\n\nOutput columns: category, accounts_count",
+    "schema": {
+      "Accounts": [
+        [
+          "account_id",
+          "INTEGER"
+        ],
+        [
+          "income",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "category",
+      "accounts_count"
+    ],
+    "ordered": false,
+    "starter": "-- Count Salary Categories\n-- SQLite · write one SELECT / WITH query below.\n-- Output: category, accounts_count\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Accounts": [
+              [
+                1,
+                10000
+              ],
+              [
+                2,
+                20000
+              ],
+              [
+                3,
+                50000
+              ],
+              [
+                4,
+                50001
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "Low Salary",
+            1
+          ],
+          [
+            "Average Salary",
+            2
+          ],
+          [
+            "High Salary",
+            1
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Accounts": [
+              [
+                1,
+                60000
+              ],
+              [
+                2,
+                70000
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "Low Salary",
+            0
+          ],
+          [
+            "Average Salary",
+            0
+          ],
+          [
+            "High Salary",
+            2
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Accounts\": [\n    [\n      1,\n      10000\n    ],\n    [\n      2,\n      20000\n    ],\n    [\n      3,\n      50000\n    ],\n    [\n      4,\n      50001\n    ]\n  ]\n}\n\nExpected columns: category, accounts_count\nExpected rows:\n[\n  [\n    \"Low Salary\",\n    1\n  ],\n  [\n    \"Average Salary\",\n    2\n  ],\n  [\n    \"High Salary\",\n    1\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1978,
+    "title": "Employees Whose Manager Left the Company",
+    "slug": "employees-whose-manager-left-the-company",
+    "file": "employees_whose_manager_left_the_company.sql",
+    "language": "sql",
+    "category": "Subqueries",
+    "method": "__sql__",
+    "rules": [
+      "급여가 30000 미만이며 manager_id가 지정되어 있지만 해당 관리자가 Employees에 없는 직원의 employee_id를 오름차순으로 반환하세요.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Employees (employee_id INTEGER, name TEXT, manager_id INTEGER, salary INTEGER);\n\nOutput columns: employee_id",
+    "schema": {
+      "Employees": [
+        [
+          "employee_id",
+          "INTEGER"
+        ],
+        [
+          "name",
+          "TEXT"
+        ],
+        [
+          "manager_id",
+          "INTEGER"
+        ],
+        [
+          "salary",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "employee_id"
+    ],
+    "ordered": true,
+    "starter": "-- Employees Whose Manager Left the Company\n-- SQLite · write one SELECT / WITH query below.\n-- Output: employee_id\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Employees": [
+              [
+                1,
+                "A",
+                null,
+                10000
+              ],
+              [
+                2,
+                "B",
+                9,
+                20000
+              ],
+              [
+                3,
+                "C",
+                1,
+                10000
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            2
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Employees": [
+              [
+                4,
+                "D",
+                8,
+                30000
+              ],
+              [
+                5,
+                "E",
+                8,
+                29999
+              ],
+              [
+                6,
+                "F",
+                null,
+                100
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            5
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employees\": [\n    [\n      1,\n      \"A\",\n      null,\n      10000\n    ],\n    [\n      2,\n      \"B\",\n      9,\n      20000\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      10000\n    ]\n  ]\n}\n\nExpected columns: employee_id\nExpected rows:\n[\n  [\n    2\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 626,
+    "title": "Exchange Seats",
+    "slug": "exchange-seats",
+    "file": "exchange_seats.sql",
+    "language": "sql",
+    "category": "Subqueries",
+    "method": "__sql__",
+    "rules": [
+      "1부터 연속된 좌석 id에서 인접한 두 학생의 자리를 바꾸세요. 총 학생 수가 홀수이면 마지막 학생은 그대로입니다. id 오름차순으로 반환하세요.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Seat (id INTEGER, student TEXT);\n\nOutput columns: id, student",
+    "schema": {
+      "Seat": [
+        [
+          "id",
+          "INTEGER"
+        ],
+        [
+          "student",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "id",
+      "student"
+    ],
+    "ordered": true,
+    "starter": "-- Exchange Seats\n-- SQLite · write one SELECT / WITH query below.\n-- Output: id, student\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Seat": [
+              [
+                1,
+                "A"
+              ],
+              [
+                2,
+                "B"
+              ],
+              [
+                3,
+                "C"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            "B"
+          ],
+          [
+            2,
+            "A"
+          ],
+          [
+            3,
+            "C"
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Seat": [
+              [
+                1,
+                "A"
+              ],
+              [
+                2,
+                "B"
+              ],
+              [
+                3,
+                "C"
+              ],
+              [
+                4,
+                "D"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            "B"
+          ],
+          [
+            2,
+            "A"
+          ],
+          [
+            3,
+            "D"
+          ],
+          [
+            4,
+            "C"
+          ]
+        ]
+      },
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Seat": [
+              [
+                1,
+                "A"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            "A"
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Seat\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ],\n    [\n      3,\n      \"C\"\n    ]\n  ]\n}\n\nExpected columns: id, student\nExpected rows:\n[\n  [\n    1,\n    \"B\"\n  ],\n  [\n    2,\n    \"A\"\n  ],\n  [\n    3,\n    \"C\"\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1341,
+    "title": "Movie Rating",
+    "slug": "movie-rating",
+    "file": "movie_rating.sql",
+    "language": "sql",
+    "category": "Subqueries",
+    "method": "__sql__",
+    "rules": [
+      "results 열의 첫 행은 가장 많은 영화를 평가한 사용자 이름, 둘째 행은 2020년 2월 평균 평점이 가장 높은 영화 제목입니다. 각각 동률이면 이름/제목 사전순으로 가장 작은 것을 고르세요. 두 결과가 같아도 두 행입니다.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Movies (movie_id INTEGER, title TEXT);\nCREATE TABLE Users (user_id INTEGER, name TEXT);\nCREATE TABLE MovieRating (movie_id INTEGER, user_id INTEGER, rating INTEGER, created_at TEXT);\n\nOutput columns: results",
+    "schema": {
+      "Movies": [
+        [
+          "movie_id",
+          "INTEGER"
+        ],
+        [
+          "title",
+          "TEXT"
+        ]
+      ],
+      "Users": [
+        [
+          "user_id",
+          "INTEGER"
+        ],
+        [
+          "name",
+          "TEXT"
+        ]
+      ],
+      "MovieRating": [
+        [
+          "movie_id",
+          "INTEGER"
+        ],
+        [
+          "user_id",
+          "INTEGER"
+        ],
+        [
+          "rating",
+          "INTEGER"
+        ],
+        [
+          "created_at",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "results"
+    ],
+    "ordered": true,
+    "starter": "-- Movie Rating\n-- SQLite · write one SELECT / WITH query below.\n-- Output: results\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Movies": [
+              [
+                1,
+                "Alpha"
+              ],
+              [
+                2,
+                "Beta"
+              ]
+            ],
+            "Users": [
+              [
+                1,
+                "Amy"
+              ],
+              [
+                2,
+                "Bob"
+              ]
+            ],
+            "MovieRating": [
+              [
+                1,
+                1,
+                4,
+                "2020-02-01"
+              ],
+              [
+                2,
+                1,
+                5,
+                "2020-02-02"
+              ],
+              [
+                1,
+                2,
+                2,
+                "2020-02-03"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "Amy"
+          ],
+          [
+            "Beta"
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Movies": [
+              [
+                1,
+                "Amy"
+              ],
+              [
+                2,
+                "Beta"
+              ]
+            ],
+            "Users": [
+              [
+                1,
+                "Amy"
+              ],
+              [
+                2,
+                "Bob"
+              ]
+            ],
+            "MovieRating": [
+              [
+                1,
+                1,
+                5,
+                "2020-02-29"
+              ],
+              [
+                2,
+                2,
+                5,
+                "2020-02-01"
+              ],
+              [
+                2,
+                1,
+                1,
+                "2020-03-01"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "Amy"
+          ],
+          [
+            "Amy"
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Movies\": [\n    [\n      1,\n      \"Alpha\"\n    ],\n    [\n      2,\n      \"Beta\"\n    ]\n  ],\n  \"Users\": [\n    [\n      1,\n      \"Amy\"\n    ],\n    [\n      2,\n      \"Bob\"\n    ]\n  ],\n  \"MovieRating\": [\n    [\n      1,\n      1,\n      4,\n      \"2020-02-01\"\n    ],\n    [\n      2,\n      1,\n      5,\n      \"2020-02-02\"\n    ],\n    [\n      1,\n      2,\n      2,\n      \"2020-02-03\"\n    ]\n  ]\n}\n\nExpected columns: results\nExpected rows:\n[\n  [\n    \"Amy\"\n  ],\n  [\n    \"Beta\"\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 1321,
+    "title": "Restaurant Growth",
+    "slug": "restaurant-growth",
+    "file": "restaurant_growth.sql",
+    "language": "sql",
+    "category": "Subqueries",
+    "method": "__sql__",
+    "rules": [
+      "매일 방문이 있는 식당입니다. 최초 방문일에서 6일 후부터 날짜별 최근 7일 총 amount와 일평균 average_amount(소수 둘째 자리)를 반환하세요. 같은 날 여러 고객의 금액을 모두 합치고 visited_on 오름차순으로 정렬하세요.",
+      "결과 순서도 채점합니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Customer (customer_id INTEGER, name TEXT, visited_on TEXT, amount INTEGER);\n\nOutput columns: visited_on, amount, average_amount",
+    "schema": {
+      "Customer": [
+        [
+          "customer_id",
+          "INTEGER"
+        ],
+        [
+          "name",
+          "TEXT"
+        ],
+        [
+          "visited_on",
+          "TEXT"
+        ],
+        [
+          "amount",
+          "INTEGER"
+        ]
+      ]
+    },
+    "columns": [
+      "visited_on",
+      "amount",
+      "average_amount"
+    ],
+    "ordered": true,
+    "starter": "-- Restaurant Growth\n-- SQLite · write one SELECT / WITH query below.\n-- Output: visited_on, amount, average_amount\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Customer": [
+              [
+                1,
+                "A",
+                "2020-01-01",
+                10
+              ],
+              [
+                2,
+                "A",
+                "2020-01-02",
+                20
+              ],
+              [
+                3,
+                "A",
+                "2020-01-03",
+                30
+              ],
+              [
+                4,
+                "A",
+                "2020-01-04",
+                40
+              ],
+              [
+                5,
+                "A",
+                "2020-01-05",
+                50
+              ],
+              [
+                6,
+                "A",
+                "2020-01-06",
+                60
+              ],
+              [
+                7,
+                "A",
+                "2020-01-07",
+                70
+              ],
+              [
+                8,
+                "A",
+                "2020-01-08",
+                80
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "2020-01-07",
+            280,
+            40.0
+          ],
+          [
+            "2020-01-08",
+            350,
+            50.0
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Customer": [
+              [
+                1,
+                "A",
+                "2020-01-01",
+                10
+              ],
+              [
+                2,
+                "A",
+                "2020-01-02",
+                10
+              ],
+              [
+                3,
+                "A",
+                "2020-01-03",
+                10
+              ],
+              [
+                4,
+                "A",
+                "2020-01-04",
+                10
+              ],
+              [
+                5,
+                "A",
+                "2020-01-05",
+                10
+              ],
+              [
+                6,
+                "A",
+                "2020-01-06",
+                10
+              ],
+              [
+                7,
+                "A",
+                "2020-01-07",
+                10
+              ],
+              [
+                8,
+                "B",
+                "2020-01-07",
+                70
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "2020-01-07",
+            140,
+            20.0
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Customer\": [\n    [\n      1,\n      \"A\",\n      \"2020-01-01\",\n      10\n    ],\n    [\n      2,\n      \"A\",\n      \"2020-01-02\",\n      20\n    ],\n    [\n      3,\n      \"A\",\n      \"2020-01-03\",\n      30\n    ],\n    [\n      4,\n      \"A\",\n      \"2020-01-04\",\n      40\n    ],\n    [\n      5,\n      \"A\",\n      \"2020-01-05\",\n      50\n    ],\n    [\n      6,\n      \"A\",\n      \"2020-01-06\",\n      60\n    ],\n    [\n      7,\n      \"A\",\n      \"2020-01-07\",\n      70\n    ],\n    [\n      8,\n      \"A\",\n      \"2020-01-08\",\n      80\n    ]\n  ]\n}\n\nExpected columns: visited_on, amount, average_amount\nExpected rows:\n[\n  [\n    \"2020-01-07\",\n    280,\n    40.0\n  ],\n  [\n    \"2020-01-08\",\n    350,\n    50.0\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 602,
+    "title": "Friend Requests II: Who Has the Most Friends",
+    "slug": "friend-requests-ii:-who-has-the-most-friends",
+    "file": "friend_requests_ii:_who_has_the_most_friends.sql",
+    "language": "sql",
+    "category": "Subqueries",
+    "method": "__sql__",
+    "rules": [
+      "각 승인 행은 두 사람의 친구 관계를 뜻합니다. 요청자와 수락자 양쪽을 세어 친구가 가장 많은 사람의 id와 num을 반환하세요. 최대인 사람은 유일합니다.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE RequestAccepted (requester_id INTEGER, accepter_id INTEGER, accept_date TEXT);\n\nOutput columns: id, num",
+    "schema": {
+      "RequestAccepted": [
+        [
+          "requester_id",
+          "INTEGER"
+        ],
+        [
+          "accepter_id",
+          "INTEGER"
+        ],
+        [
+          "accept_date",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "id",
+      "num"
+    ],
+    "ordered": false,
+    "starter": "-- Friend Requests II: Who Has the Most Friends\n-- SQLite · write one SELECT / WITH query below.\n-- Output: id, num\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "RequestAccepted": [
+              [
+                1,
+                2,
+                "2020-01-01"
+              ],
+              [
+                1,
+                3,
+                "2020-01-02"
+              ],
+              [
+                2,
+                3,
+                "2020-01-03"
+              ],
+              [
+                3,
+                4,
+                "2020-01-04"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            3,
+            3
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "RequestAccepted": [
+              [
+                2,
+                1,
+                "2020-01-01"
+              ],
+              [
+                3,
+                1,
+                "2020-01-02"
+              ],
+              [
+                4,
+                1,
+                "2020-01-03"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            1,
+            3
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"RequestAccepted\": [\n    [\n      1,\n      2,\n      \"2020-01-01\"\n    ],\n    [\n      1,\n      3,\n      \"2020-01-02\"\n    ],\n    [\n      2,\n      3,\n      \"2020-01-03\"\n    ],\n    [\n      3,\n      4,\n      \"2020-01-04\"\n    ]\n  ]\n}\n\nExpected columns: id, num\nExpected rows:\n[\n  [\n    3,\n    3\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 585,
+    "title": "Investments in 2016",
+    "slug": "investments-in-2016",
+    "file": "investments_in_2016.sql",
+    "language": "sql",
+    "category": "Subqueries",
+    "method": "__sql__",
+    "rules": [
+      "tiv_2015가 다른 계약과 같은 값이고, (lat, lon) 위치는 모든 계약 중 유일한 계약만 골라 tiv_2016 합계를 소수 둘째 자리로 반환하세요.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Insurance (pid INTEGER, tiv_2015 REAL, tiv_2016 REAL, lat REAL, lon REAL);\n\nOutput columns: tiv_2016",
+    "schema": {
+      "Insurance": [
+        [
+          "pid",
+          "INTEGER"
+        ],
+        [
+          "tiv_2015",
+          "REAL"
+        ],
+        [
+          "tiv_2016",
+          "REAL"
+        ],
+        [
+          "lat",
+          "REAL"
+        ],
+        [
+          "lon",
+          "REAL"
+        ]
+      ]
+    },
+    "columns": [
+      "tiv_2016"
+    ],
+    "ordered": false,
+    "starter": "-- Investments in 2016\n-- SQLite · write one SELECT / WITH query below.\n-- Output: tiv_2016\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Insurance": [
+              [
+                1,
+                10,
+                5,
+                1,
+                1
+              ],
+              [
+                2,
+                10,
+                7,
+                2,
+                2
+              ],
+              [
+                3,
+                20,
+                9,
+                3,
+                3
+              ],
+              [
+                4,
+                10,
+                11,
+                3,
+                3
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            12.0
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Insurance": [
+              [
+                1,
+                10,
+                1.25,
+                1,
+                1
+              ],
+              [
+                2,
+                10,
+                2.25,
+                1,
+                2
+              ],
+              [
+                3,
+                20,
+                9,
+                2,
+                1
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            3.5
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Insurance\": [\n    [\n      1,\n      10,\n      5,\n      1,\n      1\n    ],\n    [\n      2,\n      10,\n      7,\n      2,\n      2\n    ],\n    [\n      3,\n      20,\n      9,\n      3,\n      3\n    ],\n    [\n      4,\n      10,\n      11,\n      3,\n      3\n    ]\n  ]\n}\n\nExpected columns: tiv_2016\nExpected rows:\n[\n  [\n    12.0\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 185,
+    "title": "Department Top Three Salaries",
+    "slug": "department-top-three-salaries",
+    "file": "department_top_three_salaries.sql",
+    "language": "sql",
+    "category": "Subqueries",
+    "method": "__sql__",
+    "rules": [
+      "부서별 서로 다른 급여 중 상위 3개 급여를 받는 모든 직원을 반환하세요. 같은 급여는 같은 순위이며 동률 직원을 모두 포함하세요.",
+      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
+      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+    ],
+    "constraints": "CREATE TABLE Employee (id INTEGER, name TEXT, salary INTEGER, departmentId INTEGER);\nCREATE TABLE Department (id INTEGER, name TEXT);\n\nOutput columns: Department, Employee, Salary",
+    "schema": {
+      "Employee": [
+        [
+          "id",
+          "INTEGER"
+        ],
+        [
+          "name",
+          "TEXT"
+        ],
+        [
+          "salary",
+          "INTEGER"
+        ],
+        [
+          "departmentId",
+          "INTEGER"
+        ]
+      ],
+      "Department": [
+        [
+          "id",
+          "INTEGER"
+        ],
+        [
+          "name",
+          "TEXT"
+        ]
+      ]
+    },
+    "columns": [
+      "Department",
+      "Employee",
+      "Salary"
+    ],
+    "ordered": false,
+    "starter": "-- Department Top Three Salaries\n-- SQLite · write one SELECT / WITH query below.\n-- Output: Department, Employee, Salary\n\n",
+    "tests": [
+      {
+        "label": "Example dataset",
+        "args": [
+          {
+            "Employee": [
+              [
+                1,
+                "A",
+                100,
+                1
+              ],
+              [
+                2,
+                "B",
+                90,
+                1
+              ],
+              [
+                3,
+                "C",
+                90,
+                1
+              ],
+              [
+                4,
+                "D",
+                80,
+                1
+              ],
+              [
+                5,
+                "E",
+                70,
+                1
+              ],
+              [
+                6,
+                "F",
+                50,
+                2
+              ]
+            ],
+            "Department": [
+              [
+                1,
+                "IT"
+              ],
+              [
+                2,
+                "HR"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "IT",
+            "A",
+            100
+          ],
+          [
+            "IT",
+            "B",
+            90
+          ],
+          [
+            "IT",
+            "C",
+            90
+          ],
+          [
+            "IT",
+            "D",
+            80
+          ],
+          [
+            "HR",
+            "F",
+            50
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge dataset",
+        "args": [
+          {
+            "Employee": [
+              [
+                1,
+                "A",
+                10,
+                1
+              ],
+              [
+                2,
+                "B",
+                10,
+                1
+              ],
+              [
+                3,
+                "C",
+                9,
+                1
+              ]
+            ],
+            "Department": [
+              [
+                1,
+                "IT"
+              ],
+              [
+                2,
+                "HR"
+              ]
+            ]
+          }
+        ],
+        "expected": [
+          [
+            "IT",
+            "A",
+            10
+          ],
+          [
+            "IT",
+            "B",
+            10
+          ],
+          [
+            "IT",
+            "C",
+            9
+          ]
+        ]
+      }
+    ],
+    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employee\": [\n    [\n      1,\n      \"A\",\n      100,\n      1\n    ],\n    [\n      2,\n      \"B\",\n      90,\n      1\n    ],\n    [\n      3,\n      \"C\",\n      90,\n      1\n    ],\n    [\n      4,\n      \"D\",\n      80,\n      1\n    ],\n    [\n      5,\n      \"E\",\n      70,\n      1\n    ],\n    [\n      6,\n      \"F\",\n      50,\n      2\n    ]\n  ],\n  \"Department\": [\n    [\n      1,\n      \"IT\"\n    ],\n    [\n      2,\n      \"HR\"\n    ]\n  ]\n}\n\nExpected columns: Department, Employee, Salary\nExpected rows:\n[\n  [\n    \"IT\",\n    \"A\",\n    100\n  ],\n  [\n    \"IT\",\n    \"B\",\n    90\n  ],\n  [\n    \"IT\",\n    \"C\",\n    90\n  ],\n  [\n    \"IT\",\n    \"D\",\n    80\n  ],\n  [\n    \"HR\",\n    \"F\",\n    50\n  ]\n]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  }
+]

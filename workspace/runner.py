@@ -53,6 +53,7 @@ def judge(problem, actual, expected, args):
 
 
 def evaluate(payload):
+    if payload.get("language")=="sql": return evaluate_sql(payload)
     frames=[]; results=[]; output=io.StringIO(); started=time.monotonic(); steps=0; case_frames=0; truncated=False
     class LimitedOutput(io.StringIO):
         def write(self, text):
@@ -102,3 +103,54 @@ def evaluate(payload):
             if time.monotonic()-started>8: break
         finally: sys.settrace(None)
     return dict(results=results,frames=frames,output=output.getvalue(),elapsed=round((time.monotonic()-started)*1000,1),traceTruncated=truncated)
+
+
+# Browser-local SQLite execution. Every case gets a separate, disposable database.
+def evaluate_sql(payload):
+    import sqlite3, math
+    results=[]; plans=[]; started=time.monotonic()
+    def same(a,b):
+        if isinstance(a,(int,float)) and isinstance(b,(int,float)):
+            return math.isfinite(a) and abs(a-b)<=1e-6
+        return type(a)==type(b) and a==b
+    def row_equal(a,b): return len(a)==len(b) and all(same(x,y) for x,y in zip(a,b))
+    for index,case in enumerate(payload['tests']):
+        con=sqlite3.connect(':memory:')
+        try:
+            for table,cols in payload['schema'].items():
+                con.execute('CREATE TABLE "'+table+'" ('+','.join('"'+n+'" '+t for n,t in cols)+')')
+                rows=case['args'][0].get(table,[])
+                con.executemany('INSERT INTO "'+table+'" VALUES ('+','.join('?' for _ in cols)+')',rows)
+            con.commit()
+            con.execute('PRAGMA query_only=ON')
+            # SELECTs/CTEs only; deny side effects, attaching databases and PRAGMAs.
+            allowed={sqlite3.SQLITE_SELECT,sqlite3.SQLITE_READ,sqlite3.SQLITE_FUNCTION,sqlite3.SQLITE_RECURSIVE}
+            con.set_authorizer(lambda action,*args: sqlite3.SQLITE_OK if action in allowed else sqlite3.SQLITE_DENY)
+            deadline=time.monotonic()+5
+            con.set_progress_handler(lambda: int(time.monotonic()>deadline),1000)
+            code=payload['code'].strip()
+            cursor=con.execute(code)
+            if cursor.description is None: raise ValueError('Write a SELECT or WITH query that returns rows.')
+            columns=[c[0] for c in cursor.description]
+            rows=[list(r) for r in cursor.fetchmany(10001)]
+            if len(rows)>10000: raise ValueError('Result limit: 10,000 rows.')
+            expected=case.get('expected')
+            ok=None
+            if expected is not None:
+                ok=columns==payload['columns'] and len(rows)==len(expected)
+                if ok and payload.get('ordered'):
+                    ok=all(row_equal(a,b) for a,b in zip(rows,expected))
+                elif ok:
+                    remaining=list(expected)
+                    for row in rows:
+                        hit=next((i for i,r in enumerate(remaining) if row_equal(row,r)),None)
+                        if hit is None: ok=False; break
+                        remaining.pop(hit)
+            results.append(dict(case=index+1,label=case.get('label'),ok=ok,actual={'columns':columns,'rows':rows},expected=None if expected is None else {'columns':payload['columns'],'rows':expected}))
+            if payload['mode']=='debug':
+                plans.append('Case '+str(index+1)+' · EXPLAIN QUERY PLAN\n'+'\n'.join(str(r) for r in con.execute('EXPLAIN QUERY PLAN '+code)))
+        except BaseException as e:
+            results.append(dict(case=index+1,label=case.get('label'),ok=False,error=str(e)))
+        finally:
+            con.close()
+    return dict(results=results,frames=[],output='\n\n'.join(plans),elapsed=round((time.monotonic()-started)*1000,1),traceTruncated=False)
