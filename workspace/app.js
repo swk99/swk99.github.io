@@ -56,10 +56,45 @@ function renderEdgeCases(p) {
   $('custom').hidden = true;
 }
 
-function renderFiles(){const q=$('search').value.toLowerCase();$('files').replaceChildren(...problems.filter(p=>(p.file+p.title+p.id).toLowerCase().includes(q)).map(p=>{const b=document.createElement('button');b.className='file'+(current?.id===p.id?' active':'');b.title=p.id+'. '+p.title;const icon=document.createElement('span');icon.className='python';icon.textContent=p.language==='sql'?'SQL':'Py';const name=document.createElement('span');name.textContent=p.file;b.append(icon,name);b.onclick=()=>openProblem(p);return b;}));}
+// Explicit overrides preserve manual unchecking even when older submissions passed.
+const completionOverrides=new Map();
+function isSolved(p){
+ if(completionOverrides.has(String(p.id)))return completionOverrides.get(String(p.id));
+ try{
+  const explicit=localStorage.getItem('workspace-solved:'+p.id);
+  if(explicit!==null)return explicit==='true';
+  const history=JSON.parse(localStorage.getItem('graph-submissions:'+p.id)||'[]');
+  return Array.isArray(history)&&history.some(r=>r.total>0&&r.passed===r.total);
+ }catch(e){return false;}
+}
+function markSolved(p,done){
+ completionOverrides.set(String(p.id),done);
+ try{localStorage.setItem('workspace-solved:'+p.id,String(done));}
+ catch(e){status('완료 표시는 이번 방문에만 유지됩니다 · 저장 공간 사용 불가');}
+ renderFiles();
+}
+function renderFiles(){
+ const q=$('search').value.toLowerCase();
+ const matching=problems.filter(p=>(p.file+p.title+p.id).toLowerCase().includes(q));
+ const files=$('files');files.replaceChildren();
+ for(const done of [false,true]){
+  const group=matching.filter(p=>isSolved(p)===done);if(!group.length)continue;
+  const heading=document.createElement('div');heading.className='completion-heading';heading.textContent=(done?'✓ 완료':'남은 문제')+' · '+group.length;files.append(heading);
+  for(const p of group){
+   const row=document.createElement('div');row.className='problem-row'+(done?' solved':'');
+   const check=document.createElement('input');check.type='checkbox';check.checked=done;check.setAttribute('aria-label',p.title+' 완료');
+   check.onchange=()=>{markSolved(p,check.checked);document.getElementById('completed-'+p.id)?.focus();};check.id='completed-'+p.id;
+   const b=document.createElement('button');b.className='file'+(current?.id===p.id?' active':'');b.title=p.id+'. '+p.title;
+   const icon=document.createElement('span');icon.className='python';icon.textContent=p.language==='sql'?'SQL':'Py';
+   const name=document.createElement('span');name.textContent=p.file;b.append(icon,name);b.onclick=()=>openProblem(p);
+   row.append(check,b);files.append(row);
+  }
+ }
+}
+window.addEventListener('storage',e=>{if(e.key===null||e.key.startsWith('workspace-solved:')||e.key.startsWith('graph-submissions:')){completionOverrides.clear();renderFiles();}});
 function runtimeFailure(message){clearTimeout(timer);if(worker)worker.terminate();worker=null;ready=false;busy=false;if(runtimeAttempt+1<runtimeSources.length){runtimeAttempt++;$('output').textContent=message+'\n다른 다운로드 경로로 자동 재시도 중…';boot();}else{pendingMode=null;status('Runtime unavailable · click Run to retry');$('output').textContent=message+'\n실행 엔진을 불러오지 못했습니다. Run / Debug / Submit을 누르면 다시 시도합니다. 작성한 코드는 보존됩니다.';buttons();}}
 function boot(){if(worker)worker.terminate();ready=false;busy=false;status('Python loading…');worker=new Worker('worker.js?v=runtime-fix-v1&source='+runtimeAttempt,{type:'module'});buttons();clearTimeout(timer);timer=setTimeout(()=>runtimeFailure('Runtime loading timed out.'),30000);
-worker.onmessage=({data:m})=>{if(m.type==='progress'){status(m.message);return;}if(m.type==='ready'){clearTimeout(timer);ready=true;status('Python / SQLite · ready');buttons();if(pendingMode){const mode=pendingMode;pendingMode=null;run(mode);}return;}if(m.type==='error'){if(!ready){runtimeFailure(m.error);return;}clearTimeout(timer);busy=false;status('Runtime error');$('output').textContent=m.error;buttons();return;}if(m.type==='result'){clearTimeout(timer);busy=false;buttons();const d=m.data;const passed=d.results.filter(x=>x.ok===true).length;const lines=d.results.map(r=>`[${r.ok===null?'RESULT':r.ok?'PASS':'FAIL'}] case ${r.case}${r.label?' · '+r.label:''}\n`+(r.error?r.error:`  actual: ${JSON.stringify(r.actual)}${r.ok===null?'':'\n  expected: '+JSON.stringify(r.expected)}`));let summary=runMode==='submit'?`LOCAL SUBMISSION: ${passed===runProblem.tests.length+runProblem.extra.length?'PASSED':'FAILED'} (${passed}/${runProblem.tests.length+runProblem.extra.length})\nExamples + additional local tests; not the official LeetCode judge.\n`:'';$('output').textContent=summary+lines.join('\n\n')+(d.output?'\n\nSTDOUT\n'+d.output:'')+`\n\nCompleted in ${d.elapsed} ms.`;if(runProblem.language==='sql')renderSqlResults(d,runMode);status(current?.language==='sql'?'SQLite · ready':'Python · ready');if(runMode==='submit'){try{const k='graph-submissions:'+runProblem.id;const old=JSON.parse(localStorage.getItem(k)||'[]');old.unshift({date:new Date().toISOString(),passed,total:runProblem.tests.length+runProblem.extra.length,code:runCode});localStorage.setItem(k,JSON.stringify(old.slice(0,10)));}catch(e){status('Results not saved — storage unavailable');}}if(runMode==='debug'&&d.frames.length){frames=d.frames;frameIndex=0;$('trace-case').replaceChildren();const seenCases=new Set();frames.forEach((f,i)=>{if(!seenCases.has(f.case)){seenCases.add(f.case);$('trace-case').add(new Option('Case '+f.case+' · '+f.label,String(i)));}});$('trace-controls').hidden=false;$('variables').hidden=false;showFrame();if(d.traceTruncated)$('output').textContent+='\nTrace capped at 2,500 events per case; all results are still reported.';}}};worker.onerror=()=>runtimeFailure('Unable to load the execution engine.');}
+worker.onmessage=({data:m})=>{if(m.type==='progress'){status(m.message);return;}if(m.type==='ready'){clearTimeout(timer);ready=true;status('Python / SQLite · ready');buttons();if(pendingMode){const mode=pendingMode;pendingMode=null;run(mode);}return;}if(m.type==='error'){if(!ready){runtimeFailure(m.error);return;}clearTimeout(timer);busy=false;status('Runtime error');$('output').textContent=m.error;buttons();return;}if(m.type==='result'){clearTimeout(timer);busy=false;buttons();const d=m.data;const passed=d.results.filter(x=>x.ok===true).length;const lines=d.results.map(r=>`[${r.ok===null?'RESULT':r.ok?'PASS':'FAIL'}] case ${r.case}${r.label?' · '+r.label:''}\n`+(r.error?r.error:`  actual: ${JSON.stringify(r.actual)}${r.ok===null?'':'\n  expected: '+JSON.stringify(r.expected)}`));let summary=runMode==='submit'?`LOCAL SUBMISSION: ${passed===runProblem.tests.length+runProblem.extra.length?'PASSED':'FAILED'} (${passed}/${runProblem.tests.length+runProblem.extra.length})\nExamples + additional local tests; not the official LeetCode judge.\n`:'';$('output').textContent=summary+lines.join('\n\n')+(d.output?'\n\nSTDOUT\n'+d.output:'')+`\n\nCompleted in ${d.elapsed} ms.`;if(runProblem.language==='sql')renderSqlResults(d,runMode);status(current?.language==='sql'?'SQLite · ready':'Python · ready');if(runMode==='submit'){if(passed>0&&passed===runProblem.tests.length+runProblem.extra.length&&d.results.length===passed)markSolved(runProblem,true);try{const k='graph-submissions:'+runProblem.id;const old=JSON.parse(localStorage.getItem(k)||'[]');old.unshift({date:new Date().toISOString(),passed,total:runProblem.tests.length+runProblem.extra.length,code:runCode});localStorage.setItem(k,JSON.stringify(old.slice(0,10)));}catch(e){status('Results not saved — storage unavailable');}}if(runMode==='debug'&&d.frames.length){frames=d.frames;frameIndex=0;$('trace-case').replaceChildren();const seenCases=new Set();frames.forEach((f,i)=>{if(!seenCases.has(f.case)){seenCases.add(f.case);$('trace-case').add(new Option('Case '+f.case+' · '+f.label,String(i)));}});$('trace-controls').hidden=false;$('variables').hidden=false;showFrame();if(d.traceTruncated)$('output').textContent+='\nTrace capped at 2,500 events per case; all results are still reported.';}}};worker.onerror=()=>runtimeFailure('Unable to load the execution engine.');}
 function stop(message='Execution cancelled. Reloading Python…'){if(worker)worker.terminate();clearTimeout(timer);worker=null;busy=false;ready=false;buttons();$('output').textContent=message;status('Stopped · reload page to restart');}
 function run(mode){showExecutionPanel();if(!current){$('output').textContent='문제 목록을 아직 불러오는 중입니다. 잠시 후 다시 눌러 주세요.';return;}if(busy)return;if(!ready){pendingMode=mode;$('output').textContent='실행 엔진을 준비하고 있어요. 준비되면 '+mode+'을 자동으로 실행합니다…';if(!worker){runtimeAttempt=0;boot();}return;}let tests=[...current.tests,...current.extra];const selection=$('case').value;if(selection==='examples')tests=current.tests;if(selection==='edges')tests=current.extra;if(selection.startsWith('edge:'))tests=[current.extra[Number(selection.slice(5))]];if(mode!=='submit'&&$('case').value==='custom'){try{const args=JSON.parse($('custom').value);if(!Array.isArray(args)||args.length!==current.tests[0].args.length)throw new Error('Use a JSON array containing '+current.tests[0].args.length+' function arguments.');tests=[{args}];}catch(e){$('output').textContent='Invalid custom arguments: '+e.message;return;}}if(mode==='submit')tests=[...current.tests,...current.extra];save();resetTrace();runMode=mode;runProblem=current;runCode=value();busy=true;buttons();status(current.language==='sql'?'SQLite · running':'Python · running');$('output').textContent=mode==='debug'?(current.language==='sql'?'Running queries and recording query plans for ':'Recording execution of ')+tests.length+' test cases…':'Running '+tests.length+' test cases…';worker.postMessage({code:runCode,problem:current.id,method:current.method,language:current.language,schema:current.schema,columns:current.columns,ordered:current.ordered,tests,mode});timer=setTimeout(()=>{stop('Execution timed out after 12 seconds. Python is restarting…');boot();},12000);}
 function showFrame(){const f=frames[frameIndex];$('trace-case').value=String(frames.findIndex(x=>x.case===f.case));$('step').max=frames.length;$('step').value=frameIndex+1;$('trace-label').textContent=` / ${frames.length} · case ${f.case} · line ${f.line} · ${f.event}`;$('variables').textContent=`Case ${f.case} · ${f.label}\nRecorded ${f.function}() · before line execution (return events are after)\n`+Object.entries(f.locals).map(([k,v])=>`${k} = ${v}`).join('\n');$('prev').disabled=frameIndex===0;$('next').disabled=frameIndex===frames.length-1;if(aceEditor){if(marker!=null)aceEditor.session.removeMarker(marker);const Range=ace.require('ace/range').Range;marker=aceEditor.session.addMarker(new Range(f.line-1,0,f.line-1,1),'trace-line','fullLine');aceEditor.gotoLine(f.line,0,false);}else{const lines=value().split('\n');const start=lines.slice(0,f.line-1).join('\n').length+(f.line>1?1:0);$('code').focus();$('code').setSelectionRange(start,start+(lines[f.line-1]||'').length);$('code').scrollTop=Math.max(0,(f.line-5)*32);}}
@@ -279,3 +314,39 @@ const executionStyle=document.createElement('style');executionStyle.textContent=
 .execution-heading h2{font-size:18px;margin:0}
 #execution-dialog .console{height:auto;min-height:240px;max-height:75dvh;overflow:auto;resize:none;margin:0}
 `;document.head.append(executionStyle);
+
+// A collapsible prompt composer opens the user's own ChatGPT session.
+const gptPanel=document.createElement('details');gptPanel.id='gpt-panel';
+gptPanel.innerHTML=`<summary>ChatGPT에 질문하기 · 펼치기</summary>
+<div class="gpt-body"><p>현재 문제와 코드를 질문에 함께 담아요. 답변은 별도 ChatGPT 창에서 받을 수 있어요. 그 창에서 본인 계정으로 로그인하세요.</p>
+<label for="gpt-question">질문</label><textarea id="gpt-question" rows="3" placeholder="이 코드에서 틀린 부분을 전 → 후로 알려줘"></textarea>
+<label class="gpt-option"><input id="gpt-output" type="checkbox"> 현재 실행 결과도 포함</label>
+<div class="gpt-actions"><button id="gpt-copy-open">질문 복사 + ChatGPT 열기 ↗</button><button id="gpt-preview-button">복사할 내용 보기</button><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT 열기 ↗</a></div>
+<p id="gpt-status" role="status"></p><textarea id="gpt-preview" rows="8" readonly hidden aria-label="ChatGPT에 붙여넣을 내용"></textarea></div>`;
+document.querySelector('.coding').prepend(gptPanel);
+function gptPrompt(){
+ if(!current)return '';
+ const question=$('gpt-question').value.trim()||'이 코드를 검토하고 틀린 부분을 전 → 후로 설명해 줘. 한국어로 답해 줘.';
+ return ['문제: '+current.id+' · '+current.title,...current.rules,'예시:',current.examples,'제약:',current.constraints,'내 코드 ('+(current.language==='sql'?'SQL / SQLite':'Python 3')+'):',value(),...($('gpt-output').checked?['현재 실행 결과:',$('output').innerText]:[]),'질문:',question].join('\n\n');
+}
+$('gpt-preview-button').onclick=()=>{$('gpt-preview').value=gptPrompt();$('gpt-preview').hidden=false;};
+$('gpt-copy-open').onclick=()=>{
+ if(!current){$('gpt-status').textContent='문제를 불러온 후 다시 눌러 주세요.';return;}
+ const prompt=gptPrompt();$('gpt-preview').value=prompt;
+ window.open('https://chatgpt.com/','_blank','noopener,noreferrer');
+ navigator.clipboard.writeText(prompt).then(()=>{$('gpt-status').textContent='복사했어요! ChatGPT 창에 Ctrl/Cmd + V로 붙여넣고 보내세요. 창이 안 열리면 ChatGPT 열기 링크를 누르세요.';}).catch(()=>{
+  $('gpt-preview').hidden=false;$('gpt-preview').focus();$('gpt-preview').select();$('gpt-status').textContent='자동 복사가 차단되었어요. 선택된 내용을 Ctrl/Cmd + C로 복사해 ChatGPT에 붙여넣으세요.';
+ });
+};
+gptPanel.addEventListener('toggle',()=>aceEditor?.resize());
+const progressStyle=document.createElement('style');progressStyle.textContent=`
+.completion-heading{padding:12px 14px 6px;color:#a5b8c9;font:600 13px/1.5 system-ui}
+.problem-row{display:flex;align-items:center;gap:5px;padding-left:10px;min-width:0}
+.problem-row input{flex:none;width:17px;height:17px;accent-color:#80c7a2;cursor:pointer}
+.problem-row .file{flex:1;min-width:0}.problem-row.solved .file{color:#9cb8a9}
+#gpt-panel{flex:none;border-bottom:1px solid #395447;background:#192620;padding:10px 14px;max-height:45dvh;overflow:auto}
+#gpt-panel summary{cursor:pointer;color:#b5e3c8;font:600 15px/1.5 system-ui}
+.gpt-body{font:14px/1.5 system-ui;color:#d5e4db}.gpt-body p{margin:8px 0}
+#gpt-question,#gpt-preview{display:block;box-sizing:border-box;width:100%;margin:6px 0;padding:10px;background:#111b17;color:#e1eee6;border:1px solid #557161;border-radius:6px;font:14px/1.5 system-ui;resize:vertical}
+#gpt-preview[hidden]{display:none}.gpt-option{display:flex;align-items:center;gap:6px}.gpt-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}.gpt-actions a{color:#b5e3c8}#gpt-status{font-size:13px}
+`;document.head.append(progressStyle);
