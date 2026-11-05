@@ -1,0 +1,788 @@
+[
+  {
+    "id": 3,
+    "title": "Longest Substring Without Repeating Characters",
+    "slug": "longest-substring-without-repeating-characters",
+    "file": "length_of_longest_substring.py",
+    "rules": [
+      "문자열 s에서 같은 문자가 두 번 나오지 않는 가장 긴 연속 부분 문자열의 길이를 반환하세요.",
+      "문자를 건너뛸 수 없습니다. 빈 문자열의 답은 0입니다."
+    ],
+    "constraints": "0 <= len(s) <= 50000; letters, digits, symbols and spaces.",
+    "method": "lengthOfLongestSubstring",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def lengthOfLongestSubstring(self, s: str) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "abcabcbb"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "bbbbb"
+        ],
+        "expected": 1
+      },
+      {
+        "args": [
+          "pwwkew"
+        ],
+        "expected": 3
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          "abba"
+        ],
+        "expected": 2
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          "dvdf"
+        ],
+        "expected": 3
+      },
+      {
+        "label": "Edge case 4",
+        "args": [
+          " "
+        ],
+        "expected": 1
+      }
+    ],
+    "examples": "Example 1:\nArguments: [\"abcabcbb\"]\nExpected: 3\n\nExample 2:\nArguments: [\"bbbbb\"]\nExpected: 1\n\nExample 3:\nArguments: [\"pwwkew\"]\nExpected: 3",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 76,
+    "title": "Minimum Window Substring",
+    "slug": "minimum-window-substring",
+    "file": "min_window.py",
+    "rules": [
+      "s의 연속 부분 문자열 중 t의 모든 문자를 필요한 개수만큼 포함하는 가장 짧은 문자열을 반환하세요.",
+      "t에 A가 두 번 있으면 구간에도 A가 최소 두 번 있어야 합니다. 순서는 달라도 됩니다.",
+      "가능한 구간이 없으면 빈 문자열을 반환하세요. 정답이 있으면 유일합니다."
+    ],
+    "constraints": "1 <= len(s), len(t) <= 100000; English letters, case-sensitive.",
+    "method": "minWindow",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def minWindow(self, s: str, t: str) -> str:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "ADOBECODEBANC",
+          "ABC"
+        ],
+        "expected": "BANC"
+      },
+      {
+        "args": [
+          "a",
+          "a"
+        ],
+        "expected": "a"
+      },
+      {
+        "args": [
+          "a",
+          "aa"
+        ],
+        "expected": ""
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          "aa",
+          "aa"
+        ],
+        "expected": "aa"
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          "bba",
+          "ab"
+        ],
+        "expected": "ba"
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          "a",
+          "A"
+        ],
+        "expected": ""
+      }
+    ],
+    "examples": "Example 1:\nArguments: [\"ADOBECODEBANC\",\"ABC\"]\nExpected: \"BANC\"\n\nExample 2:\nArguments: [\"a\",\"a\"]\nExpected: \"a\"\n\nExample 3:\nArguments: [\"a\",\"aa\"]\nExpected: \"\"",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 10,
+    "title": "Regular Expression Matching",
+    "slug": "regular-expression-matching",
+    "file": "is_match.py",
+    "rules": [
+      "패턴 p가 문자열 s 전체와 일치하는지 반환하세요. 일부만 일치하면 False입니다.",
+      ".은 임의의 문자 한 개, *는 바로 앞 요소가 0번 이상 반복됨을 뜻합니다.",
+      "예: a*는 빈 문자열, a, aa 등에 대응합니다. 패턴은 유효하게 주어집니다."
+    ],
+    "constraints": "1 <= len(s), len(p) <= 20; s: lowercase letters; p: lowercase letters, '.' and '*'.",
+    "method": "isMatch",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def isMatch(self, s: str, p: str) -> bool:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "aa",
+          "a"
+        ],
+        "expected": false
+      },
+      {
+        "args": [
+          "aa",
+          "a*"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "ab",
+          ".*"
+        ],
+        "expected": true
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          "aab",
+          "c*a*b"
+        ],
+        "expected": true
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          "mississippi",
+          "mis*is*p*."
+        ],
+        "expected": false
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          "ab",
+          ".*c"
+        ],
+        "expected": false
+      },
+      {
+        "label": "Edge case 4",
+        "args": [
+          "a",
+          "ab*"
+        ],
+        "expected": true
+      }
+    ],
+    "examples": "Example 1:\nArguments: [\"aa\",\"a\"]\nExpected: false\n\nExample 2:\nArguments: [\"aa\",\"a*\"]\nExpected: true\n\nExample 3:\nArguments: [\"ab\",\".*\"]\nExpected: true",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 72,
+    "title": "Edit Distance",
+    "slug": "edit-distance",
+    "file": "min_distance.py",
+    "rules": [
+      "word1을 word2로 바꾸는 데 필요한 최소 연산 횟수를 반환하세요.",
+      "한 번의 연산은 문자 하나 삽입, 삭제 또는 교체입니다. 같은 문자를 그대로 두는 것은 비용이 없습니다."
+    ],
+    "constraints": "0 <= len(word1), len(word2) <= 500; lowercase English letters.",
+    "method": "minDistance",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def minDistance(self, word1: str, word2: str) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "horse",
+          "ros"
+        ],
+        "expected": 3
+      },
+      {
+        "args": [
+          "intention",
+          "execution"
+        ],
+        "expected": 5
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          "",
+          "abc"
+        ],
+        "expected": 3
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          "abc",
+          ""
+        ],
+        "expected": 3
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          "same",
+          "same"
+        ],
+        "expected": 0
+      },
+      {
+        "label": "Edge case 4",
+        "args": [
+          "ab",
+          "ba"
+        ],
+        "expected": 2
+      }
+    ],
+    "examples": "Example 1:\nArguments: [\"horse\",\"ros\"]\nExpected: 3\n\nExample 2:\nArguments: [\"intention\",\"execution\"]\nExpected: 5",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 8,
+    "title": "String to Integer (atoi)",
+    "slug": "string-to-integer-atoi",
+    "file": "my_atoi.py",
+    "rules": [
+      "앞쪽 공백(' ')을 건너뛴 뒤 선택적인 + 또는 - 부호 하나를 읽으세요.",
+      "그다음 연속된 숫자만 읽고 첫 비숫자 문자에서 멈추세요. 숫자를 읽지 못하면 0입니다.",
+      "결과를 32비트 부호 있는 정수 범위 [-2147483648, 2147483647]로 제한하여 반환하세요."
+    ],
+    "constraints": "0 <= len(s) <= 200; English letters, digits, spaces, '+', '-', '.'.",
+    "method": "myAtoi",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def myAtoi(self, s: str) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "42"
+        ],
+        "expected": 42
+      },
+      {
+        "args": [
+          "   -042"
+        ],
+        "expected": -42
+      },
+      {
+        "args": [
+          "1337c0d3"
+        ],
+        "expected": 1337
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          "words and 987"
+        ],
+        "expected": 0
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          "-91283472332"
+        ],
+        "expected": -2147483648
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          "2147483648"
+        ],
+        "expected": 2147483647
+      },
+      {
+        "label": "Edge case 4",
+        "args": [
+          "+-12"
+        ],
+        "expected": 0
+      },
+      {
+        "label": "Edge case 5",
+        "args": [
+          ""
+        ],
+        "expected": 0
+      },
+      {
+        "label": "Edge case 6",
+        "args": [
+          "0-1"
+        ],
+        "expected": 0
+      }
+    ],
+    "examples": "Example 1:\nArguments: [\"42\"]\nExpected: 42\n\nExample 2:\nArguments: [\"   -042\"]\nExpected: -42\n\nExample 3:\nArguments: [\"1337c0d3\"]\nExpected: 1337",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 49,
+    "title": "Group Anagrams",
+    "slug": "group-anagrams",
+    "file": "group_anagrams.py",
+    "rules": [
+      "문자 순서만 바꿔서 서로 같게 만들 수 있는 단어들을 같은 그룹으로 묶으세요.",
+      "모든 입력 단어를 중복 횟수까지 보존하세요. 그룹 순서와 그룹 안의 단어 순서는 자유입니다."
+    ],
+    "constraints": "1 <= len(strs) <= 10000; 0 <= len(strs[i]) <= 100; lowercase English letters.",
+    "method": "groupAnagrams",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          [
+            "eat",
+            "tea",
+            "tan",
+            "ate",
+            "nat",
+            "bat"
+          ]
+        ],
+        "expected": [
+          [
+            "bat"
+          ],
+          [
+            "nat",
+            "tan"
+          ],
+          [
+            "ate",
+            "eat",
+            "tea"
+          ]
+        ]
+      },
+      {
+        "args": [
+          [
+            ""
+          ]
+        ],
+        "expected": [
+          [
+            ""
+          ]
+        ]
+      },
+      {
+        "args": [
+          [
+            "a"
+          ]
+        ],
+        "expected": [
+          [
+            "a"
+          ]
+        ]
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          [
+            "ab",
+            "ba",
+            "ab",
+            "abc"
+          ]
+        ],
+        "expected": [
+          [
+            "ab",
+            "ba",
+            "ab"
+          ],
+          [
+            "abc"
+          ]
+        ]
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          [
+            "",
+            ""
+          ]
+        ],
+        "expected": [
+          [
+            "",
+            ""
+          ]
+        ]
+      }
+    ],
+    "examples": "Example 1:\nArguments: [[\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]]\nExpected: [[\"bat\"],[\"nat\",\"tan\"],[\"ate\",\"eat\",\"tea\"]]\n\nExample 2:\nArguments: [[\"\"]]\nExpected: [[\"\"]]\n\nExample 3:\nArguments: [[\"a\"]]\nExpected: [[\"a\"]]",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 5,
+    "title": "Longest Palindromic Substring",
+    "slug": "longest-palindromic-substring",
+    "file": "longest_palindrome.py",
+    "rules": [
+      "s에서 앞뒤로 읽어도 같은 가장 긴 연속 부분 문자열을 반환하세요.",
+      "문자열의 길이가 아니라 문자열 자체를 반환합니다. 최대 길이 정답이 여러 개면 아무 것이나 가능합니다."
+    ],
+    "constraints": "1 <= len(s) <= 1000; English letters and digits.",
+    "method": "longestPalindrome",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def longestPalindrome(self, s: str) -> str:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "babad"
+        ],
+        "expected": "bab"
+      },
+      {
+        "args": [
+          "cbbd"
+        ],
+        "expected": "bb"
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          "a"
+        ],
+        "expected": "a"
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          "ac"
+        ],
+        "expected": "a"
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          "aaaa"
+        ],
+        "expected": "aaaa"
+      },
+      {
+        "label": "Edge case 4",
+        "args": [
+          "racecarx"
+        ],
+        "expected": "racecar"
+      }
+    ],
+    "examples": "Example 1:\nArguments: [\"babad\"]\nExpected: \"bab\"\n\nExample 2:\nArguments: [\"cbbd\"]\nExpected: \"bb\"",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 6,
+    "title": "ZigZag Conversion",
+    "slug": "zigzag-conversion",
+    "file": "convert.py",
+    "rules": [
+      "문자열을 numRows개의 행에 위에서 아래로, 그다음 대각선 위쪽으로 지그재그 배치하세요.",
+      "맨 위 행부터 각 행의 문자를 왼쪽에서 오른쪽 순서로 이어 붙여 반환하세요.",
+      "numRows가 1이면 원래 문자열을 그대로 반환합니다."
+    ],
+    "constraints": "1 <= len(s), numRows <= 1000; English letters, ',' and '.'.",
+    "method": "convert",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def convert(self, s: str, numRows: int) -> str:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "PAYPALISHIRING",
+          3
+        ],
+        "expected": "PAHNAPLSIIGYIR"
+      },
+      {
+        "args": [
+          "PAYPALISHIRING",
+          4
+        ],
+        "expected": "PINALSIGYAHRPI"
+      },
+      {
+        "args": [
+          "A",
+          1
+        ],
+        "expected": "A"
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          "ABCD",
+          1
+        ],
+        "expected": "ABCD"
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          "AB",
+          5
+        ],
+        "expected": "AB"
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          "ABCDE",
+          2
+        ],
+        "expected": "ACEBD"
+      }
+    ],
+    "examples": "Example 1:\nArguments: [\"PAYPALISHIRING\",3]\nExpected: \"PAHNAPLSIIGYIR\"\n\nExample 2:\nArguments: [\"PAYPALISHIRING\",4]\nExpected: \"PINALSIGYAHRPI\"\n\nExample 3:\nArguments: [\"A\",1]\nExpected: \"A\"",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 20,
+    "title": "Valid Parentheses",
+    "slug": "valid-parentheses",
+    "file": "is_valid.py",
+    "rules": [
+      "괄호 (), {}, []만 들어 있는 문자열이 올바르게 짝지어졌는지 반환하세요.",
+      "여는 괄호는 같은 종류의 닫는 괄호로 닫혀야 하며, 가장 나중에 열린 괄호부터 닫혀야 합니다.",
+      "모든 괄호가 짝을 이루어야 합니다."
+    ],
+    "constraints": "1 <= len(s) <= 10000; only (){}[].",
+    "method": "isValid",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def isValid(self, s: str) -> bool:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          "()"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "()[]{}"
+        ],
+        "expected": true
+      },
+      {
+        "args": [
+          "(]"
+        ],
+        "expected": false
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          "([)]"
+        ],
+        "expected": false
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          "([])"
+        ],
+        "expected": true
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          "]"
+        ],
+        "expected": false
+      },
+      {
+        "label": "Edge case 4",
+        "args": [
+          "(("
+        ],
+        "expected": false
+      }
+    ],
+    "examples": "Example 1:\nArguments: [\"()\"]\nExpected: true\n\nExample 2:\nArguments: [\"()[]{}\"]\nExpected: true\n\nExample 3:\nArguments: [\"(]\"]\nExpected: false",
+    "hasEditorial": false,
+    "hasAnimation": false
+  },
+  {
+    "id": 443,
+    "title": "String Compression",
+    "slug": "string-compression",
+    "file": "compress.py",
+    "rules": [
+      "문자 배열 chars의 연속된 동일 문자 그룹을 압축하여 같은 배열의 앞부분에 직접 저장하세요.",
+      "그룹 길이가 1이면 문자만 쓰고, 2 이상이면 문자 뒤에 개수의 각 자릿수를 따로 쓰세요.",
+      "압축된 길이 k를 정수로 반환하세요. chars[:k]도 채점합니다. 나머지 배열 내용은 무시합니다. 추가 공간은 O(1)을 사용하세요.",
+      "예: aabcccccaaa → a2bc5a3. 게시글의 b1과 달리 LeetCode 443에서는 개수 1을 생략합니다."
+    ],
+    "constraints": "1 <= len(chars) <= 2000; each element is one letter, digit or symbol.",
+    "method": "compress",
+    "starter": "from typing import List\nfrom collections import Counter, defaultdict, deque\n\n\nclass Solution:\n    def compress(self, chars: List[str]) -> int:\n        pass\n",
+    "tests": [
+      {
+        "args": [
+          [
+            "a",
+            "a",
+            "b",
+            "b",
+            "c",
+            "c",
+            "c"
+          ]
+        ],
+        "expected": {
+          "length": 6,
+          "chars": [
+            "a",
+            "2",
+            "b",
+            "2",
+            "c",
+            "3"
+          ]
+        }
+      },
+      {
+        "args": [
+          [
+            "a"
+          ]
+        ],
+        "expected": {
+          "length": 1,
+          "chars": [
+            "a"
+          ]
+        }
+      }
+    ],
+    "extra": [
+      {
+        "label": "Edge case 1",
+        "args": [
+          [
+            "b",
+            "b",
+            "b",
+            "b",
+            "b",
+            "b",
+            "b",
+            "b",
+            "b",
+            "b",
+            "b",
+            "b"
+          ]
+        ],
+        "expected": {
+          "length": 3,
+          "chars": [
+            "b",
+            "1",
+            "2"
+          ]
+        }
+      },
+      {
+        "label": "Edge case 2",
+        "args": [
+          [
+            "a",
+            "a",
+            "b",
+            "c",
+            "c",
+            "c",
+            "c",
+            "c",
+            "a",
+            "a",
+            "a"
+          ]
+        ],
+        "expected": {
+          "length": 7,
+          "chars": [
+            "a",
+            "2",
+            "b",
+            "c",
+            "5",
+            "a",
+            "3"
+          ]
+        }
+      },
+      {
+        "label": "Edge case 3",
+        "args": [
+          [
+            "a",
+            "b",
+            "c"
+          ]
+        ],
+        "expected": {
+          "length": 3,
+          "chars": [
+            "a",
+            "b",
+            "c"
+          ]
+        }
+      }
+    ],
+    "examples": "Example 1:\nArguments: [[\"a\",\"a\",\"b\",\"b\",\"c\",\"c\",\"c\"]]\nExpected: {\"length\":6,\"chars\":[\"a\",\"2\",\"b\",\"2\",\"c\",\"3\"]}\n\nExample 2:\nArguments: [[\"a\"]]\nExpected: {\"length\":1,\"chars\":[\"a\"]}",
+    "hasEditorial": false,
+    "hasAnimation": false
+  }
+]

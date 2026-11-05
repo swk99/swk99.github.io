@@ -4,6 +4,13 @@ from typing import List
 def judge(problem, actual, expected, args):
     """Validate non-unique answers without accepting invalid internal ordering."""
     import math
+    if problem == 49:
+        if not isinstance(actual, list) or any(not isinstance(g, list) or any(not isinstance(s, str) for s in g) for g in actual): return False
+        return sorted(sorted(g) for g in actual) == sorted(sorted(g) for g in expected)
+    if problem == 5:
+        return isinstance(actual, str) and actual in args[0] and actual == actual[::-1] and len(actual) == len(expected)
+    if problem == 443:
+        return isinstance(actual, dict) and type(actual.get('length')) == int and actual == expected
     if problem == 1514:
         return type(actual) in (int, float) and math.isfinite(actual) and abs(actual-expected) <= 1e-5
     if problem == 721:
@@ -80,7 +87,10 @@ def evaluate(payload):
             with contextlib.redirect_stdout(output),contextlib.redirect_stderr(output):
                 sys.settrace(trace)
                 exec(compile(payload['code'],'solution.py','exec'),ns)
-                actual=getattr(ns['Solution'](),payload['method'])(*copy.deepcopy(case['args']))
+                call_args=copy.deepcopy(case['args'])
+                actual=getattr(ns['Solution'](),payload['method'])(*call_args)
+                if payload['problem']==443:
+                    actual={'length':actual,'chars':call_args[0][:actual] if type(actual)==int and 0<=actual<=len(call_args[0]) else None}
                 sys.settrace(None)
                 actual=json.loads(json.dumps(actual))
                 expected=case.get('expected')
