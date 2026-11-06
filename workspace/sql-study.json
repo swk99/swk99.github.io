@@ -1,0 +1,1461 @@
+{
+  "datasets": {
+    "employees": {"schema": {"Employee": [["id", "INTEGER"], ["name", "TEXT"], ["managerId", "INTEGER"], ["salary", "INTEGER"]]}, "example": {"Employee": [[1, "Ada", null, 120], [2, "Bo", null, 90], [3, "Cleo", 1, 80], [4, "Dan", 1, 60], [5, "Eli", 1, 55], [6, "Fay", 1, 50], [7, "Gus", 1, 45], [8, "Hana", 2, 40], [9, "Ivo", 3, 30]]}, "edge": {"Employee": [[20, "Mina", null, 150], [21, "Noah", 20, 90], [22, "Ola", 20, 80], [23, "Pia", 20, 70], [24, "Quin", 20, 60], [25, "Rae", 20, 55], [26, "Sol", 20, 50], [27, "Tess", 21, 50], [28, "Uma", 21, 40], [29, "Vic", 21, 35], [30, "Wes", 21, 30], [31, "Xiu", 21, 20], [32, "Yael", 22, 18], [33, "Zoe", 22, 16], [34, "Amir", 22, 14], [35, "Ben", 22, 12]]}},
+    "concerts": {"schema": {"concerts": [["artist_id", "INTEGER"], ["artist_name", "TEXT"], ["genre", "TEXT"], ["concert_revenue", "INTEGER"], ["number_of_members", "INTEGER"]]}, "example": {"concerts": [[1, "Atlas", "Pop", 300, 3], [2, "Bloom", "Pop", 200, 2], [3, "Coda", "Pop", 70, 1], [4, "Dawn", "Rock", 150, 2], [5, "Echo", "Rock", 80, 2], [6, "Flare", "Pop", 200, 4]]}, "edge": {"concerts": [[1, "Fjord", "Folk", 71, 2], [2, "Glow", "Folk", 106, 3], [3, "Halo", "Jazz", 180, 2], [4, "Indigo", "Jazz", 90, 1], [5, "June", "Jazz", 50, 1], [6, "Kite", "Jazz", 120, 2], [7, "Lark", "Jazz", 180, 3]]}},
+    "sales": {"schema": {"sales": [["sale_id", "INTEGER"], ["shop", "TEXT"], ["sale_date", "TEXT"], ["channel", "TEXT"], ["amount", "INTEGER"]]}, "example": {"sales": [[1, "North", "2026-01-01", "online", 40], [2, "North", "2026-01-03", "store", 25], [3, "South", "2026-01-01", "online", 60], [4, "North", "2026-01-03", "online", 15], [5, "South", "2026-01-04", "online", 70]]}, "edge": {"sales": [[8, "West", "2026-02-03", "store", 50], [9, "East", "2026-02-01", "store", 10], [10, "West", "2026-02-01", "online", 20], [11, "East", "2026-02-01", "store", 30], [12, "West", "2026-02-03", "store", 35]]}},
+    "lists": {"schema": {"january": [["customer_id", "INTEGER"]], "february": [["customer_id", "INTEGER"]]}, "example": {"january": [[1], [2], [2], [3]], "february": [[2], [3], [4]]}, "edge": {"january": [[4], [5], [5], [7]], "february": [[4], [6], [6]]}},
+    "pivot": {"schema": {"shop_totals": [["shop", "TEXT"], ["online_sales", "INTEGER"], ["store_sales", "INTEGER"]]}, "example": {"shop_totals": [["North", 55, 25], ["South", 130, 0]]}, "edge": {"shop_totals": [["East", 0, 40], ["West", 20, 85], ["Central", 0, 0]]}},
+    "customers": {"schema": {"customers": [["customer_id", "INTEGER"], ["customer_name", "TEXT"], ["email", "TEXT"]]}, "example": {"customers": [[1, "  SAM Wilson  ", "Sam@Example.COM"], [2, "Ada Kim", "Ada@EXAMPLE.com"], [3, "  Elli Hanson", "elli@Mail.Org"]]}, "edge": {"customers": [[1, "Chris ANDERSON ", "Chris@Mail.Org"], [2, "  Mia Sonner", "Mia@Example.COM"], [3, " Bo SON ", "BO@Example.Com"], [4, "Noa Chen", "noa@mail.org"]]}},
+    "basket": {"schema": {"orders": [["order_id", "INTEGER"], ["customer_id", "INTEGER"], ["order_date", "TEXT"]], "order_items": [["order_id", "INTEGER"], ["product_id", "INTEGER"], ["reordered", "INTEGER"]], "products": [["product_id", "INTEGER"], ["product_name", "TEXT"]]}, "example": {"orders": [[1, 10, "2026-01-02"], [2, 10, "2026-02-03"], [3, 11, "2026-02-04"], [4, 11, "2026-01-04"], [5, 12, "2026-03-01"]], "order_items": [[1, 1, 0], [2, 1, 1], [3, 1, 1], [2, 2, 1], [4, 2, 1], [3, 3, 0], [5, 2, 1]], "products": [[1, "Milk"], [2, "Apples"], [3, "Rice"], [4, "Tea"]]}, "edge": {"orders": [[1, 10, "2026-01-31"], [2, 10, "2026-02-01"], [3, 11, "2026-02-28"], [4, 11, "2026-03-01"], [5, 10, "2026-02-02"], [6, 12, "2026-01-02"], [7, 13, "2025-12-31"]], "order_items": [[1, 1, 1], [2, 1, 1], [3, 1, 0], [4, 1, 1], [3, 2, 1], [5, 2, 1], [2, 3, 0], [6, 4, 1], [7, 2, 1]], "products": [[1, "Tea"], [2, "Milk"], [3, "Rice"], [4, "Apples"]]}}
+  },
+  "lessons": [
+    {
+      "id": "sql-study-select-where",
+      "file": "select_where.sql",
+      "title": "조건에 맞는 직원 고르기",
+      "level": "기초",
+      "dataset": "employees",
+      "rules": [
+        "급여가 60 이상인 직원의 이름과 급여를 보여주세요.",
+        "결과 열 · name, salary",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "FROM에서 가져올 표를 정하고 WHERE에서 조건을 만족하는 행을 골라요. SELECT에서 결과 열을 정해요.",
+      "hints": [
+        "행 하나만 보고 급여 조건을 판단할 수 있어요.",
+        "FROM Employee 다음에 WHERE salary >= 60을 써보세요."
+      ],
+      "solution": "SELECT name, salary\nFROM Employee\nWHERE salary >= 60;",
+      "starter": "SELECT name, salary\nFROM Employee\n-- 여기에 행을 고르는 조건을 추가하세요.\n",
+      "columns": [
+        "name",
+        "salary"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Ada",
+            120
+          ],
+          [
+            "Bo",
+            90
+          ],
+          [
+            "Cleo",
+            80
+          ],
+          [
+            "Dan",
+            60
+          ]
+        ],
+        "edge": [
+          [
+            "Mina",
+            150
+          ],
+          [
+            "Noah",
+            90
+          ],
+          [
+            "Ola",
+            80
+          ],
+          [
+            "Pia",
+            70
+          ],
+          [
+            "Quin",
+            60
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-group-by-count",
+      "file": "group_by_count.sql",
+      "title": "관리자별 직속 인원 세기",
+      "level": "기초",
+      "dataset": "employees",
+      "rules": [
+        "관리자가 있는 직원만 사용해서 관리자 ID별 직속 인원 수를 direct_reports로 반환하세요.",
+        "결과 열 · managerId, direct_reports",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "GROUP BY를 쓰면 같은 managerId를 가진 행이 한 그룹이 돼요. 이제 결과 한 행은 관리자 한 명을 뜻해요.",
+      "hints": [
+        "managerId가 NULL인 행은 누구에게도 보고하지 않아요.",
+        "WHERE managerId IS NOT NULL로 걸러낸 뒤 GROUP BY managerId와 COUNT(*)를 써보세요."
+      ],
+      "solution": "SELECT managerId, COUNT(*) AS direct_reports\nFROM Employee\nWHERE managerId IS NOT NULL\nGROUP BY managerId;",
+      "starter": "",
+      "columns": [
+        "managerId",
+        "direct_reports"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            3,
+            1
+          ]
+        ],
+        "edge": [
+          [
+            20,
+            6
+          ],
+          [
+            21,
+            5
+          ],
+          [
+            22,
+            4
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-having",
+      "file": "having.sql",
+      "title": "직속 인원이 5명 이상인 그룹",
+      "level": "기초",
+      "dataset": "employees",
+      "rules": [
+        "직속 인원이 5명 이상인 관리자 ID와 인원 수를 반환하세요. 관리자가 없는 직원 행은 제외하세요.",
+        "결과 열 · managerId, direct_reports",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "WHERE는 그룹을 만들기 전에 행을 걸러요. HAVING은 GROUP BY로 만든 그룹을 집계 결과로 걸러요.",
+      "hints": [
+        "02번에서 만든 결과 중 어느 그룹을 남길지 생각해 보세요.",
+        "GROUP BY managerId 다음에 HAVING COUNT(*) >= 5를 붙이세요."
+      ],
+      "solution": "SELECT managerId, COUNT(*) AS direct_reports\nFROM Employee\nWHERE managerId IS NOT NULL\nGROUP BY managerId\nHAVING COUNT(*) >= 5;",
+      "starter": "",
+      "columns": [
+        "managerId",
+        "direct_reports"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1,
+            5
+          ]
+        ],
+        "edge": [
+          [
+            20,
+            6
+          ],
+          [
+            21,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-self-join",
+      "file": "self_join.sql",
+      "title": "직원 옆에 관리자 이름 붙이기",
+      "level": "기초",
+      "dataset": "employees",
+      "rules": [
+        "관리자가 있는 직원의 이름을 employee_name, 관리자 이름을 manager_name으로 반환하세요.",
+        "결과 열 · employee_name, manager_name",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "직원과 관리자 모두 Employee에 있어요. 같은 테이블에 e와 m이라는 별칭을 붙여 두 역할로 읽을 수 있어요.",
+      "hints": [
+        "직원 행의 managerId는 어떤 행의 id와 같은가요?",
+        "FROM Employee AS e JOIN Employee AS m ON e.managerId = m.id로 연결해 보세요."
+      ],
+      "solution": "SELECT e.name AS employee_name, m.name AS manager_name\nFROM Employee AS e\nJOIN Employee AS m ON e.managerId = m.id;",
+      "starter": "",
+      "columns": [
+        "employee_name",
+        "manager_name"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Cleo",
+            "Ada"
+          ],
+          [
+            "Dan",
+            "Ada"
+          ],
+          [
+            "Eli",
+            "Ada"
+          ],
+          [
+            "Fay",
+            "Ada"
+          ],
+          [
+            "Gus",
+            "Ada"
+          ],
+          [
+            "Hana",
+            "Bo"
+          ],
+          [
+            "Ivo",
+            "Cleo"
+          ]
+        ],
+        "edge": [
+          [
+            "Noah",
+            "Mina"
+          ],
+          [
+            "Ola",
+            "Mina"
+          ],
+          [
+            "Pia",
+            "Mina"
+          ],
+          [
+            "Quin",
+            "Mina"
+          ],
+          [
+            "Rae",
+            "Mina"
+          ],
+          [
+            "Sol",
+            "Mina"
+          ],
+          [
+            "Tess",
+            "Noah"
+          ],
+          [
+            "Uma",
+            "Noah"
+          ],
+          [
+            "Vic",
+            "Noah"
+          ],
+          [
+            "Wes",
+            "Noah"
+          ],
+          [
+            "Xiu",
+            "Noah"
+          ],
+          [
+            "Yael",
+            "Ola"
+          ],
+          [
+            "Zoe",
+            "Ola"
+          ],
+          [
+            "Amir",
+            "Ola"
+          ],
+          [
+            "Ben",
+            "Ola"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-first-cte",
+      "file": "first_cte.sql",
+      "title": "WITH로 관리자 이름 찾기",
+      "level": "CTE와 서브쿼리",
+      "dataset": "employees",
+      "rules": [
+        "직속 인원이 5명 이상인 관리자 이름과 인원 수를 반환하세요. 먼저 집계 결과를 만들고 Employee와 연결해 보세요.",
+        "결과 열 · name, direct_reports",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "manager_counts는 직접 정하는 중간 결과 이름이에요. 괄호 안 SELECT가 집계표를 만들고 바깥 SELECT가 그 표를 사용해요.",
+      "hints": [
+        "WITH 안에는 03번에서 구한 관리자 ID와 인원 수가 들어가요.",
+        "바깥에서는 Employee.id를 manager_counts.managerId에 연결하세요."
+      ],
+      "solution": "WITH manager_counts AS (\n  SELECT managerId, COUNT(*) AS direct_reports\n  FROM Employee\n  WHERE managerId IS NOT NULL\n  GROUP BY managerId\n  HAVING COUNT(*) >= 5\n)\nSELECT e.name, c.direct_reports\nFROM Employee AS e\nJOIN manager_counts AS c ON e.id = c.managerId;",
+      "starter": "WITH manager_counts AS (\n  -- 03번의 집계 쿼리를 여기에 넣으세요.\n)\n-- 바깥 SELECT에서 이름과 인원 수를 반환하세요.\n",
+      "columns": [
+        "name",
+        "direct_reports"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Ada",
+            5
+          ]
+        ],
+        "edge": [
+          [
+            "Mina",
+            6
+          ],
+          [
+            "Noah",
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-derived-table",
+      "file": "derived_table.sql",
+      "title": "FROM 안에 같은 집계 넣기",
+      "level": "CTE와 서브쿼리",
+      "dataset": "employees",
+      "rules": [
+        "05번과 같은 결과를 서브쿼리로 만들어 보세요. 관리자 이름과 직속 인원 수를 반환하세요.",
+        "결과 열 · name, direct_reports",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "여러 행이 나오는 서브쿼리는 FROM이나 JOIN에서 표처럼 쓸 수 있어요. 괄호 밖에 별칭을 붙이면 열을 가리키기 편해요.",
+      "hints": [
+        "관리자 집계를 먼저 단독으로 실행한 다음 괄호 안으로 옮겨보세요.",
+        "JOIN (집계 SELECT) AS c ON e.id = c.managerId 형태로 연결하세요."
+      ],
+      "solution": "SELECT e.name, c.direct_reports\nFROM Employee AS e\nJOIN (\n  SELECT managerId, COUNT(*) AS direct_reports\n  FROM Employee\n  WHERE managerId IS NOT NULL\n  GROUP BY managerId\n  HAVING COUNT(*) >= 5\n) AS c ON e.id = c.managerId;",
+      "starter": "",
+      "columns": [
+        "name",
+        "direct_reports"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Ada",
+            5
+          ]
+        ],
+        "edge": [
+          [
+            "Mina",
+            6
+          ],
+          [
+            "Noah",
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-scalar-subquery",
+      "file": "scalar_subquery.sql",
+      "title": "평균 급여보다 많이 받는 직원",
+      "level": "CTE와 서브쿼리",
+      "dataset": "employees",
+      "rules": [
+        "전체 직원의 평균 급여보다 급여가 높은 직원의 이름과 급여를 반환하세요.",
+        "결과 열 · name, salary",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "WHERE에서 >와 함께 쓰는 서브쿼리는 비교 기준이 되는 값 하나를 반환해요.",
+      "hints": [
+        "평균 급여 하나를 반환하는 SELECT를 먼저 실행해 보세요.",
+        "WHERE salary > (SELECT AVG(salary) FROM Employee)로 두 결과를 연결하세요."
+      ],
+      "solution": "SELECT name, salary\nFROM Employee\nWHERE salary > (SELECT AVG(salary) FROM Employee);",
+      "starter": "",
+      "columns": [
+        "name",
+        "salary"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Ada",
+            120
+          ],
+          [
+            "Bo",
+            90
+          ],
+          [
+            "Cleo",
+            80
+          ]
+        ],
+        "edge": [
+          [
+            "Mina",
+            150
+          ],
+          [
+            "Noah",
+            90
+          ],
+          [
+            "Ola",
+            80
+          ],
+          [
+            "Pia",
+            70
+          ],
+          [
+            "Quin",
+            60
+          ],
+          [
+            "Rae",
+            55
+          ],
+          [
+            "Sol",
+            50
+          ],
+          [
+            "Tess",
+            50
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-correlated-subquery",
+      "file": "correlated_subquery.sql",
+      "title": "장르별 최고 매출 공연",
+      "level": "CTE와 서브쿼리",
+      "dataset": "concerts",
+      "rules": [
+        "자기 장르에서 공연 매출이 가장 높은 아티스트의 이름, 장르, 공연 매출을 반환하세요. 공동 1위는 모두 포함하세요.",
+        "결과 열 · artist_name, genre, concert_revenue",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "상관 서브쿼리는 바깥 행의 값을 읽을 수 있어요. 바깥 행이 Pop이면 안쪽 쿼리는 Pop의 최댓값을 구해요.",
+      "hints": [
+        "공연 테이블을 바깥에서는 c, 안에서는 peer라고 부르세요.",
+        "안쪽 SELECT에서 peer.genre = c.genre로 범위를 좁힌 뒤 MAX를 구하세요."
+      ],
+      "solution": "SELECT c.artist_name, c.genre, c.concert_revenue\nFROM concerts AS c\nWHERE c.concert_revenue = (\n  SELECT MAX(peer.concert_revenue)\n  FROM concerts AS peer\n  WHERE peer.genre = c.genre\n);",
+      "starter": "",
+      "columns": [
+        "artist_name",
+        "genre",
+        "concert_revenue"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Atlas",
+            "Pop",
+            300
+          ],
+          [
+            "Dawn",
+            "Rock",
+            150
+          ]
+        ],
+        "edge": [
+          [
+            "Glow",
+            "Folk",
+            106
+          ],
+          [
+            "Halo",
+            "Jazz",
+            180
+          ],
+          [
+            "Lark",
+            "Jazz",
+            180
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-recursive-cte",
+      "file": "recursive_cte.sql",
+      "title": "직속과 간접 보고 직원 찾기",
+      "level": "CTE와 서브쿼리",
+      "dataset": "employees",
+      "rules": [
+        "최상위 관리자(managerId가 NULL)의 아래에 있는 모든 직원의 이름과 depth를 반환하세요. 직속 직원은 depth 1, 그 아래는 2예요. 최상위 관리자는 제외하세요.",
+        "결과 열 · name, depth",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "재귀 CTE는 시작 행을 고른 다음, 방금 찾은 행과 다시 JOIN해 다음 단계의 행을 찾는 구조예요.",
+      "hints": [
+        "먼저 최상위 관리자를 depth 0으로 담으세요.",
+        "UNION ALL 아래에서 Employee.managerId를 CTE의 id와 연결하고 depth에 1을 더하세요."
+      ],
+      "solution": "WITH RECURSIVE reports AS (\n  SELECT id, name, 0 AS depth\n  FROM Employee\n  WHERE managerId IS NULL\n  UNION ALL\n  SELECT e.id, e.name, r.depth + 1\n  FROM Employee AS e\n  JOIN reports AS r ON e.managerId = r.id\n)\nSELECT name, depth\nFROM reports\nWHERE depth > 0;",
+      "starter": "",
+      "columns": [
+        "name",
+        "depth"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Cleo",
+            1
+          ],
+          [
+            "Dan",
+            1
+          ],
+          [
+            "Eli",
+            1
+          ],
+          [
+            "Fay",
+            1
+          ],
+          [
+            "Gus",
+            1
+          ],
+          [
+            "Hana",
+            1
+          ],
+          [
+            "Ivo",
+            2
+          ]
+        ],
+        "edge": [
+          [
+            "Noah",
+            1
+          ],
+          [
+            "Ola",
+            1
+          ],
+          [
+            "Pia",
+            1
+          ],
+          [
+            "Quin",
+            1
+          ],
+          [
+            "Rae",
+            1
+          ],
+          [
+            "Sol",
+            1
+          ],
+          [
+            "Tess",
+            2
+          ],
+          [
+            "Uma",
+            2
+          ],
+          [
+            "Vic",
+            2
+          ],
+          [
+            "Wes",
+            2
+          ],
+          [
+            "Xiu",
+            2
+          ],
+          [
+            "Yael",
+            2
+          ],
+          [
+            "Zoe",
+            2
+          ],
+          [
+            "Amir",
+            2
+          ],
+          [
+            "Ben",
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-window-sum",
+      "file": "window_sum.sql",
+      "title": "판매 행마다 매장 합계 붙이기",
+      "level": "윈도 함수",
+      "dataset": "sales",
+      "rules": [
+        "모든 판매의 sale_id, shop, amount와 해당 매장의 전체 매출 shop_total을 반환하세요.",
+        "결과 열 · sale_id, shop, amount, shop_total",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "SUM(amount) OVER (PARTITION BY shop)은 매장별 합계를 구하면서 원래 판매 행을 유지해요.",
+      "hints": [
+        "판매 한 건마다 결과 한 행이 있어야 해요.",
+        "SUM(amount) 뒤에 OVER (PARTITION BY shop)을 붙이세요."
+      ],
+      "solution": "SELECT sale_id, shop, amount,\n       SUM(amount) OVER (PARTITION BY shop) AS shop_total\nFROM sales;",
+      "starter": "",
+      "columns": [
+        "sale_id",
+        "shop",
+        "amount",
+        "shop_total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1,
+            "North",
+            40,
+            80
+          ],
+          [
+            2,
+            "North",
+            25,
+            80
+          ],
+          [
+            4,
+            "North",
+            15,
+            80
+          ],
+          [
+            3,
+            "South",
+            60,
+            130
+          ],
+          [
+            5,
+            "South",
+            70,
+            130
+          ]
+        ],
+        "edge": [
+          [
+            9,
+            "East",
+            10,
+            40
+          ],
+          [
+            11,
+            "East",
+            30,
+            40
+          ],
+          [
+            8,
+            "West",
+            50,
+            105
+          ],
+          [
+            10,
+            "West",
+            20,
+            105
+          ],
+          [
+            12,
+            "West",
+            35,
+            105
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-running-total",
+      "file": "running_total.sql",
+      "title": "매장별 누적 매출",
+      "level": "윈도 함수",
+      "dataset": "sales",
+      "rules": [
+        "모든 판매의 sale_id, shop과 해당 판매까지의 누적 매출 running_total을 반환하세요. 매장별로 sale_date, sale_id 순으로 누적하세요.",
+        "결과 열 · sale_id, shop, running_total",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "윈도에 ORDER BY를 넣으면 계산 순서를 정할 수 있어요. ROWS는 그 순서에서 어떤 행 범위를 계산할지 지정해요.",
+      "hints": [
+        "같은 날 판매가 여러 건이라면 sale_id로 순서를 정해요.",
+        "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW는 첫 행부터 현재 행까지예요."
+      ],
+      "solution": "SELECT sale_id, shop,\n       SUM(amount) OVER (\n         PARTITION BY shop ORDER BY sale_date, sale_id\n         ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n       ) AS running_total\nFROM sales;",
+      "starter": "",
+      "columns": [
+        "sale_id",
+        "shop",
+        "running_total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1,
+            "North",
+            40
+          ],
+          [
+            2,
+            "North",
+            65
+          ],
+          [
+            4,
+            "North",
+            80
+          ],
+          [
+            3,
+            "South",
+            60
+          ],
+          [
+            5,
+            "South",
+            130
+          ]
+        ],
+        "edge": [
+          [
+            9,
+            "East",
+            10
+          ],
+          [
+            11,
+            "East",
+            40
+          ],
+          [
+            10,
+            "West",
+            20
+          ],
+          [
+            8,
+            "West",
+            70
+          ],
+          [
+            12,
+            "West",
+            105
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-ranking",
+      "file": "ranking.sql",
+      "title": "동점이 있는 순위 비교하기",
+      "level": "윈도 함수",
+      "dataset": "concerts",
+      "rules": [
+        "각 장르에서 매출이 높은 순서로 아티스트를 평가하세요. artist_name, genre와 RANK의 revenue_rank, DENSE_RANK의 dense_rank, ROW_NUMBER의 row_num을 반환하세요. row_num의 동점은 artist_id가 작은 순으로 매기세요.",
+        "결과 열 · artist_name, genre, revenue_rank, dense_rank, row_num",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "매출이 300, 300, 100이면 RANK는 1, 1, 3이고 DENSE_RANK는 1, 1, 2예요. ROW_NUMBER는 각 행에 번호를 하나씩 매겨요.",
+      "hints": [
+        "세 윈도 모두 장르별로 나누세요.",
+        "RANK와 DENSE_RANK의 정렬에는 매출만 넣어야 동점이 유지돼요. ROW_NUMBER에는 artist_id도 넣으세요."
+      ],
+      "solution": "SELECT artist_name, genre,\n       RANK() OVER (PARTITION BY genre ORDER BY concert_revenue DESC) AS revenue_rank,\n       DENSE_RANK() OVER (PARTITION BY genre ORDER BY concert_revenue DESC) AS dense_rank,\n       ROW_NUMBER() OVER (PARTITION BY genre ORDER BY concert_revenue DESC, artist_id) AS row_num\nFROM concerts;",
+      "starter": "",
+      "columns": [
+        "artist_name",
+        "genre",
+        "revenue_rank",
+        "dense_rank",
+        "row_num"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Atlas",
+            "Pop",
+            1,
+            1,
+            1
+          ],
+          [
+            "Bloom",
+            "Pop",
+            2,
+            2,
+            2
+          ],
+          [
+            "Flare",
+            "Pop",
+            2,
+            2,
+            3
+          ],
+          [
+            "Coda",
+            "Pop",
+            4,
+            3,
+            4
+          ],
+          [
+            "Dawn",
+            "Rock",
+            1,
+            1,
+            1
+          ],
+          [
+            "Echo",
+            "Rock",
+            2,
+            2,
+            2
+          ]
+        ],
+        "edge": [
+          [
+            "Glow",
+            "Folk",
+            1,
+            1,
+            1
+          ],
+          [
+            "Fjord",
+            "Folk",
+            2,
+            2,
+            2
+          ],
+          [
+            "Halo",
+            "Jazz",
+            1,
+            1,
+            1
+          ],
+          [
+            "Lark",
+            "Jazz",
+            1,
+            1,
+            2
+          ],
+          [
+            "Kite",
+            "Jazz",
+            3,
+            2,
+            3
+          ],
+          [
+            "Indigo",
+            "Jazz",
+            4,
+            3,
+            4
+          ],
+          [
+            "June",
+            "Jazz",
+            5,
+            4,
+            5
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-top-per-genre",
+      "file": "top_per_genre.sql",
+      "title": "장르별 멤버당 매출 1위",
+      "level": "윈도 함수",
+      "dataset": "concerts",
+      "rules": [
+        "멤버당 매출이 가장 높은 아티스트를 장르별로 찾으세요. 공동 1위는 모두 포함하고, 순위를 먼저 계산한 뒤 최종 출력만 소수점 둘째 자리까지 반올림하세요.",
+        "결과 열 · artist_name, genre, revenue_per_member",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "행별 지표 계산 → 장르별 순위 계산 → 1위만 선택 순으로 결과를 좁혀보세요.",
+      "hints": [
+        "SQLite에서 1.0 * concert_revenue / number_of_members로 소수점이 있는 값을 구하세요.",
+        "CTE에서 RANK를 계산하고 바깥 WHERE에서 순위가 1인 행을 고르세요."
+      ],
+      "solution": "WITH scored AS (\n  SELECT artist_name, genre,\n         1.0 * concert_revenue / number_of_members AS per_member\n  FROM concerts\n), ranked AS (\n  SELECT artist_name, genre, per_member,\n         RANK() OVER (PARTITION BY genre ORDER BY per_member DESC) AS position\n  FROM scored\n)\nSELECT artist_name, genre, ROUND(per_member, 2) AS revenue_per_member\nFROM ranked\nWHERE position = 1;",
+      "starter": "",
+      "columns": [
+        "artist_name",
+        "genre",
+        "revenue_per_member"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Atlas",
+            "Pop",
+            100.0
+          ],
+          [
+            "Bloom",
+            "Pop",
+            100.0
+          ],
+          [
+            "Dawn",
+            "Rock",
+            75.0
+          ]
+        ],
+        "edge": [
+          [
+            "Fjord",
+            "Folk",
+            35.5
+          ],
+          [
+            "Halo",
+            "Jazz",
+            90.0
+          ],
+          [
+            "Indigo",
+            "Jazz",
+            90.0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-lead-lag",
+      "file": "lead_lag.sql",
+      "title": "이전·다음 판매액 보기",
+      "level": "윈도 함수",
+      "dataset": "sales",
+      "rules": [
+        "각 판매의 sale_id와 같은 매장의 직전 판매액 previous_amount, 다음 판매액 next_amount를 반환하세요. 매장별 순서는 sale_date, sale_id예요.",
+        "결과 열 · sale_id, previous_amount, next_amount",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "LAG는 정렬한 윈도의 이전 행, LEAD는 다음 행을 읽어요. 해당 행이 없으면 기본 결과는 NULL이에요.",
+      "hints": [
+        "판매 행을 유지한 채 앞뒤 행의 amount를 가져오세요.",
+        "두 함수에 똑같이 OVER (PARTITION BY shop ORDER BY sale_date, sale_id)를 넣으세요."
+      ],
+      "solution": "SELECT sale_id,\n       LAG(amount) OVER (PARTITION BY shop ORDER BY sale_date, sale_id) AS previous_amount,\n       LEAD(amount) OVER (PARTITION BY shop ORDER BY sale_date, sale_id) AS next_amount\nFROM sales;",
+      "starter": "",
+      "columns": [
+        "sale_id",
+        "previous_amount",
+        "next_amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1,
+            null,
+            25
+          ],
+          [
+            2,
+            40,
+            15
+          ],
+          [
+            4,
+            25,
+            null
+          ],
+          [
+            3,
+            null,
+            70
+          ],
+          [
+            5,
+            60,
+            null
+          ]
+        ],
+        "edge": [
+          [
+            9,
+            null,
+            30
+          ],
+          [
+            11,
+            10,
+            null
+          ],
+          [
+            10,
+            null,
+            50
+          ],
+          [
+            8,
+            20,
+            35
+          ],
+          [
+            12,
+            50,
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-union",
+      "file": "union.sql",
+      "title": "두 달 고객 목록 합치기",
+      "level": "데이터 변형",
+      "dataset": "lists",
+      "rules": [
+        "1월이나 2월에 등장한 모든 고객 ID를 한 번씩 반환하세요.",
+        "결과 열 · customer_id",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "UNION은 두 결과를 합치면서 중복을 없애요. UNION ALL은 중복 행까지 모두 유지해요.",
+      "hints": [
+        "두 SELECT는 모두 열 하나를 반환해요.",
+        "두 SELECT 사이에 UNION을 넣으세요."
+      ],
+      "solution": "SELECT customer_id FROM january\nUNION\nSELECT customer_id FROM february;",
+      "starter": "",
+      "columns": [
+        "customer_id"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "edge": [
+          [
+            4
+          ],
+          [
+            5
+          ],
+          [
+            6
+          ],
+          [
+            7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-set-difference",
+      "file": "set_difference.sql",
+      "title": "1월에만 등장한 고객 찾기",
+      "level": "데이터 변형",
+      "dataset": "lists",
+      "rules": [
+        "1월에 등장하고 2월에는 등장하지 않은 고객 ID를 한 번씩 반환하세요.",
+        "결과 열 · customer_id",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "INTERSECT는 두 결과에 모두 있는 행, EXCEPT는 왼쪽 결과에만 있는 행을 반환해요.",
+      "hints": [
+        "어느 달에서 어느 달을 빼야 할까요?",
+        "SELECT customer_id FROM january를 EXCEPT 앞에 두세요."
+      ],
+      "solution": "SELECT customer_id FROM january\nEXCEPT\nSELECT customer_id FROM february;",
+      "starter": "",
+      "columns": [
+        "customer_id"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1
+          ]
+        ],
+        "edge": [
+          [
+            5
+          ],
+          [
+            7
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-execution-order",
+      "file": "execution_order.sql",
+      "title": "어느 조건을 어디에 써야 할까?",
+      "level": "데이터 변형",
+      "dataset": "sales",
+      "rules": [
+        "온라인 판매만 사용해 매장별 총매출을 구하세요. 온라인 총매출이 40 이상인 매장만, 총매출 내림차순과 매장 이름 오름차순으로 반환하세요.",
+        "결과 열 · shop, online_total"
+      ],
+      "concept": "논리적으로 FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY 순서로 생각하면 각 조건을 어디에 넣을지 보여요.",
+      "hints": [
+        "판매 한 행에서 판단할 조건과 매장 단위로 판단할 조건을 나눠보세요.",
+        "WHERE channel로 행을 고르고 HAVING SUM(amount)로 그룹을 고르세요."
+      ],
+      "solution": "SELECT shop, SUM(amount) AS online_total\nFROM sales\nWHERE channel = 'online'\nGROUP BY shop\nHAVING SUM(amount) >= 40\nORDER BY online_total DESC, shop;",
+      "starter": "",
+      "columns": [
+        "shop",
+        "online_total"
+      ],
+      "ordered": true,
+      "expected": {
+        "example": [
+          [
+            "South",
+            130
+          ],
+          [
+            "North",
+            55
+          ]
+        ],
+        "edge": []
+      }
+    },
+    {
+      "id": "sql-study-pivot",
+      "file": "pivot.sql",
+      "title": "온라인과 매장 매출을 두 열로",
+      "level": "데이터 변형",
+      "dataset": "sales",
+      "rules": [
+        "매장마다 한 행을 반환하고, 온라인 매출 online_sales와 오프라인 매출 store_sales를 각각 열로 보여주세요. 해당 채널 판매가 없으면 0이에요.",
+        "결과 열 · shop, online_sales, store_sales",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "조건부 집계는 한 열의 값을 기준으로 나눠서 집계해요. CASE가 어떤 금액을 더할지 정해줘요.",
+      "hints": [
+        "GROUP BY shop으로 매장마다 한 행을 만드세요.",
+        "SUM(CASE WHEN channel = 'online' THEN amount ELSE 0 END) 형태를 두 채널에 적용하세요."
+      ],
+      "solution": "SELECT shop,\n       SUM(CASE WHEN channel = 'online' THEN amount ELSE 0 END) AS online_sales,\n       SUM(CASE WHEN channel = 'store' THEN amount ELSE 0 END) AS store_sales\nFROM sales\nGROUP BY shop;",
+      "starter": "",
+      "columns": [
+        "shop",
+        "online_sales",
+        "store_sales"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "North",
+            55,
+            25
+          ],
+          [
+            "South",
+            130,
+            0
+          ]
+        ],
+        "edge": [
+          [
+            "East",
+            0,
+            40
+          ],
+          [
+            "West",
+            20,
+            85
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-unpivot",
+      "file": "unpivot.sql",
+      "title": "채널별 매출 열을 다시 행으로",
+      "level": "데이터 변형",
+      "dataset": "pivot",
+      "rules": [
+        "매장별 온라인과 오프라인 매출을 각각 별도 행으로 반환하세요. channel에는 online 또는 store를 넣고, 0인 매출도 포함하세요.",
+        "결과 열 · shop, channel, amount",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "열마다 같은 모양의 SELECT를 만들고 UNION ALL로 쌓으면, 열에 담겨 있던 값을 행으로 펼칠 수 있어요.",
+      "hints": [
+        "각 SELECT는 shop, channel, amount 세 열을 만들어야 해요.",
+        "첫 SELECT는 'online' AS channel과 online_sales AS amount를 선택해요. 두 결과는 UNION ALL로 이어보세요."
+      ],
+      "solution": "SELECT shop, 'online' AS channel, online_sales AS amount FROM shop_totals\nUNION ALL\nSELECT shop, 'store' AS channel, store_sales AS amount FROM shop_totals;",
+      "starter": "",
+      "columns": [
+        "shop",
+        "channel",
+        "amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "North",
+            "online",
+            55
+          ],
+          [
+            "South",
+            "online",
+            130
+          ],
+          [
+            "North",
+            "store",
+            25
+          ],
+          [
+            "South",
+            "store",
+            0
+          ]
+        ],
+        "edge": [
+          [
+            "East",
+            "online",
+            0
+          ],
+          [
+            "West",
+            "online",
+            20
+          ],
+          [
+            "Central",
+            "online",
+            0
+          ],
+          [
+            "East",
+            "store",
+            40
+          ],
+          [
+            "West",
+            "store",
+            85
+          ],
+          [
+            "Central",
+            "store",
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-string-cleanup",
+      "file": "string_cleanup.sql",
+      "title": "이름을 정리하고 이메일 도메인 추출",
+      "level": "데이터 변형",
+      "dataset": "customers",
+      "rules": [
+        "공백을 제거한 이름이 대소문자 구분 없이 son으로 끝나는 고객을 찾으세요. customer_id, 양끝 공백을 제거한 clean_name, 소문자로 바꾼 이메일 도메인 email_domain을 반환하세요. 이메일에는 @가 하나씩 있어요.",
+        "결과 열 · customer_id, clean_name, email_domain",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "TRIM은 양끝 공백을 지우고 LOWER는 소문자로 바꿔요. INSTR과 SUBSTR을 함께 쓰면 구분자 뒤 문자열을 꺼낼 수 있어요.",
+      "hints": [
+        "LOWER(TRIM(customer_name))에 LIKE '%son'을 써보세요.",
+        "INSTR(email, '@')가 @의 위치예요. 그 다음 문자부터 SUBSTR로 자르세요."
+      ],
+      "solution": "SELECT customer_id, TRIM(customer_name) AS clean_name,\n       LOWER(SUBSTR(email, INSTR(email, '@') + 1)) AS email_domain\nFROM customers\nWHERE LOWER(TRIM(customer_name)) LIKE '%son';",
+      "starter": "",
+      "columns": [
+        "customer_id",
+        "clean_name",
+        "email_domain"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1,
+            "SAM Wilson",
+            "example.com"
+          ],
+          [
+            3,
+            "Elli Hanson",
+            "mail.org"
+          ]
+        ],
+        "edge": [
+          [
+            1,
+            "Chris ANDERSON",
+            "mail.org"
+          ],
+          [
+            3,
+            "Bo SON",
+            "example.com"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-basket-join",
+      "file": "basket_join.sql",
+      "title": "2월에 재구매된 상품 세기",
+      "level": "장보기 종합 실습",
+      "dataset": "basket",
+      "rules": [
+        "2026년 2월에 재구매된 상품 이름과 재구매 건수 reorders를 반환하세요. reordered가 1인 주문 항목만 세고, 상품 ID 단위로 집계하세요.",
+        "결과 열 · product_name, reorders",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "결과의 한 행이 무엇인지 정해두면 JOIN 이후 무엇을 세야 할지 명확해져요. 여기서는 상품별 재구매 행 수를 세요.",
+      "hints": [
+        "orders의 날짜와 order_items의 reordered가 모두 필요해요. product_name은 products에 있어요.",
+        "날짜는 2월 1일 이상, 3월 1일 미만으로 거르세요. 주문 항목 하나가 집계 대상 한 건이에요."
+      ],
+      "solution": "SELECT p.product_name, COUNT(*) AS reorders\nFROM orders AS o\nJOIN order_items AS i ON o.order_id = i.order_id\nJOIN products AS p ON p.product_id = i.product_id\nWHERE o.order_date >= '2026-02-01' AND o.order_date < '2026-03-01'\n  AND i.reordered = 1\nGROUP BY p.product_id, p.product_name;",
+      "starter": "",
+      "columns": [
+        "product_name",
+        "reorders"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Milk",
+            2
+          ],
+          [
+            "Apples",
+            1
+          ]
+        ],
+        "edge": [
+          [
+            "Tea",
+            1
+          ],
+          [
+            "Milk",
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "sql-study-basket-growth",
+      "file": "basket_growth.sql",
+      "title": "1월보다 재구매가 늘어난 상품",
+      "level": "장보기 종합 실습",
+      "dataset": "basket",
+      "rules": [
+        "2026년 1월 재구매가 2건 미만이고 2월 재구매가 2건 이상인 상품을 찾으세요. 상품 이름과 두 달의 건수를 반환하세요. 재구매가 없던 달의 건수는 0으로 계산하세요.",
+        "결과 열 · product_name, january_reorders, february_reorders",
+        "결과 행 순서는 자유예요."
+      ],
+      "concept": "읽기 쉬운 쿼리는 중간 결과의 역할이 분명해요. 월별 집계표를 먼저 검증하고, 바깥에서 상품 이름을 붙여 변화 조건을 적용해 보세요.",
+      "hints": [
+        "orders와 order_items를 연결하고 1~2월의 재구매 행만 가져오세요.",
+        "상품별 SUM(CASE WHEN ... THEN 1 ELSE 0 END) 두 개를 월별 집계 CTE에 만든 다음 바깥 WHERE에서 비교하세요."
+      ],
+      "solution": "WITH monthly_reorders AS (\n  SELECT i.product_id,\n         SUM(CASE WHEN o.order_date < '2026-02-01' THEN 1 ELSE 0 END) AS january_reorders,\n         SUM(CASE WHEN o.order_date >= '2026-02-01' THEN 1 ELSE 0 END) AS february_reorders\n  FROM orders AS o\n  JOIN order_items AS i ON i.order_id = o.order_id\n  WHERE o.order_date >= '2026-01-01' AND o.order_date < '2026-03-01'\n    AND i.reordered = 1\n  GROUP BY i.product_id\n)\nSELECT p.product_name, m.january_reorders, m.february_reorders\nFROM monthly_reorders AS m\nJOIN products AS p ON p.product_id = m.product_id\nWHERE m.january_reorders < 2 AND m.february_reorders >= 2;",
+      "starter": "",
+      "columns": [
+        "product_name",
+        "january_reorders",
+        "february_reorders"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "Milk",
+            0,
+            2
+          ]
+        ],
+        "edge": [
+          [
+            "Milk",
+            0,
+            2
+          ]
+        ]
+      }
+    }
+  ]
+}

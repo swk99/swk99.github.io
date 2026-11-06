@@ -39,3 +39,11 @@ body{font-size:16pt;line-height:1.65}button,input,select,textarea{font-size:16pt
 #live-plan-steps{max-height:165px;overflow:auto;margin:8px 0 0;padding-inline-start:19px}
 #live-plan-steps li{padding:2px 0;overflow-wrap:anywhere}
 #live-plan-steps code{color:#c7e5ff;font-weight:700}
+
+#sql-study-guide{margin:18px 0;padding:14px 16px;border:1px solid #395a77;border-radius:8px;background:#192a39;color:#e2edf7}
+#sql-study-guide h2{margin:0;font-size:1rem;color:#b8ddff}
+#sql-study-guide p{margin:8px 0 12px}
+#sql-study-guide details{margin:6px 0}
+#sql-study-guide pre{overflow:auto}
+.sql-study-nav{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px}
+.sql-study-nav a{color:#b8ddff;text-decoration:underline}
