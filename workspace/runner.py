@@ -105,6 +105,29 @@ def evaluate(payload):
     return dict(results=results,frames=frames,output=output.getvalue(),elapsed=round((time.monotonic()-started)*1000,1),traceTruncated=truncated)
 
 
+def prepare_sql_case(con, schema, tables):
+    import sqlite3
+    for table, cols in schema.items():
+        con.execute('CREATE TABLE "'+table+'" ('+','.join('"'+n+'" '+t for n,t in cols)+')')
+        rows = tables.get(table, [])
+        con.executemany('INSERT INTO "'+table+'" VALUES ('+','.join('?' for _ in cols)+')', rows)
+    con.commit()
+    con.execute('PRAGMA query_only=ON')
+    # SELECTs and CTEs only. Deny writes, attaching databases and PRAGMAs.
+    allowed = {sqlite3.SQLITE_SELECT, sqlite3.SQLITE_READ, sqlite3.SQLITE_FUNCTION, sqlite3.SQLITE_RECURSIVE}
+    con.set_authorizer(lambda action, *args: sqlite3.SQLITE_OK if action in allowed else sqlite3.SQLITE_DENY)
+
+
+def preview_sql_plan(payload):
+    import sqlite3
+    con = sqlite3.connect(':memory:')
+    try:
+        prepare_sql_case(con, payload['schema'], payload['rows'])
+        return con.execute('EXPLAIN QUERY PLAN '+payload['code']).fetchall()
+    finally:
+        con.close()
+
+
 # Browser-local SQLite execution. Every case gets a separate, disposable database.
 def evaluate_sql(payload):
     import sqlite3, math
@@ -117,15 +140,7 @@ def evaluate_sql(payload):
     for index,case in enumerate(payload['tests']):
         con=sqlite3.connect(':memory:')
         try:
-            for table,cols in payload['schema'].items():
-                con.execute('CREATE TABLE "'+table+'" ('+','.join('"'+n+'" '+t for n,t in cols)+')')
-                rows=case['args'][0].get(table,[])
-                con.executemany('INSERT INTO "'+table+'" VALUES ('+','.join('?' for _ in cols)+')',rows)
-            con.commit()
-            con.execute('PRAGMA query_only=ON')
-            # SELECTs/CTEs only; deny side effects, attaching databases and PRAGMAs.
-            allowed={sqlite3.SQLITE_SELECT,sqlite3.SQLITE_READ,sqlite3.SQLITE_FUNCTION,sqlite3.SQLITE_RECURSIVE}
-            con.set_authorizer(lambda action,*args: sqlite3.SQLITE_OK if action in allowed else sqlite3.SQLITE_DENY)
+            prepare_sql_case(con, payload['schema'], case['args'][0])
             deadline=time.monotonic()+5
             con.set_progress_handler(lambda: int(time.monotonic()>deadline),1000)
             code=payload['code'].strip()

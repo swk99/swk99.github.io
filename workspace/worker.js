@@ -6,12 +6,23 @@ try {
   const base=sources[source]||sources[0];
   const {loadPyodide}=await import(base+'pyodide.mjs');
   py=await loadPyodide({indexURL:base});
-  const response=await fetch('./runner.py?v=sql31-v1');
+  const response=await fetch('./runner.py?v=live-sql-plan-v1');
   if(!response.ok)throw new Error('Could not load test runner: '+response.status);
   py.runPython(await response.text());
   self.postMessage({type:'ready',version:py.runPython('sys.version.split()[0]')});
 } catch(e) {self.postMessage({type:'error',error:String(e.message||e)});}
 self.onmessage=async({data})=>{
+  if(data.type==='plan'){
+    try{
+      py.globals.set('request_json',JSON.stringify(data));
+      const rows=JSON.parse(py.runPython('json.dumps(preview_sql_plan(json.loads(request_json)))'));
+      self.postMessage({type:'plan',revision:data.revision,rows});
+    }catch(e){
+      const error=String(e.message||e).trim().split('\n').at(-1).replace(/^(?:sqlite3\.\w+|ValueError): /,'');
+      self.postMessage({type:'plan',revision:data.revision,error});
+    }
+    return;
+  }
   try{
     if(!py)throw new Error('Runtime is not ready.');
     py.globals.set('request_json',JSON.stringify(data));
