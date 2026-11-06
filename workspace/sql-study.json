@@ -21,6 +21,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "FROM에서 가져올 표를 정하고 WHERE에서 조건을 만족하는 행을 골라요. SELECT에서 결과 열을 정해요.",
+      "conceptExample": {
+        "sql": "SELECT name\nFROM Employee\nWHERE id = 1;",
+        "explanation": "Employee에서 id가 1인 행을 고른 뒤 name 열만 보여줘요. 샘플에서는 Ada 한 행이 나와요."
+      },
       "hints": [
         "행 하나만 보고 급여 조건을 판단할 수 있어요.",
         "FROM Employee 다음에 WHERE salary >= 60을 써보세요."
@@ -87,6 +91,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "GROUP BY를 쓰면 같은 managerId를 가진 행이 한 그룹이 돼요. 이제 결과 한 행은 관리자 한 명을 뜻해요.",
+      "conceptExample": {
+        "sql": "SELECT managerId, SUM(salary) AS team_salary\nFROM Employee\nGROUP BY managerId;",
+        "explanation": "같은 managerId를 가진 직원들의 급여를 한데 더해요. 샘플에서 관리자 1의 그룹은 80 + 60 + 55 + 50 + 45 = 290이에요. SUM은 값을 더하고, COUNT(*)는 그룹에 든 행을 세요."
+      },
       "hints": [
         "managerId가 NULL인 행은 누구에게도 보고하지 않아요.",
         "WHERE managerId IS NOT NULL로 걸러낸 뒤 GROUP BY managerId와 COUNT(*)를 써보세요."
@@ -141,6 +149,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "WHERE는 그룹을 만들기 전에 행을 걸러요. HAVING은 GROUP BY로 만든 그룹을 집계 결과로 걸러요.",
+      "conceptExample": {
+        "sql": "SELECT managerId, SUM(salary) AS team_salary\nFROM Employee\nWHERE managerId IS NOT NULL\nGROUP BY managerId\nHAVING SUM(salary) >= 100;",
+        "explanation": "WHERE는 관리자 ID가 비어 있는 직원 행을 먼저 제외해요. HAVING은 그룹별 급여 합계를 계산한 뒤 100 이상인 그룹만 남겨요. 샘플에서는 합계 290인 관리자 1만 남아요."
+      },
       "hints": [
         "02번에서 만든 결과 중 어느 그룹을 남길지 생각해 보세요.",
         "GROUP BY managerId 다음에 HAVING COUNT(*) >= 5를 붙이세요."
@@ -183,6 +195,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "직원과 관리자 모두 Employee에 있어요. 같은 테이블에 e와 m이라는 별칭을 붙여 두 역할로 읽을 수 있어요.",
+      "conceptExample": {
+        "sql": "SELECT e.id AS employee_id, m.id AS manager_id\nFROM Employee AS e\nJOIN Employee AS m ON e.managerId = m.id\nWHERE e.id = 9;",
+        "explanation": "직원 쪽에서 Ivo(id 9)의 managerId는 3이에요. 같은 테이블의 관리자 쪽에서 id가 3인 Cleo 행과 만나 9, 3이 나와요."
+      },
       "hints": [
         "직원 행의 managerId는 어떤 행의 id와 같은가요?",
         "FROM Employee AS e JOIN Employee AS m ON e.managerId = m.id로 연결해 보세요."
@@ -301,6 +317,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "manager_counts는 직접 정하는 중간 결과 이름이에요. 괄호 안 SELECT가 집계표를 만들고 바깥 SELECT가 그 표를 사용해요.",
+      "conceptExample": {
+        "sql": "WITH high_salary AS (\n  SELECT name, salary\n  FROM Employee\n  WHERE salary >= 90\n)\nSELECT name FROM high_salary;",
+        "explanation": "괄호 안을 먼저 읽으면 high_salary는 name과 salary가 있는 중간 표예요. 바깥 SELECT는 거기서 name만 골라요. high_salary는 직접 지은 이름이라 이 문장 안에서만 쓸 수 있어요."
+      },
       "hints": [
         "WITH 안에는 03번에서 구한 관리자 ID와 인원 수가 들어가요.",
         "바깥에서는 Employee.id를 manager_counts.managerId에 연결하세요."
@@ -343,6 +363,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "여러 행이 나오는 서브쿼리는 FROM이나 JOIN에서 표처럼 쓸 수 있어요. 괄호 밖에 별칭을 붙이면 열을 가리키기 편해요.",
+      "conceptExample": {
+        "sql": "SELECT h.name\nFROM (\n  SELECT name, salary\n  FROM Employee\n  WHERE salary >= 90\n) AS h;",
+        "explanation": "앞의 WITH 예시와 같은 결과예요. 이번에는 중간 표를 FROM 괄호 안에서 만들고 바로 h라는 별칭을 붙였어요."
+      },
       "hints": [
         "관리자 집계를 먼저 단독으로 실행한 다음 괄호 안으로 옮겨보세요.",
         "JOIN (집계 SELECT) AS c ON e.id = c.managerId 형태로 연결하세요."
@@ -385,6 +409,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "WHERE에서 >와 함께 쓰는 서브쿼리는 비교 기준이 되는 값 하나를 반환해요.",
+      "conceptExample": {
+        "sql": "SELECT name\nFROM Employee\nWHERE salary = (SELECT MAX(salary) FROM Employee);",
+        "explanation": "안쪽 MAX가 샘플에서 120이라는 값 하나를 돌려줘요. 바깥 WHERE는 그 값과 각 직원의 급여를 비교해 Ada를 남겨요."
+      },
       "hints": [
         "평균 급여 하나를 반환하는 SELECT를 먼저 실행해 보세요.",
         "WHERE salary > (SELECT AVG(salary) FROM Employee)로 두 결과를 연결하세요."
@@ -459,6 +487,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "상관 서브쿼리는 바깥 행의 값을 읽을 수 있어요. 바깥 행이 Pop이면 안쪽 쿼리는 Pop의 최댓값을 구해요.",
+      "conceptExample": {
+        "sql": "SELECT c.artist_name\nFROM concerts AS c\nWHERE EXISTS (\n  SELECT 1 FROM concerts AS peer\n  WHERE peer.genre = c.genre AND peer.artist_id <> c.artist_id\n);",
+        "explanation": "안쪽 WHERE는 바깥 행의 장르와 ID를 읽어요. 현재 아티스트와 장르가 같고 ID가 다른 행이 하나라도 있으면 EXISTS가 참이에요."
+      },
       "hints": [
         "공연 테이블을 바깥에서는 c, 안에서는 peer라고 부르세요.",
         "안쪽 SELECT에서 peer.genre = c.genre로 범위를 좁힌 뒤 MAX를 구하세요."
@@ -515,6 +547,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "재귀 CTE는 시작 행을 고른 다음, 방금 찾은 행과 다시 JOIN해 다음 단계의 행을 찾는 구조예요.",
+      "conceptExample": {
+        "sql": "WITH RECURSIVE steps(n) AS (\n  SELECT 1\n  UNION ALL\n  SELECT n + 1 FROM steps WHERE n < 3\n)\nSELECT n FROM steps;",
+        "explanation": "SELECT 1이 출발점이에요. 그다음 1에서 2, 2에서 3을 만들고 n < 3 조건 때문에 멈춰요. 직원 계층에서는 +1 자리에 다음 보고 관계를 찾는 JOIN을 넣어요."
+      },
       "hints": [
         "먼저 최상위 관리자를 depth 0으로 담으세요.",
         "UNION ALL 아래에서 Employee.managerId를 CTE의 id와 연결하고 depth에 1을 더하세요."
@@ -633,6 +669,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "SUM(amount) OVER (PARTITION BY shop)은 매장별 합계를 구하면서 원래 판매 행을 유지해요.",
+      "conceptExample": {
+        "sql": "SELECT sale_id, shop, COUNT(*) OVER (PARTITION BY shop) AS sales_in_shop\nFROM sales;",
+        "explanation": "샘플에서 North 판매는 3건이라 그 3개 행에 모두 3이 붙어요. GROUP BY shop으로 같은 계산을 하면 North는 한 행으로 묶여요."
+      },
       "hints": [
         "판매 한 건마다 결과 한 행이 있어야 해요.",
         "SUM(amount) 뒤에 OVER (PARTITION BY shop)을 붙이세요."
@@ -725,6 +765,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "윈도에 ORDER BY를 넣으면 계산 순서를 정할 수 있어요. ROWS는 그 순서에서 어떤 행 범위를 계산할지 지정해요.",
+      "conceptExample": {
+        "sql": "SELECT sale_id, amount,\n       SUM(amount) OVER (\n         ORDER BY sale_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n       ) AS running_total\nFROM sales;",
+        "explanation": "첫 판매액 40과 둘째 판매액 25를 순서대로 읽으면 누적 합은 40, 65가 돼요. 여기에 PARTITION BY shop을 더하면 매장마다 다시 첫 행부터 누적해요."
+      },
       "hints": [
         "같은 날 판매가 여러 건이라면 sale_id로 순서를 정해요.",
         "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW는 첫 행부터 현재 행까지예요."
@@ -806,6 +850,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "매출이 300, 300, 100이면 RANK는 1, 1, 3이고 DENSE_RANK는 1, 1, 2예요. ROW_NUMBER는 각 행에 번호를 하나씩 매겨요.",
+      "conceptExample": {
+        "sql": "WITH scores(score) AS (VALUES (90), (90), (70))\nSELECT score,\n       RANK() OVER (ORDER BY score DESC) AS rank_no,\n       DENSE_RANK() OVER (ORDER BY score DESC) AS dense_no\nFROM scores;",
+        "explanation": "두 90점은 공동 1위예요. 70점은 RANK로 3위, DENSE_RANK로 2위예요. ROW_NUMBER로 순번을 매길 때 동점의 순서도 정하고 싶다면 고유 ID를 정렬 기준에 추가해요."
+      },
       "hints": [
         "세 윈도 모두 장르별로 나누세요.",
         "RANK와 DENSE_RANK의 정렬에는 매출만 넣어야 동점이 유지돼요. ROW_NUMBER에는 artist_id도 넣으세요."
@@ -930,6 +978,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "행별 지표 계산 → 장르별 순위 계산 → 1위만 선택 순으로 결과를 좁혀보세요.",
+      "conceptExample": {
+        "sql": "WITH numbered AS (\n  SELECT artist_name, genre,\n         ROW_NUMBER() OVER (PARTITION BY genre ORDER BY artist_id) AS rn\n  FROM concerts\n)\nSELECT artist_name, genre FROM numbered WHERE rn = 1;",
+        "explanation": "안쪽 SELECT에서 장르별로 ID 순번을 만들어요. 바깥 WHERE에서 순번이 1인 행만 골라 장르마다 ID가 가장 작은 아티스트를 얻어요."
+      },
       "hints": [
         "SQLite에서 1.0 * concert_revenue / number_of_members로 소수점이 있는 값을 구하세요.",
         "CTE에서 RANK를 계산하고 바깥 WHERE에서 순위가 1인 행을 고르세요."
@@ -991,6 +1043,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "LAG는 정렬한 윈도의 이전 행, LEAD는 다음 행을 읽어요. 해당 행이 없으면 기본 결과는 NULL이에요.",
+      "conceptExample": {
+        "sql": "SELECT sale_id, amount,\n       LAG(amount) OVER (ORDER BY sale_id) AS previous_amount\nFROM sales;",
+        "explanation": "첫 판매에는 앞 행이 없어 NULL이에요. 두 번째 판매의 previous_amount는 첫 판매액인 40이에요. LEAD로 바꾸면 같은 순서에서 다음 행을 읽어요."
+      },
       "hints": [
         "판매 행을 유지한 채 앞뒤 행의 amount를 가져오세요.",
         "두 함수에 똑같이 OVER (PARTITION BY shop ORDER BY sale_date, sale_id)를 넣으세요."
@@ -1072,6 +1128,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "UNION은 두 결과를 합치면서 중복을 없애요. UNION ALL은 중복 행까지 모두 유지해요.",
+      "conceptExample": {
+        "sql": "SELECT 1 AS customer_id\nUNION ALL\nSELECT 1;",
+        "explanation": "UNION ALL은 같은 값 1을 두 행으로 돌려줘요. UNION으로 바꾸면 한 행만 남아요. 양쪽 SELECT의 열 개수는 같아야 해요."
+      },
       "hints": [
         "두 SELECT는 모두 열 하나를 반환해요.",
         "두 SELECT 사이에 UNION을 넣으세요."
@@ -1125,6 +1185,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "INTERSECT는 두 결과에 모두 있는 행, EXCEPT는 왼쪽 결과에만 있는 행을 반환해요.",
+      "conceptExample": {
+        "sql": "SELECT customer_id FROM january\nINTERSECT\nSELECT customer_id FROM february;",
+        "explanation": "샘플에서 2와 3은 두 달 모두에 있어서 남아요. INTERSECT를 EXCEPT로 바꾸면 왼쪽 목록에서 오른쪽 목록에 있는 ID를 빼요."
+      },
       "hints": [
         "어느 달에서 어느 달을 빼야 할까요?",
         "SELECT customer_id FROM january를 EXCEPT 앞에 두세요."
@@ -1162,6 +1226,10 @@
         "결과 열 · shop, online_total"
       ],
       "concept": "논리적으로 FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY 순서로 생각하면 각 조건을 어디에 넣을지 보여요.",
+      "conceptExample": {
+        "sql": "SELECT shop, COUNT(*) AS sale_count\nFROM sales\nWHERE amount >= 30\nGROUP BY shop\nHAVING COUNT(*) >= 2\nORDER BY sale_count DESC;",
+        "explanation": "먼저 30 이상인 판매 행만 골라요. 그다음 매장별로 세고 2건 이상인 매장만 남겨요. 마지막 ORDER BY는 남은 결과를 정렬해요."
+      },
       "hints": [
         "판매 한 행에서 판단할 조건과 매장 단위로 판단할 조건을 나눠보세요.",
         "WHERE channel로 행을 고르고 HAVING SUM(amount)로 그룹을 고르세요."
@@ -1199,6 +1267,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "조건부 집계는 한 열의 값을 기준으로 나눠서 집계해요. CASE가 어떤 금액을 더할지 정해줘요.",
+      "conceptExample": {
+        "sql": "SELECT shop,\n       SUM(CASE WHEN channel = 'online' THEN 1 ELSE 0 END) AS online_orders\nFROM sales\nGROUP BY shop;",
+        "explanation": "CASE가 온라인 판매 행마다 1을 만들고, SUM이 매장별 온라인 판매 건수를 세요. THEN 1 대신 THEN amount를 쓰면 건수가 매출액으로 바뀌어요."
+      },
       "hints": [
         "GROUP BY shop으로 매장마다 한 행을 만드세요.",
         "SUM(CASE WHEN channel = 'online' THEN amount ELSE 0 END) 형태를 두 채널에 적용하세요."
@@ -1250,6 +1322,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "열마다 같은 모양의 SELECT를 만들고 UNION ALL로 쌓으면, 열에 담겨 있던 값을 행으로 펼칠 수 있어요.",
+      "conceptExample": {
+        "sql": "WITH one_shop(shop, online_sales, store_sales) AS (VALUES ('North', 55, 25))\nSELECT shop, 'online' AS channel, online_sales AS amount FROM one_shop\nUNION ALL\nSELECT shop, 'store' AS channel, store_sales AS amount FROM one_shop;",
+        "explanation": "North 한 행에서 North, online, 55와 North, store, 25 두 행이 나와요. 각 SELECT가 매출 열 하나를 읽고 어느 채널인지 이름을 붙여요."
+      },
       "hints": [
         "각 SELECT는 shop, channel, amount 세 열을 만들어야 해요.",
         "첫 SELECT는 'online' AS channel과 online_sales AS amount를 선택해요. 두 결과는 UNION ALL로 이어보세요."
@@ -1331,6 +1407,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "TRIM은 양끝 공백을 지우고 LOWER는 소문자로 바꿔요. INSTR과 SUBSTR을 함께 쓰면 구분자 뒤 문자열을 꺼낼 수 있어요.",
+      "conceptExample": {
+        "sql": "SELECT LOWER(TRIM('  ADA Kim  ')) AS clean_name,\n       SUBSTR('ada@example.com', INSTR('ada@example.com', '@') + 1) AS domain;",
+        "explanation": "첫 열은 ada kim이에요. INSTR가 @ 위치를 구하고 +1이 @ 다음 칸을 가리켜서, SUBSTR는 example.com을 가져와요."
+      },
       "hints": [
         "LOWER(TRIM(customer_name))에 LIKE '%son'을 써보세요.",
         "INSTR(email, '@')가 @의 위치예요. 그 다음 문자부터 SUBSTR로 자르세요."
@@ -1382,6 +1462,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "결과의 한 행이 무엇인지 정해두면 JOIN 이후 무엇을 세야 할지 명확해져요. 여기서는 상품별 재구매 행 수를 세요.",
+      "conceptExample": {
+        "sql": "SELECT o.order_id, i.product_id\nFROM orders AS o\nJOIN order_items AS i ON o.order_id = i.order_id\nWHERE o.order_id = 2;",
+        "explanation": "샘플에서 2번 주문에 상품이 두 개라 결과도 두 행이에요. 이 JOIN 뒤에 COUNT(*)를 쓰면 주문 건수가 아니라 주문 항목 수를 세게 돼요."
+      },
       "hints": [
         "orders의 날짜와 order_items의 reordered가 모두 필요해요. product_name은 products에 있어요.",
         "날짜는 2월 1일 이상, 3월 1일 미만으로 거르세요. 주문 항목 하나가 집계 대상 한 건이에요."
@@ -1428,6 +1512,10 @@
         "결과 행 순서는 자유예요."
       ],
       "concept": "읽기 쉬운 쿼리는 중간 결과의 역할이 분명해요. 월별 집계표를 먼저 검증하고, 바깥에서 상품 이름을 붙여 변화 조건을 적용해 보세요.",
+      "conceptExample": {
+        "sql": "SELECT customer_id,\n       SUM(CASE WHEN order_date >= '2026-02-01' THEN 1 ELSE 0 END) AS feb_orders\nFROM orders\nWHERE order_date >= '2026-01-01' AND order_date < '2026-03-01'\nGROUP BY customer_id;",
+        "explanation": "먼저 1~2월 주문만 골라요. 그 안에서 2월이면 1, 1월이면 0을 더하면 고객마다 2월 주문 수를 얻어요. 본 문제에서는 고객 대신 상품을 기준으로 묶어요."
+      },
       "hints": [
         "orders와 order_items를 연결하고 1~2월의 재구매 행만 가져오세요.",
         "상품별 SUM(CASE WHEN ... THEN 1 ELSE 0 END) 두 개를 월별 집계 CTE에 만든 다음 바깥 WHERE에서 비교하세요."

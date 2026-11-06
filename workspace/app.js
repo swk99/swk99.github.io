@@ -145,12 +145,12 @@ function renderFiles(){
 }
 
 function buildSqlStudy({datasets,lessons}){
- return lessons.map(({dataset,expected,level,concept,hints,solution,...lesson},i)=>{
+ return lessons.map(({dataset,expected,level,concept,conceptExample,hints,solution,...lesson},i)=>{
   const {schema,example,edge}=datasets[dataset];
   const number=String(i+1).padStart(2,'0');
   return {
    ...lesson,language:'sql',method:'__sql__',hasEditorial:false,hasAnimation:false,
-   study:{number,total:lessons.length,level,concept,hints,solution},
+   study:{number,total:lessons.length,level,concept,conceptExample,hints,solution},
    starter:lesson.starter||`-- ${lesson.title}\n-- FROM ${Object.keys(schema).join(', ')}\n\n`,
    schema,examples:'',constraints:Object.entries(schema).map(([name,cols])=>
     `CREATE TABLE ${name} (${cols.map(col=>col.join(' ')).join(', ')});`
@@ -166,12 +166,20 @@ function renderSqlStudy(p){
  panel.hidden=!p.study;
  panel.replaceChildren();
  if(!p.study)return;
- const {number,total,level,concept,hints,solution}=p.study;
+ const {number,total,level,concept,conceptExample,hints,solution}=p.study;
  const heading=document.createElement('h2');
  heading.textContent=`SQL 학습 코스 · ${number}/${total} · ${level}`;
+ const conceptHeading=document.createElement('h3');
+ conceptHeading.textContent='먼저 보는 개념';
  const intro=document.createElement('p');
  intro.textContent=concept;
- panel.append(heading,intro);
+ panel.append(heading,conceptHeading,intro);
+ if(conceptExample){
+  const example=addReveal('짧은 개념 예제',conceptExample.sql,'pre');
+  const explanation=document.createElement('p');
+  explanation.textContent=conceptExample.explanation;
+  example.append(explanation);
+ }
  for(const [i,hint] of hints.entries())addReveal('힌트 '+(i+1),hint,'p');
  addReveal('예시 풀이 보기',solution,'pre');
  const navigation=document.createElement('nav');
@@ -192,6 +200,7 @@ function renderSqlStudy(p){
   body.textContent=content;
   details.append(summary,body);
   panel.append(details);
+  return details;
  }
  function addLessonLink(label,problem){
   if(!problem)return;
@@ -321,7 +330,7 @@ editorialButton.onclick=async()=>{
   }catch(e){body.textContent=e.message;}
 };
 
-async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');const studyResponse=await fetch('sql-study.json?v=1');if(!studyResponse.ok)throw new Error('Could not load the SQL study course');problems.push(...buildSqlStudy(await studyResponse.json()),...await sqlResponse.json());openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||problems[0]);boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;refreshLines();aceEditor.session.on('change',()=>{save();refreshLines();resetTrace();queueLivePlan();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
+async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');const studyResponse=await fetch('sql-study.json?v=2');if(!studyResponse.ok)throw new Error('Could not load the SQL study course');problems.push(...buildSqlStudy(await studyResponse.json()),...await sqlResponse.json());openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||problems[0]);boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;refreshLines();aceEditor.session.on('change',()=>{save();refreshLines();resetTrace();queueLivePlan();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
 
 
 
