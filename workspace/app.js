@@ -356,9 +356,9 @@ const complexityPanel=document.createElement('div');
 complexityPanel.id='complexity-panel';
 complexityPanel.setAttribute('aria-live','polite');
 complexityPanel.innerHTML='<strong>Complexity estimate</strong> <span id="complexity-time">Time: —</span> <span id="complexity-space">Space: —</span><small id="complexity-note">Python heuristic · not an exact Big-O proof</small>';
-document.querySelector('.editor-wrap').after(complexityPanel);
+document.querySelector('.toolbar').before(complexityPanel);
 const complexityStyle=document.createElement('style');
-complexityStyle.textContent='#complexity-panel{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:9px 14px;background:#192620;border-top:1px solid #395447;color:#d5e4db;font:13px/1.4 system-ui}#complexity-panel strong{color:#b5e3c8}#complexity-panel small{flex-basis:100%;color:#9fb5aa}';
+complexityStyle.textContent='#complexity-panel{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:12px 16px;background:#20372c;border-bottom:2px solid #78c7a0;color:#d5e4db;font:13px/1.4 system-ui}#complexity-panel strong{color:#b5e3c8}#complexity-panel small{flex-basis:100%;color:#9fb5aa}';
 document.head.append(complexityStyle);
 let complexityDebounce;
 function updateComplexity(){
