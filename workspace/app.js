@@ -10,7 +10,7 @@ function refreshLines(){const text=value();$('gutter').textContent=text.split('\
 function buttons(){for(const id of ['run','debug','submit'])$(id).disabled=!current||busy;$('stop').disabled=!busy&&!(!ready&&worker);$('case').disabled=busy;}
 function resetTrace(){frames=[];$('trace-controls').hidden=true;$('variables').hidden=true;if(aceEditor&&marker!=null){aceEditor.session.removeMarker(marker);marker=null;}}
 function openProblem(p){window.workspaceAnimationClose?.();if(busy){pendingMode=null;stop('Execution stopped: module changed.');boot();}save();current=p;setLanguage(p);editorialButton.hidden=p.hasEditorial===false;const animationButton=$('animation-button');if(animationButton)animationButton.hidden=p.hasAnimation===false;if(editorialDialog.open)editorialDialog.close();leetcodeLink.href='https://leetcode.com/problems/'+(p.slug||leetcodeSlugs[p.id])+'/description/';leetcodeLink.hidden=!(p.slug||leetcodeSlugs[p.id]);resetTrace();$('filename').textContent=p.file;$('crumb').textContent=p.file;$('pid').textContent='#'+p.id;$('problem-title').textContent=p.title;$('rules').replaceChildren(...p.rules.map(r=>{const li=document.createElement('li');li.textContent=r;return li;}));$('examples').textContent=p.examples;renderSqlExamples(p);renderExampleImages(p);$('constraints').textContent=p.constraints;$('custom').value=JSON.stringify(p.tests[0].args);$('test-count').textContent=`${p.tests.length} examples · ${p.extra.length} edge cases`;renderEdgeCases(p);
-let draft;try{draft=localStorage.getItem('graph-workspace:'+p.id);}catch(e){}$('code').value=draft??p.starter;if(aceEditor)aceEditor.setValue($('code').value,-1);refreshLines();$('output').textContent=`${p.file} ready. ${p.language==='sql'?'Write a SQLite SELECT / WITH query.':'Implement Solution.'+p.method+'().'}`;history.replaceState(null,'','#'+p.id);renderFiles();}
+let draft;try{draft=localStorage.getItem('graph-workspace:'+p.id);}catch(e){}$('code').value=draft??p.starter;if(aceEditor)aceEditor.setValue($('code').value,-1);refreshLines();$('output').textContent=`${p.file} ready. ${p.language==='sql'?'Write a SQLite SELECT / WITH query.':'Implement Solution.'+p.method+'().'}`;history.replaceState(null,'','#'+p.id);renderFiles();updateComplexity();}
 
 function renderEdgeCases(p) {
   let panel = $('edge-cases');
@@ -205,7 +205,7 @@ editorialButton.onclick=async()=>{
   }catch(e){body.textContent=e.message;}
 };
 
-async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');problems.push(...await sqlResponse.json());openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||problems[0]);boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;aceEditor.session.on('change',()=>{save();resetTrace();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
+async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');problems.push(...await sqlResponse.json());openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||problems[0]);boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;aceEditor.session.on('change',()=>{save();resetTrace();updateComplexity();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
 
 
 
@@ -350,3 +350,55 @@ const progressStyle=document.createElement('style');progressStyle.textContent=`
 #gpt-question,#gpt-preview{display:block;box-sizing:border-box;width:100%;margin:6px 0;padding:10px;background:#111b17;color:#e1eee6;border:1px solid #557161;border-radius:6px;font:14px/1.5 system-ui;resize:vertical}
 #gpt-preview[hidden]{display:none}.gpt-option{display:flex;align-items:center;gap:6px}.gpt-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}.gpt-actions a{color:#b5e3c8}#gpt-status{font-size:13px}
 `;document.head.append(progressStyle);
+
+/* Live, conservative static complexity hints. Not a formal complexity proof. */
+const complexityPanel=document.createElement('div');
+complexityPanel.id='complexity-panel';
+complexityPanel.setAttribute('aria-live','polite');
+complexityPanel.innerHTML='<strong>Complexity estimate</strong> <span id="complexity-time">Time: —</span> <span id="complexity-space">Space: —</span><small id="complexity-note">Python heuristic · not an exact Big-O proof</small>';
+document.querySelector('.editor-wrap').after(complexityPanel);
+const complexityStyle=document.createElement('style');
+complexityStyle.textContent='#complexity-panel{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;padding:9px 14px;background:#192620;border-top:1px solid #395447;color:#d5e4db;font:13px/1.4 system-ui}#complexity-panel strong{color:#b5e3c8}#complexity-panel small{flex-basis:100%;color:#9fb5aa}';
+document.head.append(complexityStyle);
+let complexityDebounce;
+function updateComplexity(){
+ clearTimeout(complexityDebounce);
+ complexityDebounce=setTimeout(()=>{
+  const code=value(), lines=code.split('\n');
+  const time=$('complexity-time'),space=$('complexity-space'),note=$('complexity-note');
+  if(current?.language==='sql'){time.textContent='Time: query-plan dependent';space.textContent='Space: database dependent';note.textContent='SQL complexity depends on indexes, rows and the query planner.';return;}
+  const active=lines.filter(l=>l.trim()&&!/^\s*#/.test(l));
+  if(!active.length){time.textContent='Time: —';space.textContent='Space: —';note.textContent='Start typing to see an estimate.';return;}
+  const loopLines=active.filter(l=>/^\s*(for|while)\b/.test(l));
+  const indent=l=>(l.match(/^\s*/)||[''])[0].replace(/\t/g,'    ').length;
+  let depth=0;
+  for(let i=0;i<active.length;i++){
+   if(!/^\s*(for|while)\b/.test(active[i]))continue;
+   let parents=0;
+   for(let j=0;j<i;j++)if(/^\s*(for|while)\b/.test(active[j])&&indent(active[j])<indent(active[i])){
+    let closed=false;for(let k=j+1;k<i;k++)if(indent(active[k])<=indent(active[j])){closed=true;break;}
+    if(!closed)parents++;
+   }
+   depth=Math.max(depth,parents+1);
+  }
+  const joined=active.join('\n');
+  const bfs=/\b(popleft|heappop)\s*\(/.test(joined);
+  const scans=/for\s+\w+\s+in\s+(wordList|words|nums|arr|list|values)\b/.test(joined);
+  const sorts=/\b(sorted\s*\(|\.sort\s*\()/.test(joined);
+  const builds=/\b(deque|set|dict|defaultdict|Counter|list)\s*\(|\[[^\]]*\bfor\b/.test(joined);
+  const recursive=/\bdef\s+(\w+)\s*\([^)]*\)[\s\S]*?\breturn\s+\1\s*\(/.test(joined);
+  let t='O(1)', sp='O(1)', explanation='Straight-line operations only (assuming constant-size values).';
+  if(depth>=3){t='O(n^'+depth+')';explanation='Nested loops detected; each is assumed to traverse up to n items.';}
+  else if(depth===2){t='O(n²)';explanation='Nested loops detected; both are assumed to traverse n items.';}
+  else if(depth===1){t='O(n)';explanation='One loop level detected; assumed linear in input size.';}
+  if(sorts&&depth===0){t='O(n log n)';explanation='Sorting detected.';}
+  if(sorts&&depth===1){t='O(n² log n)';explanation='Sorting inside a loop may dominate.';}
+  if(bfs&&scans&&depth>=2){t='O(V × N × L)';explanation='BFS plus scanning a word list; V visited words, N candidates, L comparison length.';}
+  if(builds||bfs)sp='O(n)';
+  if(recursive){sp='O(depth) or more';explanation+=' Recursion may add stack space.';}
+  time.textContent='Time: ~'+t;
+  space.textContent='Space: ~'+sp;
+  note.textContent=explanation+' Heuristic only: input sizes, loop bounds, built-ins, recursion and aliases may change the true bounds.';
+ },220);
+}
+$('code').addEventListener('input',updateComplexity);
