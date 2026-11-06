@@ -351,3 +351,25 @@ const progressStyle=document.createElement('style');progressStyle.textContent=`
 #gpt-preview[hidden]{display:none}.gpt-option{display:flex;align-items:center;gap:6px}.gpt-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}.gpt-actions a{color:#b5e3c8}#gpt-status{font-size:13px}
 `;document.head.append(progressStyle);
 
+
+/* SQL schema is always visible above the editor, with FROM-ready table names. */
+const sqlSchemaPanel=document.createElement('section');
+sqlSchemaPanel.id='sql-schema-panel';
+sqlSchemaPanel.style.cssText='padding:12px 16px;background:#18242e;color:#e2edf7;border-bottom:2px solid #638db1;font:14px/1.5 system-ui;max-height:210px;overflow:auto';
+document.querySelector('.toolbar').before(sqlSchemaPanel);
+function showSqlSchema(){
+ if(!current||current.language!=='sql'||!current.schema){sqlSchemaPanel.hidden=true;return;}
+ sqlSchemaPanel.hidden=false;
+ const heading=document.createElement('strong');heading.textContent='DATABASE TABLES · FROM / JOIN';heading.style.cssText='display:block;color:#a8d5fa;font-size:16px;margin-bottom:8px';
+ const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:12px;flex-wrap:wrap';
+ for(const [name,cols] of Object.entries(current.schema)){
+  const table=document.createElement('div');table.style.cssText='padding:8px 12px;background:#233545;border:1px solid #42647f;border-radius:7px;min-width:155px';
+  const title=document.createElement('strong');title.textContent=name;title.style.cssText='color:#fff;font-size:17px;display:block';
+  const fields=document.createElement('div');fields.textContent=cols.map(c=>c[0]+' ('+c[1]+')').join(' · ');fields.style.cssText='font-size:13px;color:#c6d8e8;margin-top:4px';
+  table.append(title,fields);wrap.append(table);
+ }
+ sqlSchemaPanel.replaceChildren(heading,wrap);
+}
+const originalOpenProblem=openProblem;
+openProblem=function(p){originalOpenProblem(p);showSqlSchema();};
+showSqlSchema();
