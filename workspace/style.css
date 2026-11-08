@@ -48,3 +48,11 @@ body{font-size:16pt;line-height:1.65}button,input,select,textarea{font-size:16pt
 #sql-study-guide pre{overflow:auto}
 .sql-study-nav{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px}
 .sql-study-nav a{color:#b8ddff;text-decoration:underline}
+
+/* Kodori coursework entry and chapter map */
+.kodori-start{font-size:16px;line-height:1.4;min-height:40px;background:#284238;color:#e0f4dd;border-color:#6e9c80;white-space:normal}
+.course-map{padding-left:0;list-style:none;max-height:360px;overflow:auto}
+.course-map li{margin:8px 0;font-size:16px}
+.course-map a{color:#c2e4ff;display:block;padding:6px;border-radius:4px}
+.course-map a[aria-current]{background:#304b5c;font-weight:700}
+header .title{font-size:14px}
