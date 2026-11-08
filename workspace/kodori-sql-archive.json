@@ -1,5 +1,5 @@
 {
-  "course": "이전 구성 · 완료 기록",
+  "course": "이전 문제 기록",
   "datasets": {
     "snacks": {
       "schema": {
@@ -1048,6 +1048,911 @@
           [
             "차",
             3
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-cte-first",
+      "file": "kodori_cte_first.sql",
+      "title": "CTE: 작은 결과에 이름 하나 붙이기",
+      "dataset": "snacks",
+      "rules": [
+        "WITH로 forest라는 CTE를 만드세요. 숲 가게 행을 담고, 바깥 SELECT에서 name, amount를 반환하세요.",
+        "결과 열: name, amount",
+        "결과를 먼저 예상한 뒤 실행해 보세요. 행 순서는 자유예요."
+      ],
+      "concept": "🐨 기본 SELECT는 이미 아니까, 오늘 새로 볼 것은 WITH 이름 AS (...) 하나야. 괄호 안 결과에 이름을 붙이고 바로 다음 쿼리에서 읽어. CTE는 이 SQL 문장 안에서만 유효하고 임시 테이블 생성 명령과는 달라.",
+      "conceptExample": {
+        "sql": "WITH forest AS (\n  SELECT name, amount FROM snacks WHERE shop = '숲'\n)\nSELECT name, amount FROM forest;",
+        "explanation": "WITH forest AS (...) → 숲의 두 행에 forest라는 이름을 붙여요 → 바깥 FROM forest로 이름과 금액을 읽어요."
+      },
+      "hints": [
+        "두 빈칸에 같은 CTE 이름을 넣어보세요.",
+        "WITH forest AS (...) → 숲의 두 행에 forest라는 이름을 붙여요 → 바깥 FROM forest로 이름과 금액을 읽어요."
+      ],
+      "solution": "WITH forest AS (\n  SELECT name, amount FROM snacks WHERE shop = '숲'\n)\nSELECT name, amount FROM forest;",
+      "explanation": "WITH forest AS (...) → 숲의 두 행에 forest라는 이름을 붙여요 → 바깥 FROM forest로 이름과 금액을 읽어요.",
+      "starter": "WITH ___ AS (\n  SELECT name, amount FROM snacks WHERE shop = '숲'\n)\nSELECT name, amount FROM ___;",
+      "columns": [
+        "name",
+        "amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "잎사귀",
+            10
+          ],
+          [
+            "도토리",
+            20
+          ]
+        ],
+        "edge": [
+          [
+            "열매",
+            40
+          ],
+          [
+            "도토리",
+            20
+          ]
+        ]
+      },
+      "level": "01 · CTE vs. Subquery"
+    },
+    {
+      "id": "kodori-sql-subquery",
+      "file": "kodori_subquery.sql",
+      "title": "평균보다 비싼 간식",
+      "level": "01 · CTE vs. Subquery",
+      "dataset": "snacks",
+      "rules": [
+        "전체 평균보다 amount가 큰 name, amount를 보여주세요.",
+        "결과 열: name, amount",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 서브쿼리는 쿼리 안의 작은 쿼리야. CTE는 WITH로 작은 결과에 이름을 붙이는 방법이야. 영구 표나 임시 테이블을 만드는 명령은 아니고, 이 문장 안에서만 이름을 써.",
+      "conceptExample": {
+        "sql": "WITH forest AS (SELECT * FROM snacks WHERE shop = '숲')\nSELECT name FROM forest;",
+        "explanation": "forest라는 이름으로 숲 가게의 결과를 다시 읽어요. CTE가 항상 더 빠르거나 저장되는 것은 아니에요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 평균 한 값을 구하는 쿼리를 괄호에 넣어요.",
+        "사용할 핵심 구문: WHERE amount > (SELECT AVG(amount) FROM snacks)"
+      ],
+      "solution": "SELECT name, amount FROM snacks\nWHERE amount > (SELECT AVG(amount) FROM snacks);",
+      "explanation": "WHERE amount > (SELECT AVG(amount) FROM snacks) → 안쪽에서 평균 20 → 바깥에서 20 초과인 차 30을 골라요.",
+      "starter": "SELECT name, amount FROM snacks\nWHERE amount > (\n  -- 평균 한 값을 반환하는 서브쿼리를 넣으세요.\n  ___\n);",
+      "columns": [
+        "name",
+        "amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "차",
+            30
+          ]
+        ],
+        "edge": [
+          [
+            "열매",
+            40
+          ],
+          [
+            "잎사귀",
+            40
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-cte",
+      "file": "kodori_cte.sql",
+      "title": "같은 문제를 이름 붙여 풀기",
+      "level": "01 · CTE vs. Subquery",
+      "dataset": "snacks",
+      "rules": [
+        "가게별 합계를 totals CTE로 만들고 total >= 40인 shop, total을 보여주세요.",
+        "결과 열: shop, total",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 서브쿼리는 쿼리 안의 작은 쿼리야. CTE는 WITH로 작은 결과에 이름을 붙이는 방법이야. 영구 표나 임시 테이블을 만드는 명령은 아니고, 이 문장 안에서만 이름을 써.",
+      "conceptExample": {
+        "sql": "WITH forest AS (SELECT * FROM snacks WHERE shop = '숲')\nSELECT name FROM forest;",
+        "explanation": "forest라는 이름으로 숲 가게의 결과를 다시 읽어요. CTE가 항상 더 빠르거나 저장되는 것은 아니에요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 WITH totals AS (...) 뒤에서 totals를 표처럼 읽어요.",
+        "사용할 핵심 구문: WITH totals AS (...)"
+      ],
+      "solution": "WITH totals AS (\n  SELECT shop, SUM(amount) AS total\n  FROM snacks\n  GROUP BY shop\n)\nSELECT shop, total FROM totals WHERE total >= 40;",
+      "explanation": "WITH totals AS (...) → 숲 30, 강 50 결과에 이름을 붙여요 → 바깥 WHERE로 강만 남겨요.",
+      "starter": "WITH totals AS (\n  SELECT shop, SUM(amount) AS total\n  FROM snacks\n  GROUP BY shop\n)\nSELECT shop, total\nFROM totals\nWHERE ___;",
+      "columns": [
+        "shop",
+        "total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "강",
+            50
+          ]
+        ],
+        "edge": [
+          [
+            "산",
+            40
+          ],
+          [
+            "숲",
+            60
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-running",
+      "file": "kodori_running.sql",
+      "title": "날짜 따라 쌓이는 매출",
+      "level": "02 · Window Function",
+      "dataset": "daily",
+      "rules": [
+        "day, amount와 그 날짜까지의 누적 합 running_total을 보여주세요. day는 유일해요.",
+        "결과 열: day, amount, running_total",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 GROUP BY는 행을 줄였지? 윈도 함수는 원래 행을 유지하며 계산 열을 옆에 붙여. OVER()는 전체 행, PARTITION BY는 계산할 그룹을 뜻해.",
+      "conceptExample": {
+        "sql": "SELECT day, amount, SUM(amount) OVER () AS total FROM daily;",
+        "explanation": "세 날짜의 행을 유지하며 전체 합 60을 옆에 붙여요. 이제 전체 합을 날짜별 누적 합으로 바꿔 볼 거예요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 ORDER BY day로 계산 순서를 정하고 ROWS로 처음부터 현재 행까지 더해요.",
+        "사용할 핵심 구문: ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW"
+      ],
+      "solution": "SELECT day, amount,\n  SUM(amount) OVER (ORDER BY day ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total\nFROM daily;",
+      "explanation": "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW → 첫날 10 → 다음 날 40 → 마지막 날 60. 윈도 안의 ORDER BY는 최종 출력 정렬을 보장하지 않아요.",
+      "starter": "-- 날짜 따라 쌓이는 매출\n-- day, amount와 그 날짜까지의 누적 합 running_total을 보여주세요. day는 유일해요.\nSELECT\nFROM daily;\n",
+      "columns": [
+        "day",
+        "amount",
+        "running_total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "2026-01-01",
+            10,
+            10
+          ],
+          [
+            "2026-01-02",
+            30,
+            40
+          ],
+          [
+            "2026-01-04",
+            20,
+            60
+          ]
+        ],
+        "edge": [
+          [
+            "2026-02-01",
+            25,
+            25
+          ],
+          [
+            "2026-02-03",
+            25,
+            50
+          ],
+          [
+            "2026-02-05",
+            15,
+            65
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-dense",
+      "file": "kodori_dense.sql",
+      "title": "빈 순위 없이 상위 두 금액",
+      "level": "03 · SQL Ranking",
+      "dataset": "snacks",
+      "rules": [
+        "DENSE_RANK로 금액 내림차순을 매기고 상위 두 금액의 name, amount, place만 보여주세요.",
+        "결과 열: name, amount, place",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 동점 20이 두 개야! ROW_NUMBER는 고유 번호, RANK는 동점 뒤 번호를 건너뛰고, DENSE_RANK는 건너뛰지 않아.",
+      "conceptExample": {
+        "sql": "SELECT name, amount FROM snacks ORDER BY amount DESC, id;",
+        "explanation": "금액 내림차순은 30,20,20,10이에요. 같은 금액이면 id가 작은 행부터 읽어요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 윈도 계산 결과를 CTE로 감싸고 바깥 WHERE에서 걸러요.",
+        "사용할 핵심 구문: DENSE_RANK()"
+      ],
+      "solution": "WITH ranked AS (\n  SELECT name, amount, DENSE_RANK() OVER (ORDER BY amount DESC) AS place\n  FROM snacks\n)\nSELECT name, amount, place FROM ranked WHERE place <= 2;",
+      "explanation": "DENSE_RANK() → 순위 1,2,2,3 → CTE 바깥 WHERE place <= 2 → 세 행이 남아요. 같은 SELECT의 WHERE에서 윈도 결과를 바로 걸러낼 수 없어요.",
+      "starter": "-- 빈 순위 없이 상위 두 금액\n-- DENSE_RANK로 금액 내림차순을 매기고 상위 두 금액의 name, amount, place만 보여주세요.\nSELECT\nFROM snacks;\n",
+      "columns": [
+        "name",
+        "amount",
+        "place"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "차",
+            30,
+            1
+          ],
+          [
+            "도토리",
+            20,
+            2
+          ],
+          [
+            "열매",
+            20,
+            2
+          ]
+        ],
+        "edge": [
+          [
+            "열매",
+            40,
+            1
+          ],
+          [
+            "잎사귀",
+            40,
+            1
+          ],
+          [
+            "도토리",
+            20,
+            2
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-change",
+      "file": "kodori_change.sql",
+      "title": "지난번보다 얼마나 달라졌을까",
+      "level": "04 · LEAD / LAG",
+      "dataset": "daily",
+      "rules": [
+        "day와 이전 기록 대비 금액 차이 change를 보여주세요. 첫 행은 NULL로 두세요.",
+        "결과 열: day, change",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 LAG는 정해진 순서의 이전 행, LEAD는 다음 행을 가져와. 달력의 어제·내일이 아니라 데이터 속 이웃 행이야. 이웃이 없으면 기본값은 NULL이야.",
+      "conceptExample": {
+        "sql": "SELECT day, amount FROM daily ORDER BY day;",
+        "explanation": "1일,2일,4일이 있어요. 4일의 이전 행은 2일이고, 3일은 표에 없어요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 현재 amount에서 이전 amount를 빼요.",
+        "사용할 핵심 구문: amount - LAG(amount)"
+      ],
+      "solution": "SELECT day, amount - LAG(amount) OVER (ORDER BY day) AS change FROM daily;",
+      "explanation": "amount - LAG(amount) → 첫 행 NULL → 30-10=20 → 20-30=-10이에요.",
+      "starter": "-- 지난번보다 얼마나 달라졌을까\n-- day와 이전 기록 대비 금액 차이 change를 보여주세요. 첫 행은 NULL로 두세요.\nSELECT\nFROM daily;\n",
+      "columns": [
+        "day",
+        "change"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "2026-01-01",
+            null
+          ],
+          [
+            "2026-01-02",
+            20
+          ],
+          [
+            "2026-01-04",
+            -10
+          ]
+        ],
+        "edge": [
+          [
+            "2026-02-01",
+            null
+          ],
+          [
+            "2026-02-03",
+            0
+          ],
+          [
+            "2026-02-05",
+            -10
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-self-left",
+      "file": "kodori_self_left.sql",
+      "title": "멘토 없는 친구도 데려오기",
+      "level": "05 · Self-Joins",
+      "dataset": "friends",
+      "rules": [
+        "모든 친구의 name과 mentor를 보여주세요. 멘토가 없으면 NULL이에요.",
+        "결과 열: name, mentor",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 같은 친구 표를 두 역할로 읽자. f는 친구, m은 멘토야. 별칭이 달라도 원본은 같은 표야.",
+      "conceptExample": {
+        "sql": "SELECT id, name, mentor_id FROM friends;",
+        "explanation": "코돌이의 mentor_id=1은 id=1인 코달이를 가리켜요. NULL이면 멘토가 없어요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 왼쪽 친구를 모두 보존하는 LEFT JOIN을 써요.",
+        "사용할 핵심 구문: LEFT JOIN"
+      ],
+      "solution": "SELECT f.name, m.name AS mentor\nFROM friends AS f\nLEFT JOIN friends AS m ON f.mentor_id = m.id;",
+      "explanation": "LEFT JOIN → 코달이도 남아요 → 연결된 멘토가 없어서 mentor는 NULL이에요.",
+      "starter": "-- 멘토 없는 친구도 데려오기\n-- 모든 친구의 name과 mentor를 보여주세요. 멘토가 없으면 NULL이에요.\nSELECT\nFROM friends;\n",
+      "columns": [
+        "name",
+        "mentor"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "코달이",
+            null
+          ],
+          [
+            "코돌이",
+            "코달이"
+          ],
+          [
+            "토끼",
+            "코달이"
+          ],
+          [
+            "여우",
+            "코돌이"
+          ]
+        ],
+        "edge": [
+          [
+            "곰",
+            null
+          ],
+          [
+            "코돌이",
+            "곰"
+          ],
+          [
+            "토끼",
+            "코돌이"
+          ],
+          [
+            "여우",
+            null
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-union-count",
+      "file": "kodori_union_count.sql",
+      "title": "합친 기록에서 방문 횟수",
+      "level": "06 · UNION",
+      "dataset": "lists",
+      "rules": [
+        "아침과 저녁을 합쳐 name별 방문 횟수 visits를 구하세요. 중복 방문도 세세요.",
+        "결과 열: name, visits",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 JOIN은 옆으로 연결하고 UNION은 결과를 아래로 쌓아. 두 결과는 열 개수와 의미가 맞아야 해. UNION은 중복 제거, UNION ALL은 중복 유지야.",
+      "conceptExample": {
+        "sql": "SELECT name FROM morning;",
+        "explanation": "아침 방문 기록에는 코돌이, 토끼, 토끼가 있어요. 두 번 방문한 기록도 행 두 개예요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 UNION ALL 결과에 이름을 붙인 뒤 GROUP BY해요.",
+        "사용할 핵심 구문: UNION ALL"
+      ],
+      "solution": "WITH visits_all AS (\n  SELECT name FROM morning\n  UNION ALL\n  SELECT name FROM evening\n)\nSELECT name, COUNT(*) AS visits FROM visits_all GROUP BY name;",
+      "explanation": "UNION ALL → CTE visits_all → GROUP BY name → 코돌이 2, 토끼 2, 코달이 1이에요.",
+      "starter": "-- 합친 기록에서 방문 횟수\n-- 아침과 저녁을 합쳐 name별 방문 횟수 visits를 구하세요. 중복 방문도 세세요.\nSELECT\nFROM morning;\n",
+      "columns": [
+        "name",
+        "visits"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "코달이",
+            1
+          ],
+          [
+            "코돌이",
+            2
+          ],
+          [
+            "토끼",
+            2
+          ]
+        ],
+        "edge": [
+          [
+            "곰",
+            3
+          ],
+          [
+            "여우",
+            1
+          ],
+          [
+            "토끼",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-clean-cte",
+      "file": "kodori_clean_cte.sql",
+      "title": "계산과 조건을 나누기",
+      "level": "07 · Write Clean SQL",
+      "dataset": "snacks",
+      "rules": [
+        "shop별 평균을 shop_average CTE에서 계산하고 평균이 20 이상인 shop, avg_amount를 보여주세요.",
+        "결과 열: shop, avg_amount",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 별칭은 계산의 뜻을 알려주고, 줄바꿈은 단계가 보이게 해 줘. 결과가 같아도 읽는 사람이 계산의 단위를 알아볼 수 있게 작성하자. 채점은 결과를 비교하므로 스타일은 해설과 직접 비교해 봐.",
+      "conceptExample": {
+        "sql": "SELECT amount AS price FROM snacks;",
+        "explanation": "AS price는 결과 열의 이름만 바꿔요. 원래 표의 amount 이름은 그대로예요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 CTE는 가게별 평균, 바깥 쿼리는 조건 선택을 맡아요.",
+        "사용할 핵심 구문: WITH shop_average AS (...)"
+      ],
+      "solution": "WITH shop_average AS (\n  SELECT shop, AVG(amount) AS avg_amount\n  FROM snacks\n  GROUP BY shop\n)\nSELECT shop, avg_amount\nFROM shop_average\nWHERE avg_amount >= 20;",
+      "explanation": "WITH shop_average AS (...) → 한 행이 가게 하나임을 기억 → 바깥 WHERE avg_amount >= 20 → 예제는 강 25예요.",
+      "starter": "-- 계산과 조건을 나누기\n-- shop별 평균을 shop_average CTE에서 계산하고 평균이 20 이상인 shop, avg_amount를 보여주세요.\nSELECT\nFROM snacks;\n",
+      "columns": [
+        "shop",
+        "avg_amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "강",
+            25.0
+          ]
+        ],
+        "edge": [
+          [
+            "산",
+            20.0
+          ],
+          [
+            "숲",
+            30.0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-pivot-one",
+      "file": "kodori_pivot_one.sql",
+      "title": "조건부 합계 한 칸",
+      "level": "09 · Pivoting",
+      "dataset": "snacks",
+      "rules": [
+        "숲 가게의 금액만 합쳐 forest_total 한 열 한 행으로 보여주세요. 숲이 없으면 0이에요.",
+        "결과 열: forest_total",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 행에 있는 분류를 열로 펼쳐 보자. 여기서는 여러 DB에서 쓰기 좋은 CASE WHEN + SUM으로 연습해. SQL Server의 PIVOT 전용 문법은 SQLite에서 실행되지 않아.",
+      "conceptExample": {
+        "sql": "SELECT name, CASE WHEN shop = '숲' THEN amount ELSE 0 END AS forest_amount FROM snacks;",
+        "explanation": "숲 가게 행에는 원래 금액, 다른 가게 행에는 0을 놓아요. 아직 행은 줄이지 않아요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 CASE 결과를 SUM으로 감싸요.",
+        "사용할 핵심 구문: SUM(CASE WHEN ...)"
+      ],
+      "solution": "SELECT SUM(CASE WHEN shop = '숲' THEN amount ELSE 0 END) AS forest_total FROM snacks;",
+      "explanation": "SUM(CASE WHEN ...) → 10+20+0+0=30. 다른 가게 행은 0으로 더해요.",
+      "starter": "SELECT SUM(CASE WHEN shop = '숲' THEN ___ ELSE 0 END) AS forest_total\nFROM snacks;",
+      "columns": [
+        "forest_total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            30
+          ]
+        ],
+        "edge": [
+          [
+            60
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-pivot-group",
+      "file": "kodori_pivot_group.sql",
+      "title": "피벗: 고객별 상품 금액 펼치기",
+      "dataset": "orders",
+      "rules": [
+        "고객별로 잎사귀 구매액 leaf_total과 차 구매액 tea_total을 두 열로 펼치세요. 해당 상품 구매가 없으면 0이고, 다른 상품만 산 고객도 남겨요.",
+        "결과 열: customer, leaf_total, tea_total",
+        "결과를 먼저 예상한 뒤 실행해 보세요. 행 순서는 자유예요."
+      ],
+      "concept": "🐨 피벗도 한 행의 기준이 필요해. 이번에는 고객 하나가 결과 한 행이고, 상품 종류는 열이야. GROUP BY customer와 조건부 합계를 함께 써보자.",
+      "conceptExample": {
+        "sql": "SELECT customer,\n  SUM(CASE WHEN product = '잎사귀' THEN amount ELSE 0 END) AS leaf_total,\n  SUM(CASE WHEN product = '차' THEN amount ELSE 0 END) AS tea_total\nFROM orders GROUP BY customer;",
+        "explanation": "고객별로 묶은 뒤 CASE로 잎사귀와 차를 각각 합쳐요. 다른 상품만 산 고객도 두 열이 0인 행으로 남아요."
+      },
+      "hints": [
+        "WHERE로 상품 행을 제거하지 말고 CASE 안에서 분류하세요.",
+        "고객별로 묶은 뒤 CASE로 잎사귀와 차를 각각 합쳐요. 다른 상품만 산 고객도 두 열이 0인 행으로 남아요."
+      ],
+      "solution": "SELECT customer,\n  SUM(CASE WHEN product = '잎사귀' THEN amount ELSE 0 END) AS leaf_total,\n  SUM(CASE WHEN product = '차' THEN amount ELSE 0 END) AS tea_total\nFROM orders GROUP BY customer;",
+      "explanation": "고객별로 묶은 뒤 CASE로 잎사귀와 차를 각각 합쳐요. 다른 상품만 산 고객도 두 열이 0인 행으로 남아요.",
+      "starter": "SELECT customer,\n  SUM(CASE WHEN ___ THEN amount ELSE 0 END) AS leaf_total,\n  SUM(CASE WHEN ___ THEN amount ELSE 0 END) AS tea_total\nFROM orders\nGROUP BY customer;",
+      "columns": [
+        "customer",
+        "leaf_total",
+        "tea_total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "코달이",
+            0,
+            50
+          ],
+          [
+            "코돌이",
+            30,
+            0
+          ],
+          [
+            "토끼",
+            20,
+            0
+          ]
+        ],
+        "edge": [
+          [
+            "곰",
+            10,
+            10
+          ],
+          [
+            "여우",
+            0,
+            0
+          ],
+          [
+            "토끼",
+            0,
+            20
+          ]
+        ]
+      },
+      "level": "09 · Pivoting"
+    },
+    {
+      "id": "kodori-sql-lower",
+      "file": "kodori_lower.sql",
+      "title": "메일 주소 소문자로 통일",
+      "level": "10 · String Functions",
+      "dataset": "contacts",
+      "rules": [
+        "id와 email을 소문자로 바꾼 clean_email을 보여주세요.",
+        "결과 열: id, clean_email",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 사람이 입력한 글자는 공백과 대소문자가 제각각이야. TRIM은 양끝 공백, LOWER는 소문자, SUBSTR은 일부 글자를 다뤄. SQLite의 기본 LOWER는 영문 ASCII 기준으로 생각하자.",
+      "conceptExample": {
+        "sql": "SELECT UPPER('koala') AS animal;",
+        "explanation": "결과는 KOALA예요. 문자열 리터럴은 작은따옴표로 감싸요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 LOWER(email)을 사용해요.",
+        "사용할 핵심 구문: LOWER(email)"
+      ],
+      "solution": "SELECT id, LOWER(email) AS clean_email FROM contacts;",
+      "explanation": "LOWER(email) → KO@Forest.COM이 ko@forest.com으로 바뀌어요.",
+      "starter": "-- 메일 주소 소문자로 통일\n-- id와 email을 소문자로 바꾼 clean_email을 보여주세요.\nSELECT\nFROM contacts;\n",
+      "columns": [
+        "id",
+        "clean_email"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1,
+            "ko@forest.com"
+          ],
+          [
+            2,
+            "bear@forest.com"
+          ],
+          [
+            3,
+            "bunny@river.com"
+          ]
+        ],
+        "edge": [
+          [
+            4,
+            "fox@hill.com"
+          ],
+          [
+            5,
+            "owl@forest.com"
+          ],
+          [
+            6,
+            "bear@hill.com"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-domain",
+      "file": "kodori_domain.sql",
+      "title": "골뱅이 뒤의 도메인만",
+      "level": "10 · String Functions",
+      "dataset": "contacts",
+      "rules": [
+        "id와 email의 @ 뒤 부분을 소문자로 바꾼 domain을 보여주세요. 모든 email에는 @가 정확히 하나 있어요.",
+        "결과 열: id, domain",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 사람이 입력한 글자는 공백과 대소문자가 제각각이야. TRIM은 양끝 공백, LOWER는 소문자, SUBSTR은 일부 글자를 다뤄. SQLite의 기본 LOWER는 영문 ASCII 기준으로 생각하자.",
+      "conceptExample": {
+        "sql": "SELECT UPPER('koala') AS animal;",
+        "explanation": "결과는 KOALA예요. 문자열 리터럴은 작은따옴표로 감싸요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 INSTR로 @ 위치를 찾고 SUBSTR로 다음 글자부터 잘라요.",
+        "사용할 핵심 구문: INSTR(email, '@') + 1"
+      ],
+      "solution": "SELECT id, LOWER(SUBSTR(email, INSTR(email, '@') + 1)) AS domain FROM contacts;",
+      "explanation": "INSTR(email, '@') + 1 → @ 다음 위치 → SUBSTR로 끝까지 추출 → LOWER로 forest.com처럼 통일해요. 위치는 1부터 세요.",
+      "starter": "-- 골뱅이 뒤의 도메인만\n-- id와 email의 @ 뒤 부분을 소문자로 바꾼 domain을 보여주세요. 모든 email에는 @가 정확히 하나 있어요.\nSELECT\nFROM contacts;\n",
+      "columns": [
+        "id",
+        "domain"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            1,
+            "forest.com"
+          ],
+          [
+            2,
+            "forest.com"
+          ],
+          [
+            3,
+            "river.com"
+          ]
+        ],
+        "edge": [
+          [
+            4,
+            "hill.com"
+          ],
+          [
+            5,
+            "forest.com"
+          ],
+          [
+            6,
+            "hill.com"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-case-rate",
+      "file": "kodori_case_rate.sql",
+      "title": "상품별 재구매 비율",
+      "level": "11 · Instacart 유형 SQL Case",
+      "dataset": "orders",
+      "rules": [
+        "product별 재구매 주문 비율 reorder_rate를 0~1 사이 실수로 구하세요. 반올림하지 마세요.",
+        "결과 열: product, reorder_rate",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 이제 작은 장보기 가게 분석가야! Instacart 유형의 재구매 분석을 연습하는 가상 데이터야. 실제 Instacart 자료는 아니야. 한 행은 주문 한 건이고 reordered는 재구매면 1, 아니면 0이야.",
+      "conceptExample": {
+        "sql": "SELECT id, product, reordered FROM orders;",
+        "explanation": "같은 상품이 여러 번 나와도 각각 별도의 주문이에요. 주문 수와 고객 수를 구분해요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 재구매 수 ÷ 전체 주문 수예요. 1.0을 곱해 정수 나눗셈을 피하세요.",
+        "사용할 핵심 구문: 1.0 * SUM(reordered) / COUNT(*)"
+      ],
+      "solution": "SELECT product, 1.0 * SUM(reordered) / COUNT(*) AS reorder_rate\nFROM orders\nGROUP BY product;",
+      "explanation": "1.0 * SUM(reordered) / COUNT(*) → 잎사귀 2/3, 차 1/2예요. 고객 재방문율이 아닌 주문 기준 비율이에요.",
+      "starter": "-- 상품별 재구매 비율\n-- product별 재구매 주문 비율 reorder_rate를 0~1 사이 실수로 구하세요. 반올림하지 마세요.\nSELECT\nFROM orders;\n",
+      "columns": [
+        "product",
+        "reorder_rate"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "잎사귀",
+            0.6666666666666666
+          ],
+          [
+            "차",
+            0.5
+          ]
+        ],
+        "edge": [
+          [
+            "열매",
+            1.0
+          ],
+          [
+            "잎사귀",
+            0.0
+          ],
+          [
+            "차",
+            0.6666666666666666
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-case-share",
+      "file": "kodori_case_share.sql",
+      "title": "장보기 분석: 상품별 주문 점유율",
+      "dataset": "orders",
+      "rules": [
+        "상품별 주문 수 order_count와 전체 주문 중 비율 order_share를 product와 함께 반환하세요. CTE로 상품 집계를 만들고 윈도 합계로 분모를 구하세요. 반올림하지 마세요.",
+        "결과 열: product, order_count, order_share",
+        "결과를 먼저 예상한 뒤 실행해 보세요. 행 순서는 자유예요."
+      ],
+      "concept": "🐨 Instacart 유형의 가상 장보기 데이터야. 집계 뒤의 한 행은 상품 하나야. 이 단계에서 COUNT(*) OVER()는 상품 수이고, SUM(order_count) OVER()가 전체 주문 수라는 점을 구별해 봐.",
+      "conceptExample": {
+        "sql": "WITH product_counts AS (\n  SELECT product, COUNT(*) AS order_count FROM orders GROUP BY product\n)\nSELECT product, order_count,\n  1.0 * order_count / SUM(order_count) OVER () AS order_share\nFROM product_counts;",
+        "explanation": "상품별 주문 수는 잎사귀 3, 차 2 → 윈도 SUM(order_count)=5 → 비율 0.6, 0.4예요. 실제 Instacart 자료가 아닌 연습용 데이터예요."
+      },
+      "hints": [
+        "분모는 집계 결과의 행 개수가 아니라 order_count 열의 합이에요.",
+        "상품별 주문 수는 잎사귀 3, 차 2 → 윈도 SUM(order_count)=5 → 비율 0.6, 0.4예요. 실제 Instacart 자료가 아닌 연습용 데이터예요."
+      ],
+      "solution": "WITH product_counts AS (\n  SELECT product, COUNT(*) AS order_count FROM orders GROUP BY product\n)\nSELECT product, order_count,\n  1.0 * order_count / SUM(order_count) OVER () AS order_share\nFROM product_counts;",
+      "explanation": "상품별 주문 수는 잎사귀 3, 차 2 → 윈도 SUM(order_count)=5 → 비율 0.6, 0.4예요. 실제 Instacart 자료가 아닌 연습용 데이터예요.",
+      "starter": "WITH product_counts AS (\n  SELECT product, COUNT(*) AS order_count FROM orders GROUP BY product\n)\nSELECT product, order_count,\n  1.0 * order_count / ___ AS order_share\nFROM product_counts;",
+      "columns": [
+        "product",
+        "order_count",
+        "order_share"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "잎사귀",
+            3,
+            0.6
+          ],
+          [
+            "차",
+            2,
+            0.4
+          ]
+        ],
+        "edge": [
+          [
+            "열매",
+            1,
+            0.2
+          ],
+          [
+            "잎사귀",
+            1,
+            0.2
+          ],
+          [
+            "차",
+            3,
+            0.6
+          ]
+        ]
+      },
+      "level": "11 · Instacart 유형 SQL Case"
+    },
+    {
+      "id": "kodori-sql-case-finale",
+      "file": "kodori_case_finale.sql",
+      "title": "마지막 여행: 최고 구매 고객",
+      "level": "11 · Instacart 유형 SQL Case",
+      "dataset": "orders",
+      "rules": [
+        "고객별 총 구매액을 합산한 뒤 최고 금액인 고객을 모두 보여주세요. 결과 열은 customer, total, place. 동점은 모두 1위예요.",
+        "결과 열: customer, total, place",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 이제 작은 장보기 가게 분석가야! Instacart 유형의 재구매 분석을 연습하는 가상 데이터야. 실제 Instacart 자료는 아니야. 한 행은 주문 한 건이고 reordered는 재구매면 1, 아니면 0이야.",
+      "conceptExample": {
+        "sql": "SELECT id, product, reordered FROM orders;",
+        "explanation": "같은 상품이 여러 번 나와도 각각 별도의 주문이에요. 주문 수와 고객 수를 구분해요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 첫 CTE는 고객별 합계, 둘째 CTE는 순위, 마지막은 1위 선택이에요.",
+        "사용할 핵심 구문: GROUP BY customer"
+      ],
+      "solution": "WITH totals AS (\n  SELECT customer, SUM(amount) AS total\n  FROM orders\n  GROUP BY customer\n), ranked AS (\n  SELECT customer, total,\n    DENSE_RANK() OVER (ORDER BY total DESC) AS place\n  FROM totals\n)\nSELECT customer, total, place FROM ranked WHERE place = 1;",
+      "explanation": "GROUP BY customer → 코돌이 30, 코달이 50, 토끼 20 → DENSE_RANK로 순위 → WHERE place = 1. 추가 데이터는 세 고객 모두 20으로 공동 1위예요. 🐨 엄마, 우리 심화 여행 완주했어!",
+      "starter": "-- 마지막 여행: 최고 구매 고객\n-- 고객별 총 구매액을 합산한 뒤 최고 금액인 고객을 모두 보여주세요. 결과 열은 customer, total, place. 동점은 모두 1위예요.\nSELECT\nFROM orders;\n",
+      "columns": [
+        "customer",
+        "total",
+        "place"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "코달이",
+            50,
+            1
+          ]
+        ],
+        "edge": [
+          [
+            "곰",
+            20,
+            1
+          ],
+          [
+            "여우",
+            20,
+            1
+          ],
+          [
+            "토끼",
+            20,
+            1
           ]
         ]
       }

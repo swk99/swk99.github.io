@@ -56,3 +56,13 @@ body{font-size:16pt;line-height:1.65}button,input,select,textarea{font-size:16pt
 .course-map a{color:#c2e4ff;display:block;padding:6px;border-radius:4px}
 .course-map a[aria-current]{background:#304b5c;font-weight:700}
 header .title{font-size:14px}
+
+#sql-learning-focus{padding:16px;margin:18px 0;background:#223c33;border:1px solid #75ab8e;border-radius:8px;color:#e7f6ec}
+#sql-learning-focus h2{font-size:20px;margin:0 0 8px}
+#sql-learning-focus code{font-size:20px;overflow-wrap:anywhere}
+#sql-learning-focus p{font-size:18px;margin:8px 0 0}
+#sql-learning-focus[hidden]{display:none}
+.syntax-report{white-space:normal;padding:14px;border:1px solid #7aa78e;background:#20382e;border-radius:8px}
+.syntax-report h3{font-size:20px}.syntax-report p{font:17px/1.6 system-ui;margin:4px 0}
+.archive-toggle{font-size:14px;width:calc(100% - 20px);margin:10px;white-space:normal}
+#sql-study-guide pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:18px}

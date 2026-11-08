@@ -1,4 +1,5 @@
 let py;
+let grammarReady=false;
 const sources=['https://cdn.jsdelivr.net/pyodide/v314.0.7/full/','https://unpkg.com/pyodide@314.0.7/'];
 const source=Number(new URL(self.location.href).searchParams.get('source'))||0;
 try {
@@ -6,7 +7,7 @@ try {
   const base=sources[source]||sources[0];
   const {loadPyodide}=await import(base+'pyodide.mjs');
   py=await loadPyodide({indexURL:base});
-  const response=await fetch('./runner.py?v=live-sql-plan-v1');
+  const response=await fetch('./runner.py?v=kodori48-v1');
   if(!response.ok)throw new Error('Could not load test runner: '+response.status);
   py.runPython(await response.text());
   self.postMessage({type:'ready',version:py.runPython('sys.version.split()[0]')});
@@ -25,6 +26,14 @@ self.onmessage=async({data})=>{
   }
   try{
     if(!py)throw new Error('Runtime is not ready.');
+    if(data.requirements&&!grammarReady){
+      self.postMessage({type:'progress',message:'학습 문법 검사기 준비 중…'});
+      const grammar=await fetch('./vendor/sqlglot-28.0.0-py3-none-any.whl');
+      if(!grammar.ok)throw new Error('문법 검사기를 불러오지 못했어요. 다시 실행해 주세요.');
+      py.unpackArchive(new Uint8Array(await grammar.arrayBuffer()),'zip',{extractDir:'/home/pyodide/sqlglot_vendor'});
+      py.runPython("import sys; sys.path.insert(0, '/home/pyodide/sqlglot_vendor')");
+      grammarReady=true;
+    }
     py.globals.set('request_json',JSON.stringify(data));
     const result=py.runPython('json.dumps(evaluate(json.loads(request_json)))');
     self.postMessage({type:'result',data:JSON.parse(result)});
