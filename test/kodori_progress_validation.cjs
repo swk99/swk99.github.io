@@ -56,3 +56,12 @@ assert.equal(read("window.sqlWorkspace.trackFor(problems.find(p=>p.retired))"),'
 assert.equal(read("window.sqlWorkspace.trackFor({language:'sql'})"),'interview');
 for(const [key,value] of before)assert.equal(saved.get(key),value,key);
 console.log('PASS: selected SQL track renders 48 active items, excludes archive, preserves saved records');
+assert.equal(read("window.sqlWorkspace.streak(['2026-11-06','2026-11-07','2026-11-08'],new Date(2026,10,8))"),3);
+assert.equal(read("window.sqlWorkspace.streak(['2026-11-06','2026-11-07'],new Date(2026,10,8))"),2);
+assert.equal(read("window.sqlWorkspace.streak(['2026-11-06'],new Date(2026,10,8))"),0);
+assert.equal(read("window.sqlWorkspace.streak(['2026-10-31','2026-11-01'],new Date(2026,10,1))"),2);
+const codeBlock=read(`window.sqlWorkspace.codeBlock("SELECT 'FROM WHERE' AS label FROM (SELECT SUM(amount) FROM snacks) a JOIN (SELECT SUM(amount) FROM snacks) b;")`);
+const nodes=[];function descendants(n){nodes.push(n);for(const child of n.children||[])descendants(child)}descendants(codeBlock);
+assert.equal(nodes.filter(n=>n.tag==='mark').length,2,'Both repeated subqueries highlighted');
+assert(nodes.some(n=>n.className==='sql-literal'&&n.textContent==="'FROM WHERE'"),'Keywords inside strings stay intact');
+console.log('PASS: study streak dates, duplicate subquery highlights and quoted SQL literals');

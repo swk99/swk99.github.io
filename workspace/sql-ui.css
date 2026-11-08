@@ -43,3 +43,54 @@
 @media(max-width:760px){.sql-mode .shell{height:auto;min-height:0;display:block;overflow:visible}.sql-mode aside{width:100%;max-height:230px}.sql-mode .work{display:flex!important;flex-direction:column;overflow:visible}.sql-mode main{overflow:visible}.sql-mode #spec{overflow:visible}.sql-mode .coding{height:420px;flex:none}.sql-mode .editor-wrap{min-height:300px}.sql-mode main>.console{height:330px;max-height:none}.sql-mode footer{flex-wrap:wrap}.sql-mode #sql-result-case{max-width:180px}}
 .sql-mode .work{align-items:stretch}.sql-mode .coding{align-self:stretch;height:100%}.sql-mode #spec{height:100%}.sql-mode .toolbar>span{font-size:14px}.sql-mode .sql-result-tools summary{font-size:13px}.sql-mode button,.sql-mode select{min-height:36px}
 @media(max-width:760px){.sql-mode .coding{height:420px}.sql-mode #spec{height:auto}}
+/* 코돌이의 여행 노트: warm paper, lilac navigation, green only for success. */
+.sql-journey,.sql-reopen{display:none}
+.sql-mode{color-scheme:light;background:#f8f5ee;color:#34333d;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI','Noto Sans KR','Malgun Gothic',sans-serif;word-break:keep-all;overflow-wrap:break-word}
+.sql-mode header{background:#fffdf9;border:0;padding:10px 22px;min-height:60px}
+.sql-mode header .logo{color:#726089}.sql-mode .workspace-languages button{background:transparent;color:#706b78;border:0;border-radius:20px;font-size:14px}
+.sql-mode .workspace-languages button[aria-pressed=true]{background:#eee8f7;color:#624a83;box-shadow:none}
+.sql-mode button,.sql-mode select{font-family:inherit;min-height:36px;background:#f1edf5;border:0;border-radius:9px;color:#5a496e}
+.sql-mode button:hover{background:#e6def0}.sql-mode button:focus-visible,.sql-mode select:focus-visible,.sql-mode summary:focus-visible{outline:2px solid #8c75ad;outline-offset:3px}
+.sql-mode .shell{height:calc(100dvh - 96px);min-height:0;gap:0}
+.sql-mode aside{width:280px;min-width:280px;max-height:none;background:#f1edf5;border:0;padding:0 12px 18px;scrollbar-width:thin;scrollbar-color:#c9bed4 transparent}
+.sql-mode .sql-track{padding:22px 6px 0;color:#766a82;font-weight:600}
+.sql-mode .sql-track select{background:#fffdf9;color:#413849;border:0;padding:12px 9px;font-size:14px;border-radius:12px;min-height:44px}
+.sql-mode .search{padding:0;margin:14px 6px 4px}.sql-mode #search{background:#e9e3ef;color:#44374f;border:0;border-radius:9px;padding:10px;font-family:inherit}.sql-mode #search::placeholder{color:#786c83}
+.sql-mode .completion-heading{font-size:12px;color:#766982;padding:12px 8px}.sql-mode .sql-chapter{font-size:12px;font-weight:750;color:#796787;padding:20px 8px 5px}
+.sql-mode .problem-row{padding:2px 0;gap:8px}.sql-mode .problem-row input{accent-color:#4f8265;flex-shrink:0;width:16px;height:16px}
+.sql-mode .file{font-family:inherit;font-size:14px;line-height:1.65;padding:10px 9px;word-break:keep-all;overflow-wrap:normal;color:#62586d;background:transparent;border-radius:9px;box-shadow:none}
+.sql-mode .file.active{color:#51376f;background:#fffdf9;box-shadow:0 3px 14px #6553740a;font-weight:700}.sql-mode .file:hover{background:#e6dfee}.sql-mode .problem-row.solved .file{color:#52755b}
+.sql-mode main{background:#f8f5ee;padding:0 20px 16px;gap:16px}
+.sql-mode .sql-journey{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:18px 8px 0;flex-shrink:0}
+.sql-mode .sql-mascot{font-size:39px;background:#ece4f4;border-radius:22px;width:68px;height:68px;display:grid;place-items:center;transform:rotate(-5deg)}
+.sql-mode .sql-journey-info{flex:1;min-width:180px}.sql-mode .sql-journey-line{display:flex;gap:16px;align-items:baseline;flex-wrap:wrap}.sql-mode .sql-journey-line strong{font-size:21px;color:#554266}.sql-mode .sql-journey-line span{font-size:12px;color:#817486}
+.sql-mode progress{display:block;width:100%;height:9px;border:0;border-radius:10px;overflow:hidden;margin:10px 0 8px;background:#e9e1ef;accent-color:#a18abc}.sql-mode progress::-webkit-progress-bar{background:#e9e1ef}.sql-mode progress::-webkit-progress-value{background:#a18abc;border-radius:10px}.sql-mode progress::-moz-progress-bar{background:#a18abc}
+.sql-mode #sql-koala-message{margin:0;font-size:13px;color:#73637e}.sql-mode .sql-streak{font-size:13px;background:#fff0dc;padding:8px 11px;border-radius:12px;color:#88623b}
+.sql-mode .sql-map{border:0;padding:0;margin:0}.sql-mode .sql-map summary{font-size:13px;color:#6d5587}.sql-mode .sql-map[open]{width:100%}.sql-mode .sql-map>div{display:flex;flex-wrap:wrap;gap:9px;padding-top:12px}.sql-mode .sql-map button{font-size:12px}.sql-mode .sql-map button.complete{color:#487458;background:#e8f0e8}
+.sql-mode .work{grid-template-columns:minmax(0,1.35fr) minmax(310px,1fr)!important;gap:18px;align-items:start;overflow:auto;scrollbar-width:thin;scrollbar-color:#d8cfdf transparent}
+.sql-mode #spec{height:auto;min-height:100%;padding:28px;background:#fffefa;border:0;border-radius:18px;overflow:visible;max-height:none}
+.sql-mode #problem-title{font-size:28px;line-height:1.4;font-weight:750;color:#38313f;letter-spacing:-.7px;margin-bottom:16px}
+.sql-mode #sql-problem-content{font-size:16px;line-height:1.85;color:#5a5360}.sql-mode .sql-task{margin-bottom:16px}.sql-mode .sql-syntax{display:inline-block;color:#775a96;background:#f4eff9;padding:7px 11px;border-radius:8px;font-size:12px;margin:0 0 22px}
+.sql-mode .sql-input-output{gap:14px}.sql-mode h2{color:#615369;font-size:15px;margin:8px 0 12px}
+.sql-mode .sql-sheet{margin:0 0 22px}.sql-mode .sql-sheet h3{background:#f0ebf5;color:#655575;border:0;border-radius:9px 9px 0 0;padding:10px 12px;font-size:13px}
+.sql-mode .sql-sheet-scroll{border:0;border-radius:0 0 9px 9px;scrollbar-width:thin;scrollbar-color:#d3c8df #f7f4fa}
+.sql-mode .sql-data-table{background:#faf8fc;color:#3f3948;font-size:16px}.sql-mode .sql-data-table th,.sql-mode .sql-data-table td{border:0!important;border-bottom:1px solid #ece6f1!important;font-size:16px!important;padding:10px!important}
+.sql-mode .sql-data-table thead th{background:#f4f0f8;color:#6b587b}.sql-mode .sql-data-table th small{color:#92839f;font-weight:400}.sql-mode .sql-data-table tbody th{background:#f4f0f8;color:#a092aa}.sql-mode .sql-data-table tbody tr:nth-child(even) td{background:#f5f1f8}.sql-mode .sql-data-table tbody tr:hover td{background:#eee7f5}.sql-mode .sql-data-table td.sql-null{color:#8d7c9b}
+.sql-mode .coding{align-self:start;position:sticky;top:0;height:auto;min-height:0;border:0;border-radius:18px;background:#f0edf5;overflow:hidden}
+.sql-mode .toolbar{padding:15px;border:0;gap:8px}.sql-mode .toolbar>span{font-size:12px;color:#88789b}.sql-mode .toolbar>div{gap:6px}.sql-mode .toolbar button{padding:8px 10px;font-size:12px;background:#e6e0ef;color:#69527e}
+.sql-mode .toolbar #submit{background:#568369;color:white;border-radius:9px;font-weight:650}.sql-mode .toolbar #submit:hover{background:#416f54}.sql-mode .toolbar #stop:disabled{display:none}
+.sql-mode .editor-wrap{flex:none;min-height:270px;height:clamp(270px,var(--editor-content-height,300px),58vh)!important;background:#faf9fc;border-radius:0 0 18px 18px}.sql-mode #code,.sql-mode #gutter{background:#faf9fc;color:#4e3d60}.sql-mode #ace{background:#faf9fc;font-size:16px}.sql-mode .ace_gutter{background:#f2eef6;color:#aa9ab7}.sql-mode .ace_marker-layer .ace_active-line{background:#eee8f544}.sql-mode .ace_gutter-active-line{background:#e9e2f0}
+.sql-mode .sql-reopen{display:block}.sql-mode main>.console{display:none;flex-shrink:0;background:#fffefa;border:0;border-radius:16px;height:30vh;min-height:180px;max-height:55vh;padding:0 20px 18px;scrollbar-width:thin;scrollbar-color:#d5c9df transparent}
+.sql-mode.sql-results-open main>.console{display:block}.sql-mode.sql-results-open .sql-reopen{display:none}.sql-mode .sql-result-controls{background:#fffefa;gap:10px}.sql-mode .sql-result-tabs button{color:#887792;background:transparent}.sql-mode .sql-result-tabs button[aria-selected=true]{color:#765398;border-color:#a18abc}.sql-mode .sql-result-status{color:#596e5c}.sql-mode #sql-result-case{background:#f1ebf6;color:#6f577f}.sql-mode .sql-result-tools summary{color:#8b7899}
+.sql-mode #output{color:#4f4459}.sql-mode details{border-color:#eee8f2}.sql-mode summary{color:#7b6095}.sql-mode .sql-hints{background:#f7f3fa;border:0;border-radius:12px;padding:15px 18px}.sql-mode .sql-next{background:#ede5f5;color:#73508d}
+.sql-mode .sql-reference small{display:block;background:#fff4d4;color:#8d6e27;padding:8px 12px;border-radius:8px;font-size:12px}
+.sql-mode .sql-code-block{padding:18px;background:#f5f2f8;color:#524361;border-radius:12px;font:14px/1.9 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;word-break:normal;overflow-wrap:anywhere;border:0}
+.sql-mode .sql-keyword{color:#9862ad;font-weight:650}.sql-mode .sql-function{color:#447ea0}.sql-mode .sql-literal{color:#b47b48}.sql-mode .sql-comment{color:#9b90a4}.sql-mode mark{background:#ffecae;color:inherit;border-radius:3px;box-decoration-break:clone}
+.sql-mode footer{min-height:36px;background:#f8f5ee;color:#9a8f9f;border:0;font-size:11px;padding:5px 22px}.sql-mode footer>span:first-child{display:none}
+.sql-mode .sql-settings-dialog{background:#fffefa;color:#574662;border:0;box-shadow:0 15px 70px #40304b33}.sql-mode .sql-settings-dialog::backdrop{background:#46374f55}
+@media(max-width:1150px){.sql-mode aside{width:270px;min-width:270px}.sql-mode main{padding:0 12px 12px}.sql-mode .work{grid-template-columns:minmax(0,1.2fr) minmax(280px,1fr)!important;gap:12px}.sql-mode #spec{padding:20px}.sql-mode #problem-title{font-size:25px}.sql-mode .sql-journey-line span{display:none}}
+@media(max-width:950px){.sql-mode .work{display:block!important}.sql-mode .coding{position:static;margin-top:16px}.sql-mode #spec{min-height:0}.sql-mode .sql-journey{padding:14px 0 0}.sql-mode .sql-streak{font-size:11px}.sql-mode .sql-mascot{width:48px;height:48px;font-size:29px}}
+@media(max-width:760px){.sql-mode .shell{height:auto;min-height:0;overflow:visible}.sql-mode aside{width:100%;min-width:0;max-height:260px}.sql-mode main{overflow:visible;padding:16px}.sql-mode .work{overflow:visible}.sql-mode .sql-journey{margin-bottom:16px}.sql-mode .editor-wrap{height:300px!important}.sql-mode main>.console{height:320px;margin-top:16px}.sql-mode #problem-title{font-size:24px}.sql-mode .sql-input-output{gap:10px}.sql-mode .sql-data-table th,.sql-mode .sql-data-table td{font-size:15px!important}}
+@media(prefers-reduced-motion:no-preference){.sql-mode .sql-mascot:hover{transform:rotate(6deg);transition:transform .2s}}
+@media(min-width:761px){.sql-mode{height:100dvh;display:flex;flex-direction:column;overflow:hidden}.sql-mode header,.sql-mode footer{flex-shrink:0}.sql-mode .shell{flex:1;height:auto;min-height:0}}
+.sql-mode .sql-data-table{font-family:inherit;font-variant-numeric:tabular-nums}.sql-mode .sql-data-table tr>:first-child{display:none}
