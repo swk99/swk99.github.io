@@ -16,7 +16,7 @@ for(const button of languageButtons)button.onclick=()=>{
 };
 
 $('kodori-start').onclick=()=>{
- const course=problems.filter(p=>String(p.id).startsWith('kodori-sql-'));
+ const course=problems.filter(p=>String(p.id).startsWith('kodori-sql-')&&!p.retired);
  const lesson=course.find(p=>!isSolved(p))||course[0];
  if(lesson){$('search').value='';openProblem(lesson);$('problem-title').focus();}
 };
@@ -116,19 +116,21 @@ function markSolved(p,done){
 }
 function renderFiles(){
  const q=$('search').value.toLowerCase();
- const matching=problems.filter(p=>problemLanguage(p)===problemLanguage(current)&&(p.file+p.title+p.id+(p.study?.level??'')).toLowerCase().includes(q));
+ const matching=problems.filter(p=>(!p.retired||isSolved(p))&&problemLanguage(p)===problemLanguage(current)&&(p.file+p.title+p.id+(p.study?.level??'')).toLowerCase().includes(q));
  const files=$('files');files.replaceChildren();
  if(!matching.length&&current)files.textContent='일치하는 문제가 없어요.';
  const remaining=matching.filter(p=>!isSolved(p));
  const solved=matching.filter(isSolved);
  for(const course of new Set(matching.filter(p=>p.study).map(p=>p.study.course))){
   const lessons=problems.filter(p=>p.study?.course===course);
-  const studyRemaining=remaining.filter(p=>p.study?.course===course);
-  appendGroup(`${course} · ${lessons.filter(isSolved).length}/${lessons.length} 완료`,studyRemaining,false);
+  const visible=matching.filter(p=>p.study?.course===course);
+  const label=lessons[0]?.retired?`${course} · ${visible.length}개 보존`:`${course} · ${lessons.filter(isSolved).length}/${lessons.length} 완료`;
+  appendGroup(label,visible,false);
  }
  const interview=remaining.filter(p=>!p.study);
  appendGroup(`${problemLanguage(current)==='sql'?'인터뷰 문제':'남은 문제'} · ${interview.length}`,interview,false);
- appendGroup(`✓ 완료 · ${solved.length}`,solved,true);
+ const solvedInterview=solved.filter(p=>!p.study);
+ appendGroup(`✓ 완료 · ${solvedInterview.length}`,solvedInterview,true);
 
  function appendGroup(label,group,done){
   if(!group.length)return;
@@ -137,6 +139,7 @@ function renderFiles(){
   heading.textContent=label;
   files.append(heading);
   for(const p of group){
+   const done=isSolved(p);
    const row=document.createElement('div');row.className='problem-row'+(done?' solved':'');
    const check=document.createElement('input');check.type='checkbox';check.checked=done;check.setAttribute('aria-label',p.title+' 완료');
    check.onchange=()=>{markSolved(p,check.checked);document.getElementById('completed-'+p.id)?.focus();};check.id='completed-'+p.id;
@@ -148,12 +151,12 @@ function renderFiles(){
  }
 }
 
-function buildSqlStudy({datasets,lessons,course="SQL 학습 코스",intro}){
+function buildSqlStudy({datasets,lessons,course="SQL 학습 코스",intro,retired=false}){
  return lessons.map(({dataset,expected,level,concept,conceptExample,hints,solution,explanation,...lesson},i)=>{
   const {schema,example,edge}=datasets[dataset];
   const number=String(i+1).padStart(2,'0');
   return {
-   ...lesson,language:'sql',method:'__sql__',hasEditorial:false,hasAnimation:false,
+   ...lesson,retired,language:'sql',method:'__sql__',hasEditorial:false,hasAnimation:false,
    study:{number,total:lessons.length,course,intro,level,concept,conceptExample,hints,solution,explanation},
    starter:lesson.starter||`-- ${lesson.title}\n-- FROM ${Object.keys(schema).join(', ')}\n\n`,
    schema,examples:'',constraints:Object.entries(schema).map(([name,cols])=>
@@ -193,7 +196,7 @@ function renderSqlStudy(p){
  trySolution.onclick=()=>{if(aceEditor)aceEditor.setValue(solution,-1);else $('code').value=solution;save();refreshLines();queueLivePlan();};
  answer.append(trySolution);
  if(explanation){const why=document.createElement('p');why.textContent=explanation;answer.append(why);}
- const courseLessons=problems.filter(problem=>problem.study?.course===course);
+ const courseLessons=problems.filter(problem=>problem.study?.course===course&&(!problem.retired||isSolved(problem)));
  const overview=document.createElement('details');
  const overviewTitle=document.createElement('summary');
  overviewTitle.textContent=`여행 지도 · ${courseLessons.filter(isSolved).length}/${total} 완료 · 원하는 단계로 이동`;
@@ -356,7 +359,7 @@ editorialButton.onclick=async()=>{
   }catch(e){body.textContent=e.message;}
 };
 
-async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');const studyResponse=await fetch('sql-study.json?v=2');if(!studyResponse.ok)throw new Error('Could not load the SQL study course');const kodoriResponse=await fetch('kodori-sql.json?v=2');if(!kodoriResponse.ok)throw new Error('Could not load 코돌이와 SQL 심화여행');problems.push(...buildSqlStudy(await kodoriResponse.json()),...buildSqlStudy(await studyResponse.json()),...await sqlResponse.json());$('kodori-start').disabled=false;openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||(location.hash.startsWith('#kodori-sql-')?problems.find(p=>String(p.id).startsWith('kodori-sql-')):problems[0]));boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;refreshLines();aceEditor.session.on('change',()=>{save();refreshLines();resetTrace();queueLivePlan();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
+async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');const studyResponse=await fetch('sql-study.json?v=2');if(!studyResponse.ok)throw new Error('Could not load the SQL study course');const kodoriResponse=await fetch('kodori-sql.json?v=2');if(!kodoriResponse.ok)throw new Error('Could not load 코돌이와 SQL 심화여행');const archiveResponse=await fetch('kodori-sql-archive.json?v=1');if(!archiveResponse.ok)throw new Error('Could not load saved coursework history');problems.push(...buildSqlStudy(await kodoriResponse.json()),...buildSqlStudy(await studyResponse.json()),...await sqlResponse.json(),...buildSqlStudy(await archiveResponse.json()));$('kodori-start').disabled=false;openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||(location.hash.startsWith('#kodori-sql-')?problems.find(p=>String(p.id).startsWith('kodori-sql-')):problems[0]));boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;refreshLines();aceEditor.session.on('change',()=>{save();refreshLines();resetTrace();queueLivePlan();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
 
 
 

@@ -1,0 +1,1057 @@
+{
+  "course": "이전 구성 · 완료 기록",
+  "datasets": {
+    "snacks": {
+      "schema": {
+        "snacks": [
+          [
+            "id",
+            "INTEGER"
+          ],
+          [
+            "name",
+            "TEXT"
+          ],
+          [
+            "shop",
+            "TEXT"
+          ],
+          [
+            "amount",
+            "INTEGER"
+          ]
+        ]
+      },
+      "example": {
+        "snacks": [
+          [
+            1,
+            "잎사귀",
+            "숲",
+            10
+          ],
+          [
+            2,
+            "도토리",
+            "숲",
+            20
+          ],
+          [
+            3,
+            "열매",
+            "강",
+            20
+          ],
+          [
+            4,
+            "차",
+            "강",
+            30
+          ]
+        ]
+      },
+      "edge": {
+        "snacks": [
+          [
+            9,
+            "차",
+            "산",
+            0
+          ],
+          [
+            7,
+            "열매",
+            "숲",
+            40
+          ],
+          [
+            8,
+            "잎사귀",
+            "산",
+            40
+          ],
+          [
+            6,
+            "도토리",
+            "숲",
+            20
+          ]
+        ]
+      }
+    },
+    "daily": {
+      "schema": {
+        "daily": [
+          [
+            "day",
+            "TEXT"
+          ],
+          [
+            "amount",
+            "INTEGER"
+          ]
+        ]
+      },
+      "example": {
+        "daily": [
+          [
+            "2026-01-01",
+            10
+          ],
+          [
+            "2026-01-02",
+            30
+          ],
+          [
+            "2026-01-04",
+            20
+          ]
+        ]
+      },
+      "edge": {
+        "daily": [
+          [
+            "2026-02-05",
+            15
+          ],
+          [
+            "2026-02-01",
+            25
+          ],
+          [
+            "2026-02-03",
+            25
+          ]
+        ]
+      }
+    },
+    "friends": {
+      "schema": {
+        "friends": [
+          [
+            "id",
+            "INTEGER"
+          ],
+          [
+            "name",
+            "TEXT"
+          ],
+          [
+            "mentor_id",
+            "INTEGER"
+          ]
+        ]
+      },
+      "example": {
+        "friends": [
+          [
+            1,
+            "코달이",
+            null
+          ],
+          [
+            2,
+            "코돌이",
+            1
+          ],
+          [
+            3,
+            "토끼",
+            1
+          ],
+          [
+            4,
+            "여우",
+            2
+          ]
+        ]
+      },
+      "edge": {
+        "friends": [
+          [
+            7,
+            "곰",
+            null
+          ],
+          [
+            8,
+            "코돌이",
+            7
+          ],
+          [
+            9,
+            "토끼",
+            8
+          ],
+          [
+            10,
+            "여우",
+            null
+          ]
+        ]
+      }
+    },
+    "lists": {
+      "schema": {
+        "morning": [
+          [
+            "name",
+            "TEXT"
+          ]
+        ],
+        "evening": [
+          [
+            "name",
+            "TEXT"
+          ]
+        ]
+      },
+      "example": {
+        "morning": [
+          [
+            "코돌이"
+          ],
+          [
+            "토끼"
+          ],
+          [
+            "토끼"
+          ]
+        ],
+        "evening": [
+          [
+            "코돌이"
+          ],
+          [
+            "코달이"
+          ]
+        ]
+      },
+      "edge": {
+        "morning": [
+          [
+            "곰"
+          ],
+          [
+            "곰"
+          ]
+        ],
+        "evening": [
+          [
+            "토끼"
+          ],
+          [
+            "곰"
+          ],
+          [
+            "여우"
+          ]
+        ]
+      }
+    },
+    "contacts": {
+      "schema": {
+        "contacts": [
+          [
+            "id",
+            "INTEGER"
+          ],
+          [
+            "name",
+            "TEXT"
+          ],
+          [
+            "email",
+            "TEXT"
+          ]
+        ]
+      },
+      "example": {
+        "contacts": [
+          [
+            1,
+            "  Kodori  ",
+            "KO@Forest.COM"
+          ],
+          [
+            2,
+            " Kodal",
+            "BEAR@Forest.COM"
+          ],
+          [
+            3,
+            "Rabbit ",
+            "BUNNY@River.COM"
+          ]
+        ]
+      },
+      "edge": {
+        "contacts": [
+          [
+            4,
+            " Fox ",
+            "FOX@Hill.COM"
+          ],
+          [
+            5,
+            "Owl  ",
+            "OWL@Forest.COM"
+          ],
+          [
+            6,
+            " Bear",
+            "BEAR@Hill.COM"
+          ]
+        ]
+      }
+    },
+    "orders": {
+      "schema": {
+        "orders": [
+          [
+            "id",
+            "INTEGER"
+          ],
+          [
+            "customer",
+            "TEXT"
+          ],
+          [
+            "product",
+            "TEXT"
+          ],
+          [
+            "amount",
+            "INTEGER"
+          ],
+          [
+            "reordered",
+            "INTEGER"
+          ]
+        ]
+      },
+      "example": {
+        "orders": [
+          [
+            1,
+            "코돌이",
+            "잎사귀",
+            10,
+            0
+          ],
+          [
+            2,
+            "코돌이",
+            "잎사귀",
+            20,
+            1
+          ],
+          [
+            3,
+            "코달이",
+            "차",
+            20,
+            0
+          ],
+          [
+            4,
+            "코달이",
+            "차",
+            30,
+            1
+          ],
+          [
+            5,
+            "토끼",
+            "잎사귀",
+            20,
+            1
+          ]
+        ]
+      },
+      "edge": {
+        "orders": [
+          [
+            8,
+            "곰",
+            "차",
+            10,
+            0
+          ],
+          [
+            9,
+            "곰",
+            "잎사귀",
+            10,
+            0
+          ],
+          [
+            10,
+            "여우",
+            "열매",
+            20,
+            1
+          ],
+          [
+            11,
+            "여우",
+            "차",
+            0,
+            1
+          ],
+          [
+            12,
+            "토끼",
+            "차",
+            20,
+            1
+          ]
+        ]
+      }
+    }
+  },
+  "lessons": [
+    {
+      "id": "kodori-sql-hello",
+      "file": "kodori_hello.sql",
+      "title": "간식 이름 한 열만 보기",
+      "level": "01 · 출발 준비",
+      "dataset": "snacks",
+      "rules": [
+        "모든 간식의 name만 보여주세요.",
+        "결과 열: name",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 엄마, 표 한 칸부터 보자! 행은 기록 하나, 열은 기록의 특징이야. SELECT는 열 고르기, WHERE는 행 고르기야.",
+      "conceptExample": {
+        "sql": "SELECT name FROM snacks WHERE id = 1;",
+        "explanation": "id가 1인 간식의 이름만 남겨요. 예제에서는 잎사귀 한 개예요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 SELECT 뒤에 name 한 개를 써요.",
+        "사용할 핵심 구문: SELECT name"
+      ],
+      "solution": "SELECT name FROM snacks;",
+      "explanation": "SELECT name → 네 행을 유지한 채 이름 열만 남겨요.",
+      "starter": "SELECT ___\nFROM snacks;",
+      "columns": [
+        "name"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "잎사귀"
+          ],
+          [
+            "도토리"
+          ],
+          [
+            "열매"
+          ],
+          [
+            "차"
+          ]
+        ],
+        "edge": [
+          [
+            "차"
+          ],
+          [
+            "열매"
+          ],
+          [
+            "잎사귀"
+          ],
+          [
+            "도토리"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-where",
+      "file": "kodori_where.sql",
+      "title": "20 이상인 간식만 담기",
+      "level": "01 · 출발 준비",
+      "dataset": "snacks",
+      "rules": [
+        "amount가 20 이상인 name, amount를 보여주세요.",
+        "결과 열: name, amount",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 엄마, 표 한 칸부터 보자! 행은 기록 하나, 열은 기록의 특징이야. SELECT는 열 고르기, WHERE는 행 고르기야.",
+      "conceptExample": {
+        "sql": "SELECT name FROM snacks WHERE id = 1;",
+        "explanation": "id가 1인 간식의 이름만 남겨요. 예제에서는 잎사귀 한 개예요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 조건은 WHERE에 써요.",
+        "사용할 핵심 구문: WHERE amount >= 20"
+      ],
+      "solution": "SELECT name, amount\nFROM snacks\nWHERE amount >= 20;",
+      "explanation": "WHERE amount >= 20 → 20도 포함해요 → SELECT로 이름과 금액을 보여줘요.",
+      "starter": "SELECT name, amount\nFROM snacks\nWHERE amount ___ 20;",
+      "columns": [
+        "name",
+        "amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "도토리",
+            20
+          ],
+          [
+            "열매",
+            20
+          ],
+          [
+            "차",
+            30
+          ]
+        ],
+        "edge": [
+          [
+            "열매",
+            40
+          ],
+          [
+            "잎사귀",
+            40
+          ],
+          [
+            "도토리",
+            20
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-sum",
+      "file": "kodori_sum.sql",
+      "title": "바구니 금액 하나로 합치기",
+      "level": "01 · 출발 준비",
+      "dataset": "snacks",
+      "rules": [
+        "전체 amount 합을 total이라는 열로 보여주세요.",
+        "결과 열: total",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 엄마, 표 한 칸부터 보자! 행은 기록 하나, 열은 기록의 특징이야. SELECT는 열 고르기, WHERE는 행 고르기야.",
+      "conceptExample": {
+        "sql": "SELECT name FROM snacks WHERE id = 1;",
+        "explanation": "id가 1인 간식의 이름만 남겨요. 예제에서는 잎사귀 한 개예요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 SUM으로 숫자를 합쳐요.",
+        "사용할 핵심 구문: SUM(amount)"
+      ],
+      "solution": "SELECT SUM(amount) AS total FROM snacks;",
+      "explanation": "SUM(amount) → 10+20+20+30=80 → AS total로 결과 열 이름을 정해요.",
+      "starter": "SELECT SUM(___) AS total\nFROM snacks;",
+      "columns": [
+        "total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            80
+          ]
+        ],
+        "edge": [
+          [
+            100
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-group",
+      "file": "kodori_group.sql",
+      "title": "가게별 바구니 만들기",
+      "level": "02 · 실행 순서",
+      "dataset": "snacks",
+      "rules": [
+        "shop별 amount 합을 total로 보여주세요.",
+        "결과 열: shop, total",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 SQL은 적힌 순서와 논리적으로 생각하는 순서가 달라. FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY로 생각해 봐. 실제 엔진의 물리 실행 계획과는 달라.",
+      "conceptExample": {
+        "sql": "SELECT shop, SUM(amount) AS total FROM snacks GROUP BY shop;",
+        "explanation": "가게별로 묶으면 숲 30, 강 50이 돼요. GROUP BY는 여러 행을 그룹당 한 행으로 줄여요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 shop이 같은 행끼리 묶어요.",
+        "사용할 핵심 구문: GROUP BY shop"
+      ],
+      "solution": "SELECT shop, SUM(amount) AS total\nFROM snacks\nGROUP BY shop;",
+      "explanation": "GROUP BY shop → 가게별로 나눠요 → SUM(amount)로 각 그룹을 합쳐요.",
+      "starter": "-- 가게별 바구니 만들기\n-- shop별 amount 합을 total로 보여주세요.\nSELECT\nFROM snacks;\n",
+      "columns": [
+        "shop",
+        "total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "강",
+            50
+          ],
+          [
+            "숲",
+            30
+          ]
+        ],
+        "edge": [
+          [
+            "산",
+            40
+          ],
+          [
+            "숲",
+            60
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-filter-group",
+      "file": "kodori_filter_group.sql",
+      "title": "먼저 고르고 나중에 더하기",
+      "level": "02 · 실행 순서",
+      "dataset": "snacks",
+      "rules": [
+        "amount가 20 이상인 행만 남긴 뒤 shop별 합 total을 구하세요.",
+        "결과 열: shop, total",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 SQL은 적힌 순서와 논리적으로 생각하는 순서가 달라. FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY로 생각해 봐. 실제 엔진의 물리 실행 계획과는 달라.",
+      "conceptExample": {
+        "sql": "SELECT shop, SUM(amount) AS total FROM snacks GROUP BY shop;",
+        "explanation": "가게별로 묶으면 숲 30, 강 50이 돼요. GROUP BY는 여러 행을 그룹당 한 행으로 줄여요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 WHERE는 합계를 내기 전에 작동해요.",
+        "사용할 핵심 구문: WHERE amount >= 20"
+      ],
+      "solution": "SELECT shop, SUM(amount) AS total\nFROM snacks\nWHERE amount >= 20\nGROUP BY shop;",
+      "explanation": "WHERE amount >= 20 → 10짜리 행 제외 → GROUP BY shop → 숲 20, 강 50이에요.",
+      "starter": "-- 먼저 고르고 나중에 더하기\n-- amount가 20 이상인 행만 남긴 뒤 shop별 합 total을 구하세요.\nSELECT\nFROM snacks;\n",
+      "columns": [
+        "shop",
+        "total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "강",
+            50
+          ],
+          [
+            "숲",
+            20
+          ]
+        ],
+        "edge": [
+          [
+            "산",
+            40
+          ],
+          [
+            "숲",
+            60
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-having",
+      "file": "kodori_having.sql",
+      "title": "합계가 큰 가게 찾기",
+      "level": "02 · 실행 순서",
+      "dataset": "snacks",
+      "rules": [
+        "가게별 전체 합계가 40 이상인 shop, total만 보여주세요.",
+        "결과 열: shop, total",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 SQL은 적힌 순서와 논리적으로 생각하는 순서가 달라. FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY로 생각해 봐. 실제 엔진의 물리 실행 계획과는 달라.",
+      "conceptExample": {
+        "sql": "SELECT shop, SUM(amount) AS total FROM snacks GROUP BY shop;",
+        "explanation": "가게별로 묶으면 숲 30, 강 50이 돼요. GROUP BY는 여러 행을 그룹당 한 행으로 줄여요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 그룹의 합계 조건은 HAVING이에요.",
+        "사용할 핵심 구문: HAVING SUM(amount) >= 40"
+      ],
+      "solution": "SELECT shop, SUM(amount) AS total\nFROM snacks\nGROUP BY shop\nHAVING SUM(amount) >= 40;",
+      "explanation": "HAVING SUM(amount) >= 40 → 그룹을 만든 뒤 합계를 검사 → 예제에서는 강 50만 남아요.",
+      "starter": "-- 합계가 큰 가게 찾기\n-- 가게별 전체 합계가 40 이상인 shop, total만 보여주세요.\nSELECT\nFROM snacks;\n",
+      "columns": [
+        "shop",
+        "total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "강",
+            50
+          ]
+        ],
+        "edge": [
+          [
+            "산",
+            40
+          ],
+          [
+            "숲",
+            60
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-average",
+      "file": "kodori_average.sql",
+      "title": "비교 기준 평균부터 구하기",
+      "level": "03 · 서브쿼리와 CTE",
+      "dataset": "snacks",
+      "rules": [
+        "전체 amount 평균을 avg_amount로 보여주세요.",
+        "결과 열: avg_amount",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 서브쿼리는 쿼리 안의 작은 쿼리야. CTE는 WITH로 작은 결과에 이름을 붙이는 방법이야. 영구 표나 임시 테이블을 만드는 명령은 아니고, 이 문장 안에서만 이름을 써.",
+      "conceptExample": {
+        "sql": "WITH forest AS (SELECT * FROM snacks WHERE shop = '숲')\nSELECT name FROM forest;",
+        "explanation": "forest라는 이름으로 숲 가게의 결과를 다시 읽어요. CTE가 항상 더 빠르거나 저장되는 것은 아니에요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 AVG는 평균이에요.",
+        "사용할 핵심 구문: AVG(amount)"
+      ],
+      "solution": "SELECT AVG(amount) AS avg_amount FROM snacks;",
+      "explanation": "AVG(amount) → 합 80을 4개로 나눠요 → 평균 20.0이에요.",
+      "starter": "SELECT AVG(___) AS avg_amount FROM snacks;",
+      "columns": [
+        "avg_amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            20.0
+          ]
+        ],
+        "edge": [
+          [
+            25.0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-mentor-id",
+      "file": "kodori_mentor_id.sql",
+      "title": "멘토 번호 있는 친구",
+      "level": "07 · 셀프 조인",
+      "dataset": "friends",
+      "rules": [
+        "mentor_id가 NULL이 아닌 name, mentor_id를 보여주세요.",
+        "결과 열: name, mentor_id",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 같은 친구 표를 두 역할로 읽자. f는 친구, m은 멘토야. 별칭이 달라도 원본은 같은 표야.",
+      "conceptExample": {
+        "sql": "SELECT id, name, mentor_id FROM friends;",
+        "explanation": "코돌이의 mentor_id=1은 id=1인 코달이를 가리켜요. NULL이면 멘토가 없어요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 NULL 비교는 != NULL 대신 IS NOT NULL이에요.",
+        "사용할 핵심 구문: IS NOT NULL"
+      ],
+      "solution": "SELECT name, mentor_id FROM friends WHERE mentor_id IS NOT NULL;",
+      "explanation": "IS NOT NULL → 코돌이, 토끼, 여우만 남겨요. 아직 멘토 이름을 붙이지 않아요.",
+      "starter": "-- 멘토 번호 있는 친구\n-- mentor_id가 NULL이 아닌 name, mentor_id를 보여주세요.\nSELECT\nFROM friends;\n",
+      "columns": [
+        "name",
+        "mentor_id"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "코돌이",
+            1
+          ],
+          [
+            "토끼",
+            1
+          ],
+          [
+            "여우",
+            2
+          ]
+        ],
+        "edge": [
+          [
+            "코돌이",
+            7
+          ],
+          [
+            "토끼",
+            8
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-alias",
+      "file": "kodori_alias.sql",
+      "title": "계산에 뜻이 보이는 이름",
+      "level": "09 · 읽기 좋은 SQL",
+      "dataset": "snacks",
+      "rules": [
+        "name과 amount를 두 배 한 double_amount를 보여주세요.",
+        "결과 열: name, double_amount",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 별칭은 계산의 뜻을 알려주고, 줄바꿈은 단계가 보이게 해 줘. 결과가 같아도 읽는 사람이 계산의 단위를 알아볼 수 있게 작성하자. 채점은 결과를 비교하므로 스타일은 해설과 직접 비교해 봐.",
+      "conceptExample": {
+        "sql": "SELECT amount AS price FROM snacks;",
+        "explanation": "AS price는 결과 열의 이름만 바꿔요. 원래 표의 amount 이름은 그대로예요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 계산식 뒤 AS로 이름을 붙여요.",
+        "사용할 핵심 구문: AS double_amount"
+      ],
+      "solution": "SELECT name, amount * 2 AS double_amount\nFROM snacks;",
+      "explanation": "AS double_amount → 10이 20, 20이 40, 30이 60이 돼요. 계산의 의미를 열 이름에 담아요.",
+      "starter": "-- 계산에 뜻이 보이는 이름\n-- name과 amount를 두 배 한 double_amount를 보여주세요.\nSELECT\nFROM snacks;\n",
+      "columns": [
+        "name",
+        "double_amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "잎사귀",
+            20
+          ],
+          [
+            "도토리",
+            40
+          ],
+          [
+            "열매",
+            40
+          ],
+          [
+            "차",
+            60
+          ]
+        ],
+        "edge": [
+          [
+            "차",
+            0
+          ],
+          [
+            "열매",
+            80
+          ],
+          [
+            "잎사귀",
+            80
+          ],
+          [
+            "도토리",
+            40
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-qualified",
+      "file": "kodori_qualified.sql",
+      "title": "어느 표의 열인지 알려주기",
+      "level": "09 · 읽기 좋은 SQL",
+      "dataset": "snacks",
+      "rules": [
+        "snacks에 s 별칭을 붙여 shop별 합 total을 구하세요.",
+        "결과 열: shop, total",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 별칭은 계산의 뜻을 알려주고, 줄바꿈은 단계가 보이게 해 줘. 결과가 같아도 읽는 사람이 계산의 단위를 알아볼 수 있게 작성하자. 채점은 결과를 비교하므로 스타일은 해설과 직접 비교해 봐.",
+      "conceptExample": {
+        "sql": "SELECT amount AS price FROM snacks;",
+        "explanation": "AS price는 결과 열의 이름만 바꿔요. 원래 표의 amount 이름은 그대로예요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 열 앞에 s.를 붙여 소속을 표시해요.",
+        "사용할 핵심 구문: FROM snacks AS s"
+      ],
+      "solution": "SELECT s.shop, SUM(s.amount) AS total\nFROM snacks AS s\nGROUP BY s.shop;",
+      "explanation": "FROM snacks AS s → s.shop으로 그룹화 → SUM(s.amount). 표가 많아질 때 같은 열 이름의 혼동을 줄여요.",
+      "starter": "-- 어느 표의 열인지 알려주기\n-- snacks에 s 별칭을 붙여 shop별 합 total을 구하세요.\nSELECT\nFROM snacks;\n",
+      "columns": [
+        "shop",
+        "total"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "강",
+            50
+          ],
+          [
+            "숲",
+            30
+          ]
+        ],
+        "edge": [
+          [
+            "산",
+            40
+          ],
+          [
+            "숲",
+            60
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-case",
+      "file": "kodori_case.sql",
+      "title": "조건에 맞는 금액만 남기기",
+      "level": "10 · 피벗",
+      "dataset": "snacks",
+      "rules": [
+        "name과 강 가게면 amount, 아니면 0인 river_amount를 보여주세요.",
+        "결과 열: name, river_amount",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 행에 있는 분류를 열로 펼쳐 보자. 여기서는 여러 DB에서 쓰기 좋은 CASE WHEN + SUM으로 연습해. SQL Server의 PIVOT 전용 문법은 SQLite에서 실행되지 않아.",
+      "conceptExample": {
+        "sql": "SELECT name, CASE WHEN shop = '숲' THEN amount ELSE 0 END AS forest_amount FROM snacks;",
+        "explanation": "숲 가게 행에는 원래 금액, 다른 가게 행에는 0을 놓아요. 아직 행은 줄이지 않아요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 CASE WHEN 조건 THEN 값 ELSE 값 END 형태예요.",
+        "사용할 핵심 구문: CASE WHEN shop = '강'"
+      ],
+      "solution": "SELECT name, CASE WHEN shop = '강' THEN amount ELSE 0 END AS river_amount FROM snacks;",
+      "explanation": "CASE WHEN shop = '강' → 잎사귀와 도토리는 0 → 열매 20, 차 30이에요.",
+      "starter": "-- 조건에 맞는 금액만 남기기\n-- name과 강 가게면 amount, 아니면 0인 river_amount를 보여주세요.\nSELECT\nFROM snacks;\n",
+      "columns": [
+        "name",
+        "river_amount"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "잎사귀",
+            0
+          ],
+          [
+            "도토리",
+            0
+          ],
+          [
+            "열매",
+            20
+          ],
+          [
+            "차",
+            30
+          ]
+        ],
+        "edge": [
+          [
+            "차",
+            0
+          ],
+          [
+            "열매",
+            0
+          ],
+          [
+            "잎사귀",
+            0
+          ],
+          [
+            "도토리",
+            0
+          ]
+        ]
+      }
+    },
+    {
+      "id": "kodori-sql-case-count",
+      "file": "kodori_case_count.sql",
+      "title": "상품별 주문 수 세기",
+      "level": "12 · 코돌이 장보기 분석",
+      "dataset": "orders",
+      "rules": [
+        "product별 주문 수 order_count를 보여주세요.",
+        "결과 열: product, order_count",
+        "행 순서는 자유예요. 값과 열 이름을 확인하세요."
+      ],
+      "concept": "🐨 이제 작은 장보기 가게 분석가야! Instacart 유형의 재구매 분석을 연습하는 가상 데이터야. 실제 Instacart 자료는 아니야. 한 행은 주문 한 건이고 reordered는 재구매면 1, 아니면 0이야.",
+      "conceptExample": {
+        "sql": "SELECT id, product, reordered FROM orders;",
+        "explanation": "같은 상품이 여러 번 나와도 각각 별도의 주문이에요. 주문 수와 고객 수를 구분해요."
+      },
+      "hints": [
+        "먼저 입력 표와 기대 결과를 비교해 보세요. 이번에는 한 행이 주문 하나니까 COUNT(*)로 세요.",
+        "사용할 핵심 구문: GROUP BY product"
+      ],
+      "solution": "SELECT product, COUNT(*) AS order_count FROM orders GROUP BY product;",
+      "explanation": "GROUP BY product → COUNT(*) → 잎사귀 3건, 차 2건이에요.",
+      "starter": "-- 상품별 주문 수 세기\n-- product별 주문 수 order_count를 보여주세요.\nSELECT\nFROM orders;\n",
+      "columns": [
+        "product",
+        "order_count"
+      ],
+      "ordered": false,
+      "expected": {
+        "example": [
+          [
+            "잎사귀",
+            3
+          ],
+          [
+            "차",
+            2
+          ]
+        ],
+        "edge": [
+          [
+            "열매",
+            1
+          ],
+          [
+            "잎사귀",
+            1
+          ],
+          [
+            "차",
+            3
+          ]
+        ]
+      }
+    }
+  ],
+  "retired": true
+}
