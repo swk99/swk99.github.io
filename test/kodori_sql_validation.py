@@ -26,8 +26,8 @@ for filename in ('sql-study.json', 'kodori-sql.json'):
         assert not any(r['ok'] for r in evaluate_sql(payload)['results'])
 course = json.loads((root / 'kodori-sql.json').read_text())
 lessons = {p['id'].removeprefix('kodori-sql-'):p for p in course['lessons']}
-assert len(lessons) == 36
-assert len({p['level'] for p in lessons.values()}) == 12
+assert len(lessons) == 33
+assert len({p['level'] for p in lessons.values()}) == 11
 # Independent hand-computed anchors for the concepts most prone to subtle errors.
 assert sorted(r[2] for r in lessons['rank']['expected']['example']) == [1,2,2,4]
 assert len(lessons['dense']['expected']['example']) == 3
@@ -38,3 +38,9 @@ assert len(lessons['union']['expected']['example']) == 3
 assert lessons['pivot-two']['expected']['edge'] == [[60,0]]
 assert sorted(lessons['case-finale']['expected']['edge']) == sorted([['곰',20,1],['여우',20,1],['토끼',20,1]])
 print(f'PASS: {count} solution/dataset cases, all concept examples, incorrect-query rejection, and independent semantic checks')
+
+assert lessons['cte-first']['expected']['example'] == [['잎사귀',10],['도토리',20]]
+assert lessons['order-filter']['expected']['example'] == [['잎사귀',10,30],['도토리',20,30]]
+assert lessons['order-cte']['expected']['example'] == [['잎사귀',10,80],['도토리',20,80]]
+assert lessons['self-pairs']['expected']['example'] == [['코돌이','토끼']]
+assert 'hello' not in lessons and 'where' not in lessons and 'sum' not in lessons

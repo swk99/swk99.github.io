@@ -148,13 +148,13 @@ function renderFiles(){
  }
 }
 
-function buildSqlStudy({datasets,lessons,course="SQL 학습 코스"}){
+function buildSqlStudy({datasets,lessons,course="SQL 학습 코스",intro}){
  return lessons.map(({dataset,expected,level,concept,conceptExample,hints,solution,explanation,...lesson},i)=>{
   const {schema,example,edge}=datasets[dataset];
   const number=String(i+1).padStart(2,'0');
   return {
    ...lesson,language:'sql',method:'__sql__',hasEditorial:false,hasAnimation:false,
-   study:{number,total:lessons.length,course,level,concept,conceptExample,hints,solution,explanation},
+   study:{number,total:lessons.length,course,intro,level,concept,conceptExample,hints,solution,explanation},
    starter:lesson.starter||`-- ${lesson.title}\n-- FROM ${Object.keys(schema).join(', ')}\n\n`,
    schema,examples:'',constraints:Object.entries(schema).map(([name,cols])=>
     `CREATE TABLE ${name} (${cols.map(col=>col.join(' ')).join(', ')});`
@@ -177,7 +177,9 @@ function renderSqlStudy(p){
  conceptHeading.textContent='먼저 보는 개념';
  const intro=document.createElement('p');
  intro.textContent=concept;
- panel.append(heading,conceptHeading,intro);
+ panel.append(heading);
+ if(p.study.intro){const overviewIntro=document.createElement('p');overviewIntro.className='course-intro';overviewIntro.textContent=p.study.intro;panel.append(overviewIntro);}
+ panel.append(conceptHeading,intro);
  if(conceptExample){
   const example=addReveal('짧은 개념 예제',conceptExample.sql,'pre');
   const explanation=document.createElement('p');
@@ -354,7 +356,7 @@ editorialButton.onclick=async()=>{
   }catch(e){body.textContent=e.message;}
 };
 
-async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');const studyResponse=await fetch('sql-study.json?v=2');if(!studyResponse.ok)throw new Error('Could not load the SQL study course');const kodoriResponse=await fetch('kodori-sql.json?v=1');if(!kodoriResponse.ok)throw new Error('Could not load 코돌이와 SQL 심화여행');problems.push(...buildSqlStudy(await kodoriResponse.json()),...buildSqlStudy(await studyResponse.json()),...await sqlResponse.json());$('kodori-start').disabled=false;openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||problems[0]);boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;refreshLines();aceEditor.session.on('change',()=>{save();refreshLines();resetTrace();queueLivePlan();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
+async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');const studyResponse=await fetch('sql-study.json?v=2');if(!studyResponse.ok)throw new Error('Could not load the SQL study course');const kodoriResponse=await fetch('kodori-sql.json?v=2');if(!kodoriResponse.ok)throw new Error('Could not load 코돌이와 SQL 심화여행');problems.push(...buildSqlStudy(await kodoriResponse.json()),...buildSqlStudy(await studyResponse.json()),...await sqlResponse.json());$('kodori-start').disabled=false;openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||(location.hash.startsWith('#kodori-sql-')?problems.find(p=>String(p.id).startsWith('kodori-sql-')):problems[0]));boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme('ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;refreshLines();aceEditor.session.on('change',()=>{save();refreshLines();resetTrace();queueLivePlan();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
 
 
 
@@ -393,13 +395,18 @@ function sqlTable(title,columns,rows,types){
 }
 function sqlCaseTables(p,test){
  const box=document.createElement('div');box.className='sql-case-tables';
- for(const [name,cols] of Object.entries(p.schema))box.append(sqlTable(name,cols.map(c=>c[0]),test.args[0][name]||[],cols.map(c=>c[1])));
- box.append(sqlTable('Expected result · 정답',p.columns,test.expected));
+ for(const [name,cols] of Object.entries(p.schema))box.append(sqlTable('입력 표 · '+name,cols.map(c=>c[0]),test.args[0][name]||[],cols.map(c=>c[1])));
+ box.append(sqlTable('기대 결과 · 정답 표',p.columns,test.expected));
  return box;
 }
 function renderSqlExamples(p){
  let area=$('sql-examples');if(!area){area=document.createElement('div');area.id='sql-examples';$('examples').after(area);}
  const sql=p.language==='sql';$('examples').hidden=sql;area.hidden=!sql;area.replaceChildren();
+ const examplePanel=$('examples').closest('details');
+ const guide=$('sql-study-guide');
+ if(sql){guide.before(examplePanel);examplePanel.open=true;}
+ else guide.after(examplePanel);
+ examplePanel.querySelector('summary').textContent=sql?'입력 표 · 기대 결과':'Examples · input / output';
  if(sql)p.tests.forEach((test,i)=>{const label=document.createElement('h2');label.textContent='Example '+(i+1);area.append(label,sqlCaseTables(p,test));});
 }
 function renderSqlResults(data,mode){
@@ -409,7 +416,7 @@ function renderSqlResults(data,mode){
  summary.textContent=(mode==='submit'?'LOCAL SUBMISSION · ':'')+passed+'/'+data.results.length+' passed · '+data.elapsed+' ms';output.append(summary);
  data.results.forEach(r=>{const section=document.createElement('section');section.className='sql-result-case';const h=document.createElement('h3');h.textContent=(r.ok===null?'RESULT':r.ok?'PASS':'FAIL')+' · Case '+r.case;section.append(h);
  if(r.error){const e=document.createElement('pre');e.textContent=r.error;section.append(e);}
- else{section.append(sqlTable('Actual result · 실행 결과',r.actual.columns,r.actual.rows));if(r.expected)section.append(sqlTable('Expected result · 정답',r.expected.columns,r.expected.rows));}output.append(section);});
+ else{section.append(sqlTable('Actual result · 실행 결과',r.actual.columns,r.actual.rows));if(r.expected)section.append(sqlTable('기대 결과 · 정답 표',r.expected.columns,r.expected.rows));}output.append(section);});
  if(data.output){const pre=document.createElement('pre');pre.textContent=data.output;output.append(pre);}
 }
 const sqlTableStyle=document.createElement('style');
@@ -417,20 +424,20 @@ sqlTableStyle.textContent=`
 #sql-examples[hidden], #examples[hidden]{display:none!important}
 .sql-case-tables,.sql-sheet,.sql-result-case{white-space:normal;min-width:0;max-width:100%}
 .sql-sheet{margin:14px 0 20px}
-.sql-sheet h3{font:600 14px/1.5 system-ui,sans-serif;margin:0;padding:9px 12px;background:#213c35;color:#bcebd9;border:1px solid #436159;border-bottom:0;border-radius:6px 6px 0 0;overflow-wrap:anywhere}
+.sql-sheet h3{font:700 22px/1.5 system-ui,sans-serif;margin:0;padding:14px 16px;background:#213c35;color:#bcebd9;border:1px solid #436159;border-bottom:0;border-radius:6px 6px 0 0;overflow-wrap:anywhere}
 .sql-sheet-scroll{max-width:100%;overflow:auto;border:1px solid #436159;border-radius:0 0 6px 6px}
-.sql-data-table{border-collapse:collapse;width:100%;margin:0;font:14px/1.5 ui-monospace,monospace;color:#e1e8ef;background:#192129}
+.sql-data-table{border-collapse:collapse;width:100%;margin:0;font:20px/1.6 ui-monospace,monospace;color:#f0f5fa;background:#192129}
 .sql-data-table caption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
-.sql-data-table th,.sql-data-table td{padding:8px 12px!important;border:1px solid #34424c!important;text-align:left;white-space:nowrap;font-size:14px!important}
+.sql-data-table th,.sql-data-table td{padding:12px 16px!important;border:1px solid #50616d!important;text-align:left;white-space:nowrap;font-size:20px!important}
 .sql-data-table thead th{background:#293d43;color:#d7f4e8;font-weight:600;position:sticky;top:0}
-.sql-data-table th small{display:block;font:10px/1.4 system-ui,sans-serif;color:#9ab6b5}
+.sql-data-table th small{display:block;font:14px/1.5 system-ui,sans-serif;color:#bad3d2}
 .sql-data-table tbody th{width:30px;background:#202c34;color:#84959f;font-weight:400;text-align:right}
 .sql-data-table tbody tr:nth-child(even) td{background:#202b34}
 .sql-data-table tbody tr:hover td{background:#2d4247}
 .sql-data-table td.sql-number{text-align:right}
 .sql-data-table td.sql-null{color:#9ba7b2;font-style:italic}
 .sql-result-summary{white-space:normal;font-weight:600;padding:8px 0;color:#a7e3cb}
-#sql-examples>h2{font-size:16px;margin-top:12px}
+#sql-examples>h2{font-size:22px;margin-top:12px}
 `;
 document.head.append(sqlTableStyle);
 
