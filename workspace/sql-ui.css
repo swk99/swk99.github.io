@@ -1,0 +1,45 @@
+.sql-track,.sql-settings,#sql-problem-content,.sql-result-controls{display:none}
+.sql-mode{font-size:16px}
+.sql-mode header{min-height:56px;padding:8px 16px;gap:12px}
+.sql-mode header>span,.sql-mode header>.title,.sql-mode #kodori-start{display:none}
+.sql-mode .sql-settings{display:block;margin-left:auto}
+.sql-mode .shell{height:calc(100dvh - 100px);min-height:600px;align-items:stretch;overflow:hidden}
+.sql-mode aside{width:230px;min-width:230px;overflow:auto;padding-bottom:16px}
+.sql-mode aside .panel-label,.sql-mode aside .folder,.sql-mode .aside-bottom{display:none}
+.sql-mode .sql-track{display:grid;gap:8px;padding:16px 12px 0;font-size:13px;color:#aabbb2}
+.sql-mode .sql-track select{width:100%;font-size:14px;padding:10px 5px;background:#20332d;color:#edf7f1;border:1px solid #496256;border-radius:6px}
+.sql-mode .search{margin:12px}.sql-mode #search{font-size:14px}
+.sql-mode .problem-row{padding:3px 8px}.sql-mode .file{font-size:14px;padding:9px 5px;line-height:1.5;white-space:normal;text-align:left}
+.sql-mode .completion-heading{font-size:13px;padding:10px 12px}
+.sql-mode main{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden}
+.sql-mode main>.tabs,.sql-mode .breadcrumb{display:none}
+.sql-mode .work{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;flex:1;min-height:0;overflow:hidden}
+.sql-mode #spec{display:block!important;overflow:auto;max-height:none;min-width:0;padding:22px}
+.sql-mode #spec> :not(#problem-title):not(#sql-problem-content){display:none!important}
+.sql-mode #problem-title{font-size:23px;line-height:1.4;margin:0 0 12px}
+.sql-mode #sql-problem-content{display:block;font-size:16px;line-height:1.6}
+.sql-mode .sql-task{margin:0 0 12px}.sql-mode .sql-syntax{font-size:13px;color:#a9d3c0;margin:8px 0 20px}
+.sql-mode .sql-input-output{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.sql-mode .sql-input-output>div{min-width:0}.sql-mode h2{font-size:16px;margin:6px 0}
+.sql-mode .sql-sheet{margin:8px 0 16px}.sql-mode .sql-sheet h3{font-size:15px;padding:8px 10px;line-height:1.4}
+.sql-mode .sql-data-table th,.sql-mode .sql-data-table td{font-size:17px!important;padding:9px 10px!important}
+.sql-mode .sql-data-table th small{font-size:11px}.sql-mode pre{font-size:15px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere}
+.sql-mode .sql-hints{margin-top:20px}.sql-mode .sql-hints summary{font-size:15px}.sql-mode .sql-next{margin-top:18px}
+.sql-mode .coding{display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;border-left:1px solid #343b40}
+.sql-mode #gpt-panel,.sql-mode #sql-schema-panel,.sql-mode #live-query-plan,.sql-mode #complexity-panel,.sql-mode #debug,.sql-mode #editorial-button,.sql-mode #animation-button,.sql-mode .toolbar a{display:none!important}
+.sql-mode .toolbar{padding:12px;min-height:54px;font-size:13px;flex-shrink:0}.sql-mode button{font-size:14px}.sql-mode .toolbar button{padding:8px 12px}
+.sql-mode .editor-wrap{flex:1;min-height:180px;height:auto!important;max-height:none!important;overflow:hidden}
+.sql-mode #ace{height:100%!important;min-height:0!important}.sql-mode #code{height:100%;min-height:0;font-size:17px}
+.sql-mode main>.console{height:29vh;min-height:190px;max-height:45vh;resize:vertical;overflow:auto;border-top:1px solid #52685c;margin:0;padding:0 18px 14px}
+.sql-mode .console-tabs,.sql-mode .test-controls,.sql-mode #custom{display:none!important}
+.sql-mode .sql-result-controls{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:10px 0;position:sticky;top:0;background:#14171c;z-index:2}
+.sql-mode .sql-result-tabs{display:flex;gap:4px}.sql-mode .sql-result-tabs button{background:transparent;border:0;border-radius:0;color:#aeb8b4;padding:8px 13px}
+.sql-mode .sql-result-tabs button[aria-selected=true]{color:#b8edce;border-bottom:2px solid #8cccaa}
+.sql-mode #sql-result-case{max-width:250px;font-size:13px;background:#202923;color:#dce8e0;padding:6px}.sql-mode #sql-result-case:empty{display:none}
+.sql-mode .sql-result-status{font-size:13px;color:#b5dbc8}.sql-mode .sql-result-tools{margin:0 0 0 auto;font-size:13px}.sql-mode .sql-result-tools[open]{width:100%;margin:0}
+.sql-mode #output{margin:0;max-height:none;white-space:normal;overflow:visible;font-size:15px}.sql-mode footer{min-height:44px;font-size:12px;padding:8px 16px}
+.sql-settings-dialog{background:#19221e;color:#e2ebe6;border:1px solid #5f7c6c;border-radius:10px;padding:24px;max-width:480px}.sql-settings-dialog button{margin:8px}.sql-settings-dialog::backdrop{background:#0009}
+@media(max-width:1000px){.sql-mode aside{width:190px;min-width:190px}.sql-mode #spec{padding:14px}.sql-mode .toolbar{flex-wrap:wrap;gap:8px}.sql-mode .sql-input-output{gap:8px}}
+@media(max-width:760px){.sql-mode .shell{height:auto;min-height:0;display:block;overflow:visible}.sql-mode aside{width:100%;max-height:230px}.sql-mode .work{display:flex!important;flex-direction:column;overflow:visible}.sql-mode main{overflow:visible}.sql-mode #spec{overflow:visible}.sql-mode .coding{height:420px;flex:none}.sql-mode .editor-wrap{min-height:300px}.sql-mode main>.console{height:330px;max-height:none}.sql-mode footer{flex-wrap:wrap}.sql-mode #sql-result-case{max-width:180px}}
+.sql-mode .work{align-items:stretch}.sql-mode .coding{align-self:stretch;height:100%}.sql-mode #spec{height:100%}.sql-mode .toolbar>span{font-size:14px}.sql-mode .sql-result-tools summary{font-size:13px}.sql-mode button,.sql-mode select{min-height:36px}
+@media(max-width:760px){.sql-mode .coding{height:420px}.sql-mode #spec{height:auto}}

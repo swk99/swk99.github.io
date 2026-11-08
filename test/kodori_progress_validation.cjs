@@ -18,7 +18,7 @@ const saved=new Map([
 class Element{constructor(tag){this.tag=tag;this.children=[];this.attributes={};this.value='';this.hidden=false;this.textContent='';}append(...nodes){this.children.push(...nodes)}replaceChildren(...nodes){this.children=nodes}setAttribute(k,v){this.attributes[k]=v}focus(){}}
 const els=Object.fromEntries(['files','search','kodori-start','problem-title'].map(id=>[id,new Element('div')]));
 const document={createElement:tag=>new Element(tag),getElementById:id=>els[id]};
-const context={document,inputs:{active,archive},localStorage:{getItem:k=>saved.has(k)?saved.get(k):null,setItem:(k,v)=>saved.set(k,String(v))},status:()=>{}};vm.createContext(context);
+const context={window:{},document,inputs:{active,archive},localStorage:{getItem:k=>saved.has(k)?saved.get(k):null,setItem:(k,v)=>saved.set(k,String(v))},status:()=>{}};vm.createContext(context);
 const section=(a,b)=>source.slice(source.indexOf(a),source.indexOf(b,source.indexOf(a)));
 vm.runInContext(`const $=id=>document.getElementById(id);let problems=[],current;const problemLanguage=p=>p?.language==='sql'?'sql':'python';function openProblem(p){current=p;}function renderSqlStudy(){}\n`+
  section('// Explicit overrides','function buildSqlStudy')+
@@ -47,3 +47,12 @@ assert(allExpanded.some(el=>el.id==='completed-kodori-sql-where'),'Retired unfin
 // Reload semantics: clear only in-memory test overrides, then read durable records.
 read('completionOverrides.clear()');assert(read("isSolved(problems.find(p=>p.id==='kodori-sql-v3-cte-extract'))"));
 console.log('PASS: retained checks, historical submissions, manual overrides, retired records, unchanged drafts, new-only completion, resume and reload');
+// Exercise the new track renderer with the same saved records.
+vm.runInContext(fs.readFileSync(path.join(root,'sql-ui.js'),'utf8'),context);
+read('renderFiles()');
+assert.equal(els.files.children.filter(e=>e.className?.includes('problem-row')).length,48);
+assert(!els.files.children.some(e=>e.children?.some(c=>c.id==='completed-kodori-sql-hello')),'Archive stays out of active track');
+assert.equal(read("window.sqlWorkspace.trackFor(problems.find(p=>p.retired))"),'archive');
+assert.equal(read("window.sqlWorkspace.trackFor({language:'sql'})"),'interview');
+for(const [key,value] of before)assert.equal(saved.get(key),value,key);
+console.log('PASS: selected SQL track renders 48 active items, excludes archive, preserves saved records');
