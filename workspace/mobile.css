@@ -43,6 +43,7 @@
 /* iOS typing mode: spend the visible viewport on code, not app chrome. */
 @media(max-width:760px){
  .sql-mode.pocket-editing header,.sql-mode.pocket-editing .pocket-nav{display:none}
+ .sql-mode.pocket-editing .shell{padding-top:env(safe-area-inset-top);box-sizing:border-box}
  .sql-mode.pocket-editing main{padding:0 6px}
  .sql-mode.pocket-editing .coding{border-radius:10px}
  .sql-mode.pocket-editing .toolbar{padding:2px 4px;min-height:48px}
