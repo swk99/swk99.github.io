@@ -9,7 +9,7 @@
     document.body.dataset.pocketView = view;
     for (const b of nav.children) b.setAttribute('aria-pressed', String(b.dataset.view === view));
     if (view === 'result') document.body.classList.add('sql-results-open');
-    requestAnimationFrame(() => aceEditor?.resize());
+    requestAnimationFrame(() => { aceEditor?.resize(); viewport(); });
   }
   for (const [view, label] of Object.entries(views)) {
     const b = make('button', label); b.type = 'button'; b.dataset.view = view;
@@ -24,7 +24,10 @@
   for (const [label, text] of [['SELECT','SELECT '],['FROM','\nFROM '],['WHERE','\nWHERE '],['JOIN','\nJOIN '],['ON',' ON '],['GROUP BY','\nGROUP BY '],['ORDER BY','\nORDER BY '],['WITH','WITH '],['AS',' AS '],['↵','\n'],['⇥','  '],['(', '('],[')',')'],[',',', '],['*','*'],['=','= '],["'","'"]]) {
     const b = make('button', label); b.type='button'; b.onpointerdown=e=>e.preventDefault(); b.onclick=()=>insert(text); keys.append(b);
   }
-  const hide = make('button','키보드 닫기'); hide.onclick=()=>{document.activeElement?.blur();aceEditor?.blur();}; keys.append(hide);
+  function dismissKeyboard() {document.activeElement?.blur();aceEditor?.blur();viewport();}
+  const hide = make('button','키보드 닫기'); hide.onclick=dismissKeyboard; keys.append(hide);
+  const done = make('button','완료','pocket-done'); done.type='button';done.setAttribute('aria-label','키보드 닫고 메뉴 보기');done.onclick=dismissKeyboard;
+  document.querySelector('.toolbar>div').append(done);
   document.querySelector('.editor-wrap').before(keys);
   let lastId, configuredEditor;
   function sync() {
@@ -40,10 +43,28 @@
   for (const id of ['run','submit']) document.getElementById(id).addEventListener('click',()=>{if(small.matches&&current?.language==='sql'){document.activeElement?.blur();aceEditor?.blur();show('result');}});
   document.addEventListener('click',e=>{if(e.target.closest('.sql-reopen'))show('result');});
   small.addEventListener('change',()=>{if(!small.matches&&aceEditor&&current?.language==='sql'){aceEditor.setTheme('ace/theme/chrome');aceEditor.setOption('showGutter',true);configuredEditor=null;}sync();});
-  const viewport=()=>{const v=visualViewport;document.documentElement.style.setProperty('--pocket-height',(v?.height||innerHeight)+'px');document.documentElement.style.setProperty('--pocket-top',(v?.offsetTop||0)+'px');aceEditor?.resize();};
-  visualViewport?.addEventListener('resize',viewport);visualViewport?.addEventListener('scroll',viewport);viewport();
+  let viewportFrame=0;
+  function viewport() {
+    cancelAnimationFrame(viewportFrame);
+    viewportFrame=requestAnimationFrame(()=>{
+      const v=window.visualViewport;
+      const editing=small.matches&&current?.language==='sql'&&document.body.dataset.pocketView==='code'&&!!document.activeElement?.closest('.editor-wrap');
+      document.body.classList.toggle('pocket-editing',editing);
+      document.documentElement.style.setProperty('--pocket-height',Math.round(v?.height||innerHeight)+'px');
+      document.documentElement.style.setProperty('--pocket-top',Math.round(v?.offsetTop||0)+'px');
+      // Resize after focus-mode CSS has freed the header/nav space, then reveal the caret.
+      aceEditor?.resize(true);
+      if(editing&&aceEditor)aceEditor.renderer.scrollCursorIntoView(null,0.5);
+    });
+  }
+  window.visualViewport?.addEventListener('resize',viewport);
+  window.visualViewport?.addEventListener('scroll',viewport);
+  window.addEventListener('resize',viewport);
+  document.addEventListener('focusin',viewport);
+  document.addEventListener('focusout',viewport);
+  viewport();
   const install=make('button','홈 화면에 추가하기','pocket-install');
   install.onclick=()=>alert('Safari에서 공유 버튼 → 홈 화면에 추가를 선택하세요.\n첫 실행과 SQL 엔진 로딩에는 인터넷이 필요합니다. 풀이 기록은 이 기기에 저장됩니다.');
   document.querySelector('header').append(install);
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(()=>{});
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>registration.update()).catch(()=>{});
 })();

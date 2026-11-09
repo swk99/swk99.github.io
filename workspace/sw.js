@@ -1,6 +1,6 @@
 // Network first for same-origin GETs only. Execution CDN still needs connectivity.
-const CACHE='sql-pocket-v1';
-self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(['./','./mobile.css?v=1','./mobile.js?v=1','./manifest.webmanifest']))));
+const CACHE='sql-pocket-v2';
+self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(['./','./mobile.css?v=2','./mobile.js?v=2','./manifest.webmanifest']))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('sql-pocket-')&&key!==CACHE).map(key=>caches.delete(key))))));
 self.addEventListener('fetch',event=>{
  const req=event.request,url=new URL(req.url);

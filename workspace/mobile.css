@@ -1,4 +1,4 @@
-.pocket-nav,.pocket-keys,.pocket-install{display:none}
+.pocket-nav,.pocket-keys,.pocket-install,.pocket-done{display:none}
 @media(max-width:760px){
  body.sql-mode{position:fixed;top:var(--pocket-top,0px);left:0;width:100%;height:var(--pocket-height,100dvh);display:flex;flex-direction:column;overflow:hidden;background:#11151f;color:#e9eaf4;color-scheme:dark}
  .sql-mode header{flex:none;min-height:48px;padding:calc(6px + env(safe-area-inset-top)) 12px 6px;background:#11151f;gap:8px}
@@ -40,6 +40,20 @@
  .sql-mode .sql-track select,.sql-mode #search{background:#252b3e;color:#e5e8f4;font-size:16px}
  .sql-mode .sql-track{color:#bac4d9}.sql-mode dialog{max-width:calc(100vw - 24px)}
 }
+/* iOS typing mode: spend the visible viewport on code, not app chrome. */
+@media(max-width:760px){
+ .sql-mode.pocket-editing header,.sql-mode.pocket-editing .pocket-nav{display:none}
+ .sql-mode.pocket-editing main{padding:0 6px}
+ .sql-mode.pocket-editing .coding{border-radius:10px}
+ .sql-mode.pocket-editing .toolbar{padding:2px 4px;min-height:48px}
+ .sql-mode.pocket-editing .pocket-done{display:block;flex:none;min-width:52px;font-size:14px}
+ .sql-mode.pocket-editing .pocket-keys{padding:2px 4px;scrollbar-width:none}
+ .sql-mode.pocket-editing .pocket-keys::-webkit-scrollbar{display:none}
+ .sql-mode.pocket-editing .pocket-keys button{min-height:44px;padding:4px 10px}
+ .sql-mode.pocket-editing .editor-wrap{min-height:0;border-radius:0}
+ .sql-mode #ace .ace_text-input{font-size:16px!important}
+}
+@media(display-mode:standalone){.sql-mode .pocket-install{display:none}}
 @media(max-width:760px){
  .sql-mode h2{color:#cbd3ea}
  .sql-mode #ace,.sql-mode #ace .ace_scroller{background:#1d1f21!important;color:#e4e4eb!important}
