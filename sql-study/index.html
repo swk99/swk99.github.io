@@ -20,39 +20,20 @@ SELECT g.genre, g.total_revenue,
 FROM genre_revenue_cte AS g
 INNER JOIN concerts AS c ON g.genre = c.genre
 WHERE c.concert_revenue &gt; g.total_revenue * 0.5
-GROUP BY g.genre, g.total_revenue;</code></pre></div><aside class="explain"><b>🐨 코돌이의 쉬운 설명</b><p>먼저 장르별 총매출을 구한 뒤, 개별 공연 매출이 그 장르 총매출의 50%를 넘는 공연만 남겨요. 마지막 AVG는 <strong>필터를 통과한 공연들의 평균</strong>이지 전체 장르의 평균이 아니에요. 주어진 5행 예시에서 Pop 합계는 1,850,000이라 925,000을 넘는 공연이 없고, K-Pop은 BTS만 625,000을 넘어요.</p></aside><h3>② 같은 중간 결과를 여러 번 참조할 때</h3><p>큰 쿼리 안에서 같은 서브쿼리 결과가 여러 번 필요하다면 CTE로 정리할 수 있습니다. 원문은 이를 중복 계산 방지의 장점으로 소개합니다.</p><div class="warning"><strong>보충·정정</strong> 같은 SQL을 반복 작성하지 않아도 된다는 장점은 있지만, 실제 계산이 한 번만 수행된다고 보장되지는 않습니다. CTE의 인라인 처리나 결과 저장 여부는 DB와 실행 계획에 따라 달라집니다.</div><h3>③ 재귀 쿼리를 작성할 때</h3><p>조직도나 댓글 스레드처럼 계층 구조를 따라 내려가야 할 때는 재귀 CTE가 적합합니다. 다음 예시는 특정 관리자의 아래에 있는 모든 직원을 찾습니다.</p><p class="caption">원문 예제의 SQL Server 형식. 열 이름의 ManagerID 오기를 manager_id로 통일했습니다. @manager_id는 미리 선언한 변수입니다.</p><div class="code"><button class="copy" type="button">복사</button><pre><code>;WITH recursive_cte AS (
-  SELECT employee_id, name, manager_id
-  FROM employees
-  WHERE manager_id = @manager_id
+GROUP BY g.genre, g.total_revenue;</code></pre></div><aside class="explain"><b>🐨 코돌이의 쉬운 설명</b><p>먼저 장르별 총매출을 구한 뒤, 개별 공연 매출이 그 장르 총매출의 50%를 넘는 공연만 남겨요. 마지막 AVG는 <strong>필터를 통과한 공연들의 평균</strong>이지 전체 장르의 평균이 아니에요. 주어진 5행 예시에서 Pop 합계는 1,850,000이라 925,000을 넘는 공연이 없고, K-Pop은 BTS만 625,000을 넘어요.</p></aside><h3>② 같은 중간 결과를 여러 번 참조할 때</h3><p>큰 쿼리 안에서 같은 서브쿼리 결과가 여러 번 필요하다면 CTE로 정리할 수 있습니다. 원문은 이를 중복 계산 방지의 장점으로 소개합니다.</p><div class="warning"><strong>보충·정정</strong> 같은 SQL을 반복 작성하지 않아도 된다는 장점은 있지만, 실제 계산이 한 번만 수행된다고 보장되지는 않습니다. CTE의 인라인 처리나 결과 저장 여부는 DB와 실행 계획에 따라 달라집니다.</div><div id="recursive-adventure" style="scroll-margin-top:90px"><h3>③ 🐨 재귀 CTE — 핵심만!</h3><p><strong>찾은 사람의 부하를 계속 찾기.</strong></p><p>👩🏻 선우 → 🐨 코돌이 → 아기코 → 아무도 없으면 끝!</p><p class="caption">SQL Server 문법 · 선우의 직원 번호는 10이라고 할게요.</p><div class="code"><button class="copy" type="button">복사</button><pre><code>;WITH 친구들 AS (
+  -- ① 선우의 부하 찾기
+  SELECT * FROM employees
+  WHERE manager_id = 10
 
-  UNION ALL
+  UNION ALL  -- 찾은 결과 이어 붙이기
 
-  SELECT e.employee_id, e.name, e.manager_id
+  -- ② 방금 찾은 사람의 부하 찾기
+  SELECT e.*
   FROM employees AS e
-  INNER JOIN recursive_cte AS r
+  JOIN 친구들 AS r
     ON e.manager_id = r.employee_id
 )
-SELECT * FROM recursive_cte;</code></pre></div><div id="recursive-adventure" style="scroll-margin-top:90px"><span class="tag">코돌이와 선우의 모험 · 보충 해설</span><h3>🐨 조직도 탐험: 친구의 부하를 찾아라!</h3><aside class="explain"><b>👩🏻 선우: “근데 이 코드가 이미 재귀 아니야?”</b><p>🐨 “맞아, 엄마! <strong>recursive_cte를 만드는 도중에 자기 자신인 recursive_cte를 다시 참조</strong>하니까, 이 코드가 이미 재귀 CTE야!”</p></aside><p>선우가 코돌이에게 부탁했어요. “내가 관리하는 직원들을 전부 찾아줘. 직속 직원뿐 아니라 그 직원들의 부하 직원까지!”</p><p>직원 명단 <code>employees</code>는 아래와 같아요. <strong>employee_id는 내 번호, manager_id는 내 상사의 번호</strong>예요.</p><div class="table-wrap"><table><thead><tr><th>employee_id · 내 번호</th><th>name · 이름</th><th>manager_id · 상사 번호</th></tr></thead><tbody><tr><td>10</td><td>선우</td><td>NULL</td></tr><tr><td>20</td><td>코돌이</td><td>10</td></tr><tr><td>30</td><td>코달이</td><td>10</td></tr><tr><td>40</td><td>아기코</td><td>20</td></tr><tr><td>50</td><td>꼬마코</td><td>40</td></tr></tbody></table></div><p>이번 탐험에서는 <code>@manager_id = 10</code>, 즉 선우의 번호라고 할게요.</p><h4>① 출발! 선우의 직속 직원 찾기</h4><div class="code"><button class="copy" type="button">복사</button><pre><code>SELECT employee_id, name, manager_id
-FROM employees
-WHERE manager_id = @manager_id</code></pre></div><aside class="explain"><b>🐨 “상사 번호가 선우 번호인 친구들, 모여!”</b><p><strong>코돌이(20), 코달이(30)</strong>가 나와요. 이 부분은 출발점(anchor)이에요. 아직 자기 자신을 참조하지 않으니, 이 부분만 보면 재귀가 아니에요.</p></aside><h4>② 방금 찾은 직원들의 부하 찾기</h4><div class="code"><button class="copy" type="button">복사</button><pre><code>SELECT e.employee_id, e.name, e.manager_id
-FROM employees AS e
-INNER JOIN recursive_cte AS r
-  ON e.manager_id = r.employee_id</code></pre></div><div class="table-wrap"><table><thead><tr><th>별명</th><th>모험 속 역할</th></tr></thead><tbody><tr><td>r</td><td>직전 단계에서 찾은 직원들 — 이번 탐색의 기준</td></tr><tr><td>e</td><td>전체 직원 명단에서 새로 찾을 부하 직원 후보</td></tr></tbody></table></div><p>가장 중요한 한 줄이에요.</p><div class="code"><button class="copy" type="button">복사</button><pre><code>e.manager_id = r.employee_id</code></pre></div><aside class="explain"><b>🐨 “새 친구의 상사 번호 = 방금 찾은 친구의 직원 번호!”</b><p><code>r</code>이 코돌이(20)라면 <code>e.manager_id = 20</code>인 직원을 찾아요. 그래서 코돌이의 부하인 <strong>아기코(40)</strong>가 나오는 거예요.</p></aside><h4>③ 새로 찾은 친구가 다음 탐험의 기준!</h4><div class="table-wrap"><table><thead><tr><th>단계</th><th>이번 탐색의 기준</th><th>새로 찾은 직원</th></tr></thead><tbody><tr><td>출발</td><td>선우(10)</td><td>코돌이(20), 코달이(30)</td></tr><tr><td>반복 1</td><td>코돌이(20), 코달이(30)</td><td>아기코(40)</td></tr><tr><td>반복 2</td><td>아기코(40)</td><td>꼬마코(50)</td></tr><tr><td>반복 3</td><td>꼬마코(50)</td><td>없음 → 종료!</td></tr></tbody></table></div><aside class="explain"><b>👩🏻 “아기코를 찾았으면, 이번엔 아기코 밑에도 누가 있는지 봐!”</b><p>🐨 “아하! <strong>새로 찾은 결과를 다시 넣어서 같은 일을 하는 거구나!</strong>”</p></aside><p>이것이 재귀예요. 논리적으로는 <strong>직전 단계에서 새로 나온 행</strong>을 기준으로 다음 행을 찾아요. 누적된 전체 명단을 매번 처음부터 다시 탐색한다고 생각하지 않아도 돼요.</p><h4>④ UNION ALL은 탐험 명단 합치기</h4><p><code>UNION ALL</code>은 출발점과 반복 단계의 결과를 중복 제거 없이 이어 붙여요. 반복을 가능하게 하는 핵심은 자기 자신을 참조하는 부분이에요.</p><div class="table-wrap"><table><thead><tr><th>최종 employee_id</th><th>name</th><th>manager_id</th></tr></thead><tbody><tr><td>20</td><td>코돌이</td><td>10</td></tr><tr><td>30</td><td>코달이</td><td>10</td></tr><tr><td>40</td><td>아기코</td><td>20</td></tr><tr><td>50</td><td>꼬마코</td><td>40</td></tr></tbody></table></div><p>선우 본인은 출발점에서 선택하지 않았으므로 포함되지 않아요. 위 표는 이해를 위한 순서이며, 실제 출력 순서는 <code>ORDER BY</code> 없이는 보장되지 않아요.</p><h4>🧠 문법 암기: 출발 → 합치기 → 다음 찾기 → 꺼내기</h4><p class="caption">아래는 구조를 외우기 위한 설명용 틀이에요. 실행할 때는 위의 실제 열 이름과 SQL을 사용하세요.</p><div class="code"><button class="copy" type="button">복사</button><pre><code>;WITH 탐험명단 AS (
-    -- ① 출발: 첫 친구 찾기
-    SELECT ...
-    FROM 직원명단
-    WHERE 상사번호 = 선우번호
-
-    UNION ALL  -- ② 찾은 친구들을 이어 붙이기
-
-    -- ③ 반복: 방금 찾은 친구의 부하 찾기
-    SELECT 새친구.*
-    FROM 직원명단 AS 새친구
-    JOIN 탐험명단 AS 찾은친구
-      ON 새친구.상사번호 = 찾은친구.직원번호
-)
--- ④ 완성된 명단 꺼내기
-SELECT * FROM 탐험명단;</code></pre></div><aside class="explain"><b>🐨 “첫 친구 찾고, 그 친구의 부하 찾고, 더 없으면 끝!”</b><p>SQL Server에서는 <code>WITH</code>만 써도 재귀 CTE가 돼요. PostgreSQL에서는 <code>WITH RECURSIVE</code>라고 써요. 맨 앞 <code>;</code>는 재귀 표시가 아니라 앞 SQL 문장을 끝내는 표시예요.</p></aside><p class="caption">이 모험은 순환이 없는 조직도를 가정해요. A의 상사가 B이고 B의 상사가 A라면 계속 되돌아갈 수 있으므로, 실제 데이터에서는 순환 방지 처리가 필요합니다.</p></div><div class="table-wrap"><table><thead><tr><th>환경</th><th>재귀 CTE 시작</th><th>관리자 값 예시</th></tr></thead><tbody><tr><td>SQL Server</td><td>;WITH recursive_cte AS (...)</td><td>@manager_id (선언 필요)</td></tr><tr><td>PostgreSQL</td><td>WITH RECURSIVE recursive_cte AS (...)</td><td>학습 시 WHERE manager_id = 10</td></tr><tr><td>MySQL 8+</td><td>WITH RECURSIVE recursive_cte AS (...)</td><td>학습 시 WHERE manager_id = 10</td></tr></tbody></table></div></section><section id="subquery"><h2>03. 서브쿼리는 언제 사용하나요?</h2><span class="tag">본문 번역</span><h3>① WHERE에서 값 하나와 비교할 때</h3><p>다른 쿼리의 결과와 단일 값을 비교하고 싶다면 WHERE 절에 서브쿼리를 넣을 수 있습니다. 서브쿼리 결과에 따라 필터 조건이 달라져 유연하게 데이터를 추출할 수 있습니다.</p><div class="code"><button class="copy" type="button">복사</button><pre><code>SELECT artist_name
+SELECT * FROM 친구들; -- 완성된 명단 보기</code></pre></div><aside class="explain"><b>🐨 핵심은 딱 한 줄!</b><p><code>e.manager_id = r.employee_id</code></p><p><strong>새 사람의 상사 번호 = 방금 찾은 사람의 번호</strong></p></aside></div></section><section id="subquery"><h2>03. 서브쿼리는 언제 사용하나요?</h2><span class="tag">본문 번역</span><h3>① WHERE에서 값 하나와 비교할 때</h3><p>다른 쿼리의 결과와 단일 값을 비교하고 싶다면 WHERE 절에 서브쿼리를 넣을 수 있습니다. 서브쿼리 결과에 따라 필터 조건이 달라져 유연하게 데이터를 추출할 수 있습니다.</p><div class="code"><button class="copy" type="button">복사</button><pre><code>SELECT artist_name
 FROM concerts
 WHERE concert_revenue &gt; (
   SELECT AVG(concert_revenue) FROM concerts
