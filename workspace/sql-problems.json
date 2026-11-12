@@ -8,9 +8,9 @@
     "category": "Joins",
     "method": "__sql__",
     "rules": [
-      "직속 부하 직원이 5명 이상인 관리자의 name을 반환하세요. 간접 보고는 세지 않습니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return the name of each manager with at least five direct reports. Do not count indirect reports.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Employee (id INTEGER, name TEXT, department TEXT, managerId INTEGER);\n\nOutput columns: name",
     "schema": {
@@ -178,7 +178,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employee\": [\n    [\n      1,\n      \"Kim\",\n      \"A\",\n      null\n    ],\n    [\n      2,\n      \"E2\",\n      \"A\",\n      1\n    ],\n    [\n      3,\n      \"E3\",\n      \"A\",\n      1\n    ],\n    [\n      4,\n      \"E4\",\n      \"A\",\n      1\n    ],\n    [\n      5,\n      \"E5\",\n      \"A\",\n      1\n    ],\n    [\n      6,\n      \"E6\",\n      \"A\",\n      1\n    ]\n  ]\n}\n\nExpected columns: name\nExpected rows:\n[\n  [\n    \"Kim\"\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Employee\": [\n    [\n      1,\n      \"Kim\",\n      \"A\",\n      null\n    ],\n    [\n      2,\n      \"E2\",\n      \"A\",\n      1\n    ],\n    [\n      3,\n      \"E3\",\n      \"A\",\n      1\n    ],\n    [\n      4,\n      \"E4\",\n      \"A\",\n      1\n    ],\n    [\n      5,\n      \"E5\",\n      \"A\",\n      1\n    ],\n    [\n      6,\n      \"E6\",\n      \"A\",\n      1\n    ]\n  ]\n}\n\nExpected columns: name\nExpected rows:\n[\n  [\n    \"Kim\"\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -191,9 +191,9 @@
     "category": "Joins",
     "method": "__sql__",
     "rules": [
-      "가입자마다 confirmed 횟수 / 전체 확인 요청 횟수를 소수 둘째 자리로 반올림하세요. 요청이 없으면 0입니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "For each signup, return confirmed requests divided by all confirmation requests, rounded to two decimal places. Return 0 when there are no requests.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Signups (user_id INTEGER, time_stamp TEXT);\nCREATE TABLE Confirmations (user_id INTEGER, time_stamp TEXT, action TEXT);\n\nOutput columns: user_id, confirmation_rate",
     "schema": {
@@ -328,7 +328,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Signups\": [\n    [\n      1,\n      \"2020-01-01\"\n    ],\n    [\n      2,\n      \"2020-01-02\"\n    ],\n    [\n      3,\n      \"2020-01-03\"\n    ]\n  ],\n  \"Confirmations\": [\n    [\n      1,\n      \"2020-02-01\",\n      \"confirmed\"\n    ],\n    [\n      1,\n      \"2020-02-02\",\n      \"timeout\"\n    ],\n    [\n      2,\n      \"2020-02-01\",\n      \"confirmed\"\n    ]\n  ]\n}\n\nExpected columns: user_id, confirmation_rate\nExpected rows:\n[\n  [\n    1,\n    0.5\n  ],\n  [\n    2,\n    1.0\n  ],\n  [\n    3,\n    0.0\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Signups\": [\n    [\n      1,\n      \"2020-01-01\"\n    ],\n    [\n      2,\n      \"2020-01-02\"\n    ],\n    [\n      3,\n      \"2020-01-03\"\n    ]\n  ],\n  \"Confirmations\": [\n    [\n      1,\n      \"2020-02-01\",\n      \"confirmed\"\n    ],\n    [\n      1,\n      \"2020-02-02\",\n      \"timeout\"\n    ],\n    [\n      2,\n      \"2020-02-01\",\n      \"confirmed\"\n    ]\n  ]\n}\n\nExpected columns: user_id, confirmation_rate\nExpected rows:\n[\n  [\n    1,\n    0.5\n  ],\n  [\n    2,\n    1.0\n  ],\n  [\n    3,\n    0.0\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -341,9 +341,9 @@
     "category": "Basic Aggregate Functions",
     "method": "__sql__",
     "rules": [
-      "id가 홀수이고 description이 boring이 아닌 영화를 모든 열로 반환하세요. rating 내림차순으로 정렬하세요.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return all columns for movies with odd id and description other than boring. Order by rating descending.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Cinema (id INTEGER, movie TEXT, description TEXT, rating REAL);\n\nOutput columns: id, movie, description, rating",
     "schema": {
@@ -460,7 +460,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Cinema\": [\n    [\n      1,\n      \"A\",\n      \"great\",\n      8.1\n    ],\n    [\n      2,\n      \"B\",\n      \"great\",\n      9.0\n    ],\n    [\n      3,\n      \"C\",\n      \"boring\",\n      8.5\n    ],\n    [\n      5,\n      \"D\",\n      \"fun\",\n      9.2\n    ]\n  ]\n}\n\nExpected columns: id, movie, description, rating\nExpected rows:\n[\n  [\n    5,\n    \"D\",\n    \"fun\",\n    9.2\n  ],\n  [\n    1,\n    \"A\",\n    \"great\",\n    8.1\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Cinema\": [\n    [\n      1,\n      \"A\",\n      \"great\",\n      8.1\n    ],\n    [\n      2,\n      \"B\",\n      \"great\",\n      9.0\n    ],\n    [\n      3,\n      \"C\",\n      \"boring\",\n      8.5\n    ],\n    [\n      5,\n      \"D\",\n      \"fun\",\n      9.2\n    ]\n  ]\n}\n\nExpected columns: id, movie, description, rating\nExpected rows:\n[\n  [\n    5,\n    \"D\",\n    \"fun\",\n    9.2\n  ],\n  [\n    1,\n    \"A\",\n    \"great\",\n    8.1\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -473,9 +473,9 @@
     "category": "Basic Aggregate Functions",
     "method": "__sql__",
     "rules": [
-      "상품마다 판매 기간에 해당하는 가격으로 총 매출 / 총 판매 수량을 구하고 소수 둘째 자리로 반올림하세요. 기간 양끝은 포함되며 같은 상품의 가격 기간은 겹치지 않습니다. 판매가 없으면 0입니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "For each product, divide total revenue by units sold using the price valid on each sale date. Round to two decimals. Price intervals include both endpoints and never overlap for a product. Return 0 for no sales.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Prices (product_id INTEGER, start_date TEXT, end_date TEXT, price INTEGER);\nCREATE TABLE UnitsSold (product_id INTEGER, purchase_date TEXT, units INTEGER);\n\nOutput columns: product_id, average_price",
     "schema": {
@@ -619,7 +619,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Prices\": [\n    [\n      1,\n      \"2020-01-01\",\n      \"2020-01-10\",\n      10\n    ],\n    [\n      1,\n      \"2020-01-11\",\n      \"2020-01-31\",\n      20\n    ],\n    [\n      2,\n      \"2020-01-01\",\n      \"2020-01-31\",\n      5\n    ]\n  ],\n  \"UnitsSold\": [\n    [\n      1,\n      \"2020-01-10\",\n      2\n    ],\n    [\n      1,\n      \"2020-01-11\",\n      1\n    ]\n  ]\n}\n\nExpected columns: product_id, average_price\nExpected rows:\n[\n  [\n    1,\n    13.33\n  ],\n  [\n    2,\n    0\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Prices\": [\n    [\n      1,\n      \"2020-01-01\",\n      \"2020-01-10\",\n      10\n    ],\n    [\n      1,\n      \"2020-01-11\",\n      \"2020-01-31\",\n      20\n    ],\n    [\n      2,\n      \"2020-01-01\",\n      \"2020-01-31\",\n      5\n    ]\n  ],\n  \"UnitsSold\": [\n    [\n      1,\n      \"2020-01-10\",\n      2\n    ],\n    [\n      1,\n      \"2020-01-11\",\n      1\n    ]\n  ]\n}\n\nExpected columns: product_id, average_price\nExpected rows:\n[\n  [\n    1,\n    13.33\n  ],\n  [\n    2,\n    0\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -632,9 +632,9 @@
     "category": "Basic Aggregate Functions",
     "method": "__sql__",
     "rules": [
-      "프로젝트별 참여 직원의 평균 경력 연수를 소수 둘째 자리로 반올림하여 반환하세요.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return the average employee experience years per project, rounded to two decimal places.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Project (project_id INTEGER, employee_id INTEGER);\nCREATE TABLE Employee (employee_id INTEGER, name TEXT, experience_years INTEGER);\n\nOutput columns: project_id, average_years",
     "schema": {
@@ -760,7 +760,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Project\": [\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      2\n    ]\n  ],\n  \"Employee\": [\n    [\n      1,\n      \"A\",\n      3\n    ],\n    [\n      2,\n      \"B\",\n      2\n    ]\n  ]\n}\n\nExpected columns: project_id, average_years\nExpected rows:\n[\n  [\n    1,\n    2.5\n  ],\n  [\n    2,\n    2.0\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Project\": [\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      2\n    ]\n  ],\n  \"Employee\": [\n    [\n      1,\n      \"A\",\n      3\n    ],\n    [\n      2,\n      \"B\",\n      2\n    ]\n  ]\n}\n\nExpected columns: project_id, average_years\nExpected rows:\n[\n  [\n    1,\n    2.5\n  ],\n  [\n    2,\n    2.0\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -773,9 +773,9 @@
     "category": "Basic Aggregate Functions",
     "method": "__sql__",
     "rules": [
-      "대회별 등록 사용자 수를 전체 사용자 수로 나눈 백분율을 소수 둘째 자리로 반올림하세요. percentage 내림차순, 동률이면 contest_id 오름차순입니다.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "For each contest, divide registered users by all users as a percentage rounded to two decimals. Order by percentage descending, then contest_id ascending.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Users (user_id INTEGER, user_name TEXT);\nCREATE TABLE Register (contest_id INTEGER, user_id INTEGER);\n\nOutput columns: contest_id, percentage",
     "schema": {
@@ -908,7 +908,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Users\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ],\n    [\n      3,\n      \"C\"\n    ]\n  ],\n  \"Register\": [\n    [\n      2,\n      1\n    ],\n    [\n      2,\n      2\n    ],\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      3,\n      3\n    ]\n  ]\n}\n\nExpected columns: contest_id, percentage\nExpected rows:\n[\n  [\n    1,\n    66.67\n  ],\n  [\n    2,\n    66.67\n  ],\n  [\n    3,\n    33.33\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Users\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ],\n    [\n      3,\n      \"C\"\n    ]\n  ],\n  \"Register\": [\n    [\n      2,\n      1\n    ],\n    [\n      2,\n      2\n    ],\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      3,\n      3\n    ]\n  ]\n}\n\nExpected columns: contest_id, percentage\nExpected rows:\n[\n  [\n    1,\n    66.67\n  ],\n  [\n    2,\n    66.67\n  ],\n  [\n    3,\n    33.33\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -921,9 +921,9 @@
     "category": "Basic Aggregate Functions",
     "method": "__sql__",
     "rules": [
-      "query_name별 quality는 rating / position의 평균입니다. poor_query_percentage는 rating < 3인 행의 비율(%)입니다. 둘 다 소수 둘째 자리로 반올림하세요. 중복 행도 각각 셉니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "For each query_name, quality is the average of rating / position; poor_query_percentage is the percentage of rows with rating < 3. Round both to two decimals. Count duplicate rows separately.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Queries (query_name TEXT, result TEXT, position INTEGER, rating INTEGER);\n\nOutput columns: query_name, quality, poor_query_percentage",
     "schema": {
@@ -1030,7 +1030,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Queries\": [\n    [\n      \"A\",\n      \"x\",\n      1,\n      5\n    ],\n    [\n      \"A\",\n      \"y\",\n      2,\n      2\n    ],\n    [\n      \"B\",\n      \"z\",\n      4,\n      4\n    ]\n  ]\n}\n\nExpected columns: query_name, quality, poor_query_percentage\nExpected rows:\n[\n  [\n    \"A\",\n    3.0,\n    50.0\n  ],\n  [\n    \"B\",\n    1.0,\n    0.0\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Queries\": [\n    [\n      \"A\",\n      \"x\",\n      1,\n      5\n    ],\n    [\n      \"A\",\n      \"y\",\n      2,\n      2\n    ],\n    [\n      \"B\",\n      \"z\",\n      4,\n      4\n    ]\n  ]\n}\n\nExpected columns: query_name, quality, poor_query_percentage\nExpected rows:\n[\n  [\n    \"A\",\n    3.0,\n    50.0\n  ],\n  [\n    \"B\",\n    1.0,\n    0.0\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -1043,9 +1043,9 @@
     "category": "Basic Aggregate Functions",
     "method": "__sql__",
     "rules": [
-      "월(YYYY-MM)·국가별 전체 거래 수, approved 거래 수, 전체 금액 합계, approved 금액 합계를 반환하세요.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "For each month (YYYY-MM) and country, return transaction count, approved count, total amount, and approved amount.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Transactions (id INTEGER, country TEXT, state TEXT, amount INTEGER, trans_date TEXT);\n\nOutput columns: month, country, trans_count, approved_count, trans_total_amount, approved_total_amount",
     "schema": {
@@ -1190,7 +1190,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Transactions\": [\n    [\n      1,\n      \"UK\",\n      \"approved\",\n      100,\n      \"2020-01-01\"\n    ],\n    [\n      2,\n      \"UK\",\n      \"declined\",\n      50,\n      \"2020-01-10\"\n    ],\n    [\n      3,\n      \"US\",\n      \"approved\",\n      75,\n      \"2020-02-01\"\n    ]\n  ]\n}\n\nExpected columns: month, country, trans_count, approved_count, trans_total_amount, approved_total_amount\nExpected rows:\n[\n  [\n    \"2020-01\",\n    \"UK\",\n    2,\n    1,\n    150,\n    100\n  ],\n  [\n    \"2020-02\",\n    \"US\",\n    1,\n    1,\n    75,\n    75\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Transactions\": [\n    [\n      1,\n      \"UK\",\n      \"approved\",\n      100,\n      \"2020-01-01\"\n    ],\n    [\n      2,\n      \"UK\",\n      \"declined\",\n      50,\n      \"2020-01-10\"\n    ],\n    [\n      3,\n      \"US\",\n      \"approved\",\n      75,\n      \"2020-02-01\"\n    ]\n  ]\n}\n\nExpected columns: month, country, trans_count, approved_count, trans_total_amount, approved_total_amount\nExpected rows:\n[\n  [\n    \"2020-01\",\n    \"UK\",\n    2,\n    1,\n    150,\n    100\n  ],\n  [\n    \"2020-02\",\n    \"US\",\n    1,\n    1,\n    75,\n    75\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -1203,9 +1203,9 @@
     "category": "Basic Aggregate Functions",
     "method": "__sql__",
     "rules": [
-      "고객마다 가장 이른 첫 주문만 살펴보세요. 주문일과 희망 배송일이 같은 첫 주문의 비율(%)을 소수 둘째 자리로 반환하세요. 고객별 첫 주문은 유일합니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Consider only each customer's earliest order. Return the percentage whose order date equals the preferred delivery date, rounded to two decimals. Each customer's first order is unique.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Delivery (delivery_id INTEGER, customer_id INTEGER, order_date TEXT, customer_pref_delivery_date TEXT);\n\nOutput columns: immediate_percentage",
     "schema": {
@@ -1301,7 +1301,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Delivery\": [\n    [\n      1,\n      1,\n      \"2020-01-01\",\n      \"2020-01-02\"\n    ],\n    [\n      2,\n      1,\n      \"2020-01-03\",\n      \"2020-01-03\"\n    ],\n    [\n      3,\n      2,\n      \"2020-01-02\",\n      \"2020-01-02\"\n    ]\n  ]\n}\n\nExpected columns: immediate_percentage\nExpected rows:\n[\n  [\n    50.0\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Delivery\": [\n    [\n      1,\n      1,\n      \"2020-01-01\",\n      \"2020-01-02\"\n    ],\n    [\n      2,\n      1,\n      \"2020-01-03\",\n      \"2020-01-03\"\n    ],\n    [\n      3,\n      2,\n      \"2020-01-02\",\n      \"2020-01-02\"\n    ]\n  ]\n}\n\nExpected columns: immediate_percentage\nExpected rows:\n[\n  [\n    50.0\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -1314,9 +1314,9 @@
     "category": "Basic Aggregate Functions",
     "method": "__sql__",
     "rules": [
-      "첫 로그인 다음 날에도 로그인한 플레이어 수 / 전체 플레이어 수를 소수 둘째 자리로 반올림하여 fraction으로 반환하세요. games_played가 0이어도 로그인입니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return fraction: players who logged in the day after their first login divided by all players, rounded to two decimals. A row with games_played=0 still counts as a login.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Activity (player_id INTEGER, device_id INTEGER, event_date TEXT, games_played INTEGER);\n\nOutput columns: fraction",
     "schema": {
@@ -1424,7 +1424,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Activity\": [\n    [\n      1,\n      1,\n      \"2020-01-01\",\n      0\n    ],\n    [\n      1,\n      2,\n      \"2020-01-02\",\n      1\n    ],\n    [\n      2,\n      1,\n      \"2020-01-01\",\n      1\n    ]\n  ]\n}\n\nExpected columns: fraction\nExpected rows:\n[\n  [\n    0.5\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Activity\": [\n    [\n      1,\n      1,\n      \"2020-01-01\",\n      0\n    ],\n    [\n      1,\n      2,\n      \"2020-01-02\",\n      1\n    ],\n    [\n      2,\n      1,\n      \"2020-01-01\",\n      1\n    ]\n  ]\n}\n\nExpected columns: fraction\nExpected rows:\n[\n  [\n    0.5\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -1437,9 +1437,9 @@
     "category": "Sorting and Grouping",
     "method": "__sql__",
     "rules": [
-      "교사마다 서로 다른 subject_id의 개수를 cnt로 반환하세요. 같은 과목을 여러 학과에서 가르쳐도 한 번입니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return each teacher's distinct subject_id count as cnt. Teaching a subject in multiple departments counts once.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Teacher (teacher_id INTEGER, subject_id INTEGER, dept_id INTEGER);\n\nOutput columns: teacher_id, cnt",
     "schema": {
@@ -1541,7 +1541,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Teacher\": [\n    [\n      1,\n      1,\n      1\n    ],\n    [\n      1,\n      1,\n      2\n    ],\n    [\n      1,\n      2,\n      1\n    ],\n    [\n      2,\n      1,\n      1\n    ]\n  ]\n}\n\nExpected columns: teacher_id, cnt\nExpected rows:\n[\n  [\n    1,\n    2\n  ],\n  [\n    2,\n    1\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Teacher\": [\n    [\n      1,\n      1,\n      1\n    ],\n    [\n      1,\n      1,\n      2\n    ],\n    [\n      1,\n      2,\n      1\n    ],\n    [\n      2,\n      1,\n      1\n    ]\n  ]\n}\n\nExpected columns: teacher_id, cnt\nExpected rows:\n[\n  [\n    1,\n    2\n  ],\n  [\n    2,\n    1\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -1554,9 +1554,9 @@
     "category": "Sorting and Grouping",
     "method": "__sql__",
     "rules": [
-      "2019-07-27까지 포함한 30일 동안 날짜별 활동 사용자 수를 반환하세요. 같은 날 여러 활동을 해도 한 명이며 활동 없는 날짜는 제외합니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return daily active users over the 30 days ending on 2019-07-27 inclusive. Count each user once per day despite multiple activities. Omit inactive dates.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Activity (user_id INTEGER, session_id INTEGER, activity_date TEXT, activity_type TEXT);\n\nOutput columns: day, active_users",
     "schema": {
@@ -1655,7 +1655,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Activity\": [\n    [\n      1,\n      1,\n      \"2019-07-27\",\n      \"open_session\"\n    ],\n    [\n      1,\n      1,\n      \"2019-07-27\",\n      \"scroll_down\"\n    ],\n    [\n      2,\n      2,\n      \"2019-07-27\",\n      \"open_session\"\n    ],\n    [\n      3,\n      3,\n      \"2019-06-27\",\n      \"open_session\"\n    ]\n  ]\n}\n\nExpected columns: day, active_users\nExpected rows:\n[\n  [\n    \"2019-07-27\",\n    2\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Activity\": [\n    [\n      1,\n      1,\n      \"2019-07-27\",\n      \"open_session\"\n    ],\n    [\n      1,\n      1,\n      \"2019-07-27\",\n      \"scroll_down\"\n    ],\n    [\n      2,\n      2,\n      \"2019-07-27\",\n      \"open_session\"\n    ],\n    [\n      3,\n      3,\n      \"2019-06-27\",\n      \"open_session\"\n    ]\n  ]\n}\n\nExpected columns: day, active_users\nExpected rows:\n[\n  [\n    \"2019-07-27\",\n    2\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -1668,9 +1668,9 @@
     "category": "Sorting and Grouping",
     "method": "__sql__",
     "rules": [
-      "각 상품이 처음 판매된 연도의 판매 행을 반환하세요. 같은 첫해에 여러 판매 행이 있으면 모두 포함합니다. year의 출력 이름은 first_year입니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return sales rows from each product's first sales year. Include all rows in that first year. Name the year output first_year.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Sales (sale_id INTEGER, product_id INTEGER, year INTEGER, quantity INTEGER, price INTEGER);\nCREATE TABLE Product (product_id INTEGER, product_name TEXT);\n\nOutput columns: product_id, first_year, quantity, price",
     "schema": {
@@ -1823,7 +1823,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Sales\": [\n    [\n      1,\n      1,\n      2019,\n      2,\n      10\n    ],\n    [\n      2,\n      1,\n      2020,\n      3,\n      20\n    ],\n    [\n      3,\n      2,\n      2020,\n      1,\n      5\n    ]\n  ],\n  \"Product\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ]\n  ]\n}\n\nExpected columns: product_id, first_year, quantity, price\nExpected rows:\n[\n  [\n    1,\n    2019,\n    2,\n    10\n  ],\n  [\n    2,\n    2020,\n    1,\n    5\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Sales\": [\n    [\n      1,\n      1,\n      2019,\n      2,\n      10\n    ],\n    [\n      2,\n      1,\n      2020,\n      3,\n      20\n    ],\n    [\n      3,\n      2,\n      2020,\n      1,\n      5\n    ]\n  ],\n  \"Product\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ]\n  ]\n}\n\nExpected columns: product_id, first_year, quantity, price\nExpected rows:\n[\n  [\n    1,\n    2019,\n    2,\n    10\n  ],\n  [\n    2,\n    2020,\n    1,\n    5\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -1836,9 +1836,9 @@
     "category": "Sorting and Grouping",
     "method": "__sql__",
     "rules": [
-      "학생이 최소 5명인 class를 반환하세요. (student, class)는 유일합니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return classes with at least five students. (student, class) is unique.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Courses (student TEXT, class TEXT);\n\nOutput columns: class",
     "schema": {
@@ -1954,7 +1954,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Courses\": [\n    [\n      \"0\",\n      \"Math\"\n    ],\n    [\n      \"1\",\n      \"Math\"\n    ],\n    [\n      \"2\",\n      \"Math\"\n    ],\n    [\n      \"3\",\n      \"Math\"\n    ],\n    [\n      \"4\",\n      \"Math\"\n    ],\n    [\n      \"A\",\n      \"CS\"\n    ]\n  ]\n}\n\nExpected columns: class\nExpected rows:\n[\n  [\n    \"Math\"\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Courses\": [\n    [\n      \"0\",\n      \"Math\"\n    ],\n    [\n      \"1\",\n      \"Math\"\n    ],\n    [\n      \"2\",\n      \"Math\"\n    ],\n    [\n      \"3\",\n      \"Math\"\n    ],\n    [\n      \"4\",\n      \"Math\"\n    ],\n    [\n      \"A\",\n      \"CS\"\n    ]\n  ]\n}\n\nExpected columns: class\nExpected rows:\n[\n  [\n    \"Math\"\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -1967,9 +1967,9 @@
     "category": "Sorting and Grouping",
     "method": "__sql__",
     "rules": [
-      "user_id별 팔로워 수를 followers_count로 반환하고 user_id 오름차순으로 정렬하세요.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return follower counts per user_id as followers_count, ordered by user_id ascending.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Followers (user_id INTEGER, follower_id INTEGER);\n\nOutput columns: user_id, followers_count",
     "schema": {
@@ -2056,7 +2056,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Followers\": [\n    [\n      2,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      3\n    ]\n  ]\n}\n\nExpected columns: user_id, followers_count\nExpected rows:\n[\n  [\n    1,\n    1\n  ],\n  [\n    2,\n    2\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Followers\": [\n    [\n      2,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      3\n    ]\n  ]\n}\n\nExpected columns: user_id, followers_count\nExpected rows:\n[\n  [\n    1,\n    1\n  ],\n  [\n    2,\n    2\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -2069,9 +2069,9 @@
     "category": "Sorting and Grouping",
     "method": "__sql__",
     "rules": [
-      "테이블에서 정확히 한 번 등장하는 수 중 가장 큰 수를 num으로 반환하세요. 없으면 NULL 한 행을 반환하세요.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return the largest number appearing exactly once as num. If none exists, return one row containing NULL.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE MyNumbers (num INTEGER);\n\nOutput columns: num",
     "schema": {
@@ -2166,7 +2166,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"MyNumbers\": [\n    [\n      8\n    ],\n    [\n      8\n    ],\n    [\n      3\n    ],\n    [\n      2\n    ]\n  ]\n}\n\nExpected columns: num\nExpected rows:\n[\n  [\n    3\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"MyNumbers\": [\n    [\n      8\n    ],\n    [\n      8\n    ],\n    [\n      3\n    ],\n    [\n      2\n    ]\n  ]\n}\n\nExpected columns: num\nExpected rows:\n[\n  [\n    3\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -2179,9 +2179,9 @@
     "category": "Sorting and Grouping",
     "method": "__sql__",
     "rules": [
-      "Product에 있는 모든 상품을 구매한 customer_id를 반환하세요. 같은 상품을 여러 번 구매해도 한 종류입니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return customer_id for customers who bought every product in Product. Multiple purchases of one product count as one distinct product.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Customer (customer_id INTEGER, product_key INTEGER);\nCREATE TABLE Product (product_key INTEGER);\n\nOutput columns: customer_id",
     "schema": {
@@ -2287,7 +2287,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Customer\": [\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      1\n    ]\n  ],\n  \"Product\": [\n    [\n      1\n    ],\n    [\n      2\n    ]\n  ]\n}\n\nExpected columns: customer_id\nExpected rows:\n[\n  [\n    1\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Customer\": [\n    [\n      1,\n      1\n    ],\n    [\n      1,\n      2\n    ],\n    [\n      2,\n      1\n    ]\n  ],\n  \"Product\": [\n    [\n      1\n    ],\n    [\n      2\n    ]\n  ]\n}\n\nExpected columns: customer_id\nExpected rows:\n[\n  [\n    1\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -2300,9 +2300,9 @@
     "category": "Advanced Select and Joins",
     "method": "__sql__",
     "rules": [
-      "직속 부하가 있는 직원의 employee_id, name, reports_count, 부하들의 평균 나이를 반올림한 average_age를 반환하세요. employee_id 오름차순입니다.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "For employees with direct reports, return employee_id, name, reports_count, and their reports' rounded average_age. Order by employee_id ascending.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Employees (employee_id INTEGER, name TEXT, reports_to INTEGER, age INTEGER);\n\nOutput columns: employee_id, name, reports_count, average_age",
     "schema": {
@@ -2419,7 +2419,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employees\": [\n    [\n      1,\n      \"A\",\n      null,\n      50\n    ],\n    [\n      2,\n      \"B\",\n      1,\n      20\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      21\n    ]\n  ]\n}\n\nExpected columns: employee_id, name, reports_count, average_age\nExpected rows:\n[\n  [\n    1,\n    \"A\",\n    2,\n    21.0\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Employees\": [\n    [\n      1,\n      \"A\",\n      null,\n      50\n    ],\n    [\n      2,\n      \"B\",\n      1,\n      20\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      21\n    ]\n  ]\n}\n\nExpected columns: employee_id, name, reports_count, average_age\nExpected rows:\n[\n  [\n    1,\n    \"A\",\n    2,\n    21.0\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -2432,9 +2432,9 @@
     "category": "Advanced Select and Joins",
     "method": "__sql__",
     "rules": [
-      "직원마다 대표 부서를 반환하세요. 부서가 여러 개면 primary_flag=Y인 부서를, 하나뿐이면 그 부서를 반환합니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return each employee's primary department. For multiple departments, choose primary_flag=Y; for one department, return that department.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Employee (employee_id INTEGER, department_id INTEGER, primary_flag TEXT);\n\nOutput columns: employee_id, department_id",
     "schema": {
@@ -2531,7 +2531,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employee\": [\n    [\n      1,\n      1,\n      \"N\"\n    ],\n    [\n      2,\n      1,\n      \"Y\"\n    ],\n    [\n      2,\n      2,\n      \"N\"\n    ]\n  ]\n}\n\nExpected columns: employee_id, department_id\nExpected rows:\n[\n  [\n    1,\n    1\n  ],\n  [\n    2,\n    1\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Employee\": [\n    [\n      1,\n      1,\n      \"N\"\n    ],\n    [\n      2,\n      1,\n      \"Y\"\n    ],\n    [\n      2,\n      2,\n      \"N\"\n    ]\n  ]\n}\n\nExpected columns: employee_id, department_id\nExpected rows:\n[\n  [\n    1,\n    1\n  ],\n  [\n    2,\n    1\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -2544,9 +2544,9 @@
     "category": "Advanced Select and Joins",
     "method": "__sql__",
     "rules": [
-      "각 행의 세 변으로 넓이가 양수인 삼각형을 만들 수 있으면 triangle=Yes, 아니면 No를 반환하세요. x,y,z도 출력합니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return x, y, z, and triangle=Yes if the three sides can form a positive-area triangle; otherwise No.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Triangle (x INTEGER, y INTEGER, z INTEGER);\n\nOutput columns: x, y, z, triangle",
     "schema": {
@@ -2665,7 +2665,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Triangle\": [\n    [\n      3,\n      4,\n      5\n    ],\n    [\n      1,\n      2,\n      3\n    ]\n  ]\n}\n\nExpected columns: x, y, z, triangle\nExpected rows:\n[\n  [\n    3,\n    4,\n    5,\n    \"Yes\"\n  ],\n  [\n    1,\n    2,\n    3,\n    \"No\"\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Triangle\": [\n    [\n      3,\n      4,\n      5\n    ],\n    [\n      1,\n      2,\n      3\n    ]\n  ]\n}\n\nExpected columns: x, y, z, triangle\nExpected rows:\n[\n  [\n    3,\n    4,\n    5,\n    \"Yes\"\n  ],\n  [\n    1,\n    2,\n    3,\n    \"No\"\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -2678,9 +2678,9 @@
     "category": "Advanced Select and Joins",
     "method": "__sql__",
     "rules": [
-      "연속된 id 3개 이상에서 같은 num이 나타나면 그 수를 ConsecutiveNums로 한 번씩 반환하세요.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return each num appearing at three or more consecutive IDs once as ConsecutiveNums.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Logs (id INTEGER, num TEXT);\n\nOutput columns: ConsecutiveNums",
     "schema": {
@@ -2776,7 +2776,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Logs\": [\n    [\n      1,\n      \"1\"\n    ],\n    [\n      2,\n      \"1\"\n    ],\n    [\n      3,\n      \"1\"\n    ],\n    [\n      4,\n      \"2\"\n    ],\n    [\n      5,\n      \"1\"\n    ]\n  ]\n}\n\nExpected columns: ConsecutiveNums\nExpected rows:\n[\n  [\n    \"1\"\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Logs\": [\n    [\n      1,\n      \"1\"\n    ],\n    [\n      2,\n      \"1\"\n    ],\n    [\n      3,\n      \"1\"\n    ],\n    [\n      4,\n      \"2\"\n    ],\n    [\n      5,\n      \"1\"\n    ]\n  ]\n}\n\nExpected columns: ConsecutiveNums\nExpected rows:\n[\n  [\n    \"1\"\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -2789,9 +2789,9 @@
     "category": "Advanced Select and Joins",
     "method": "__sql__",
     "rules": [
-      "2019-08-16 시점의 각 상품 가격을 반환하세요. 그날까지 변경된 마지막 가격을 사용하고, 이전 변경이 없으면 초기 가격 10입니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return each product's price on 2019-08-16. Use the latest change up to that date, or the initial price of 10 if there was no earlier change.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Products (product_id INTEGER, new_price INTEGER, change_date TEXT);\n\nOutput columns: product_id, price",
     "schema": {
@@ -2888,7 +2888,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Products\": [\n    [\n      1,\n      20,\n      \"2019-08-14\"\n    ],\n    [\n      1,\n      30,\n      \"2019-08-16\"\n    ],\n    [\n      2,\n      50,\n      \"2019-08-17\"\n    ]\n  ]\n}\n\nExpected columns: product_id, price\nExpected rows:\n[\n  [\n    1,\n    30\n  ],\n  [\n    2,\n    10\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Products\": [\n    [\n      1,\n      20,\n      \"2019-08-14\"\n    ],\n    [\n      1,\n      30,\n      \"2019-08-16\"\n    ],\n    [\n      2,\n      50,\n      \"2019-08-17\"\n    ]\n  ]\n}\n\nExpected columns: product_id, price\nExpected rows:\n[\n  [\n    1,\n    30\n  ],\n  [\n    2,\n    10\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -2901,9 +2901,9 @@
     "category": "Advanced Select and Joins",
     "method": "__sql__",
     "rules": [
-      "turn 오름차순으로 탑승하며 누적 무게는 1000kg 이하여야 합니다. 제한을 넘기기 직전 마지막으로 탑승한 사람의 person_name을 반환하세요. 첫 사람은 탑승 가능합니다.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "People board in turn ascending while cumulative weight stays at most 1000 kg. Return person_name of the last person who can board before exceeding the limit. The first person can board.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Queue (person_id INTEGER, person_name TEXT, weight INTEGER, turn INTEGER);\n\nOutput columns: person_name",
     "schema": {
@@ -2999,7 +2999,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Queue\": [\n    [\n      1,\n      \"A\",\n      400,\n      1\n    ],\n    [\n      2,\n      \"B\",\n      600,\n      2\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      3\n    ]\n  ]\n}\n\nExpected columns: person_name\nExpected rows:\n[\n  [\n    \"B\"\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Queue\": [\n    [\n      1,\n      \"A\",\n      400,\n      1\n    ],\n    [\n      2,\n      \"B\",\n      600,\n      2\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      3\n    ]\n  ]\n}\n\nExpected columns: person_name\nExpected rows:\n[\n  [\n    \"B\"\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -3012,9 +3012,9 @@
     "category": "Advanced Select and Joins",
     "method": "__sql__",
     "rules": [
-      "income < 20000은 Low Salary, 20000~50000은 Average Salary, > 50000은 High Salary입니다. 직원 수가 0이어도 세 범주 모두 출력하세요.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "income < 20000 is Low Salary, 20000–50000 is Average Salary, and > 50000 is High Salary. Return all three categories even when their count is 0.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Accounts (account_id INTEGER, income INTEGER);\n\nOutput columns: category, accounts_count",
     "schema": {
@@ -3109,7 +3109,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Accounts\": [\n    [\n      1,\n      10000\n    ],\n    [\n      2,\n      20000\n    ],\n    [\n      3,\n      50000\n    ],\n    [\n      4,\n      50001\n    ]\n  ]\n}\n\nExpected columns: category, accounts_count\nExpected rows:\n[\n  [\n    \"Low Salary\",\n    1\n  ],\n  [\n    \"Average Salary\",\n    2\n  ],\n  [\n    \"High Salary\",\n    1\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Accounts\": [\n    [\n      1,\n      10000\n    ],\n    [\n      2,\n      20000\n    ],\n    [\n      3,\n      50000\n    ],\n    [\n      4,\n      50001\n    ]\n  ]\n}\n\nExpected columns: category, accounts_count\nExpected rows:\n[\n  [\n    \"Low Salary\",\n    1\n  ],\n  [\n    \"Average Salary\",\n    2\n  ],\n  [\n    \"High Salary\",\n    1\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -3122,9 +3122,9 @@
     "category": "Subqueries",
     "method": "__sql__",
     "rules": [
-      "급여가 30000 미만이며 manager_id가 지정되어 있지만 해당 관리자가 Employees에 없는 직원의 employee_id를 오름차순으로 반환하세요.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return employee_id ascending for employees with salary below 30000 whose manager_id is specified but whose manager is absent from Employees.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Employees (employee_id INTEGER, name TEXT, manager_id INTEGER, salary INTEGER);\n\nOutput columns: employee_id",
     "schema": {
@@ -3220,7 +3220,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employees\": [\n    [\n      1,\n      \"A\",\n      null,\n      10000\n    ],\n    [\n      2,\n      \"B\",\n      9,\n      20000\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      10000\n    ]\n  ]\n}\n\nExpected columns: employee_id\nExpected rows:\n[\n  [\n    2\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Employees\": [\n    [\n      1,\n      \"A\",\n      null,\n      10000\n    ],\n    [\n      2,\n      \"B\",\n      9,\n      20000\n    ],\n    [\n      3,\n      \"C\",\n      1,\n      10000\n    ]\n  ]\n}\n\nExpected columns: employee_id\nExpected rows:\n[\n  [\n    2\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -3233,9 +3233,9 @@
     "category": "Subqueries",
     "method": "__sql__",
     "rules": [
-      "1부터 연속된 좌석 id에서 인접한 두 학생의 자리를 바꾸세요. 총 학생 수가 홀수이면 마지막 학생은 그대로입니다. id 오름차순으로 반환하세요.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Swap adjacent students in consecutive seat IDs starting at 1. If the total is odd, leave the final student unchanged. Return in id ascending order.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Seat (id INTEGER, student TEXT);\n\nOutput columns: id, student",
     "schema": {
@@ -3357,7 +3357,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Seat\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ],\n    [\n      3,\n      \"C\"\n    ]\n  ]\n}\n\nExpected columns: id, student\nExpected rows:\n[\n  [\n    1,\n    \"B\"\n  ],\n  [\n    2,\n    \"A\"\n  ],\n  [\n    3,\n    \"C\"\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Seat\": [\n    [\n      1,\n      \"A\"\n    ],\n    [\n      2,\n      \"B\"\n    ],\n    [\n      3,\n      \"C\"\n    ]\n  ]\n}\n\nExpected columns: id, student\nExpected rows:\n[\n  [\n    1,\n    \"B\"\n  ],\n  [\n    2,\n    \"A\"\n  ],\n  [\n    3,\n    \"C\"\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -3370,9 +3370,9 @@
     "category": "Subqueries",
     "method": "__sql__",
     "rules": [
-      "results 열의 첫 행은 가장 많은 영화를 평가한 사용자 이름, 둘째 행은 2020년 2월 평균 평점이 가장 높은 영화 제목입니다. 각각 동률이면 이름/제목 사전순으로 가장 작은 것을 고르세요. 두 결과가 같아도 두 행입니다.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "In results, the first row is the user who rated the most movies; the second is the movie with the highest average rating in February 2020. Break ties lexicographically by name/title. Keep two rows even if the values match.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Movies (movie_id INTEGER, title TEXT);\nCREATE TABLE Users (user_id INTEGER, name TEXT);\nCREATE TABLE MovieRating (movie_id INTEGER, user_id INTEGER, rating INTEGER, created_at TEXT);\n\nOutput columns: results",
     "schema": {
@@ -3534,7 +3534,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Movies\": [\n    [\n      1,\n      \"Alpha\"\n    ],\n    [\n      2,\n      \"Beta\"\n    ]\n  ],\n  \"Users\": [\n    [\n      1,\n      \"Amy\"\n    ],\n    [\n      2,\n      \"Bob\"\n    ]\n  ],\n  \"MovieRating\": [\n    [\n      1,\n      1,\n      4,\n      \"2020-02-01\"\n    ],\n    [\n      2,\n      1,\n      5,\n      \"2020-02-02\"\n    ],\n    [\n      1,\n      2,\n      2,\n      \"2020-02-03\"\n    ]\n  ]\n}\n\nExpected columns: results\nExpected rows:\n[\n  [\n    \"Amy\"\n  ],\n  [\n    \"Beta\"\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Movies\": [\n    [\n      1,\n      \"Alpha\"\n    ],\n    [\n      2,\n      \"Beta\"\n    ]\n  ],\n  \"Users\": [\n    [\n      1,\n      \"Amy\"\n    ],\n    [\n      2,\n      \"Bob\"\n    ]\n  ],\n  \"MovieRating\": [\n    [\n      1,\n      1,\n      4,\n      \"2020-02-01\"\n    ],\n    [\n      2,\n      1,\n      5,\n      \"2020-02-02\"\n    ],\n    [\n      1,\n      2,\n      2,\n      \"2020-02-03\"\n    ]\n  ]\n}\n\nExpected columns: results\nExpected rows:\n[\n  [\n    \"Amy\"\n  ],\n  [\n    \"Beta\"\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -3547,9 +3547,9 @@
     "category": "Subqueries",
     "method": "__sql__",
     "rules": [
-      "매일 방문이 있는 식당입니다. 최초 방문일에서 6일 후부터 날짜별 최근 7일 총 amount와 일평균 average_amount(소수 둘째 자리)를 반환하세요. 같은 날 여러 고객의 금액을 모두 합치고 visited_on 오름차순으로 정렬하세요.",
-      "결과 순서도 채점합니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "The restaurant has visits every day. Starting six days after the first visit, return each date's seven-day total amount and daily average_amount rounded to two decimals. Sum all customers on each date and order by visited_on ascending.",
+      "Result order is also checked.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Customer (customer_id INTEGER, name TEXT, visited_on TEXT, amount INTEGER);\n\nOutput columns: visited_on, amount, average_amount",
     "schema": {
@@ -3716,7 +3716,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Customer\": [\n    [\n      1,\n      \"A\",\n      \"2020-01-01\",\n      10\n    ],\n    [\n      2,\n      \"A\",\n      \"2020-01-02\",\n      20\n    ],\n    [\n      3,\n      \"A\",\n      \"2020-01-03\",\n      30\n    ],\n    [\n      4,\n      \"A\",\n      \"2020-01-04\",\n      40\n    ],\n    [\n      5,\n      \"A\",\n      \"2020-01-05\",\n      50\n    ],\n    [\n      6,\n      \"A\",\n      \"2020-01-06\",\n      60\n    ],\n    [\n      7,\n      \"A\",\n      \"2020-01-07\",\n      70\n    ],\n    [\n      8,\n      \"A\",\n      \"2020-01-08\",\n      80\n    ]\n  ]\n}\n\nExpected columns: visited_on, amount, average_amount\nExpected rows:\n[\n  [\n    \"2020-01-07\",\n    280,\n    40.0\n  ],\n  [\n    \"2020-01-08\",\n    350,\n    50.0\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Customer\": [\n    [\n      1,\n      \"A\",\n      \"2020-01-01\",\n      10\n    ],\n    [\n      2,\n      \"A\",\n      \"2020-01-02\",\n      20\n    ],\n    [\n      3,\n      \"A\",\n      \"2020-01-03\",\n      30\n    ],\n    [\n      4,\n      \"A\",\n      \"2020-01-04\",\n      40\n    ],\n    [\n      5,\n      \"A\",\n      \"2020-01-05\",\n      50\n    ],\n    [\n      6,\n      \"A\",\n      \"2020-01-06\",\n      60\n    ],\n    [\n      7,\n      \"A\",\n      \"2020-01-07\",\n      70\n    ],\n    [\n      8,\n      \"A\",\n      \"2020-01-08\",\n      80\n    ]\n  ]\n}\n\nExpected columns: visited_on, amount, average_amount\nExpected rows:\n[\n  [\n    \"2020-01-07\",\n    280,\n    40.0\n  ],\n  [\n    \"2020-01-08\",\n    350,\n    50.0\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -3729,9 +3729,9 @@
     "category": "Subqueries",
     "method": "__sql__",
     "rules": [
-      "각 승인 행은 두 사람의 친구 관계를 뜻합니다. 요청자와 수락자 양쪽을 세어 친구가 가장 많은 사람의 id와 num을 반환하세요. 최대인 사람은 유일합니다.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Each acceptance row represents a friendship. Count both requesters and accepters, then return id and num for the person with the most friends. The maximum is unique.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE RequestAccepted (requester_id INTEGER, accepter_id INTEGER, accept_date TEXT);\n\nOutput columns: id, num",
     "schema": {
@@ -3825,7 +3825,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"RequestAccepted\": [\n    [\n      1,\n      2,\n      \"2020-01-01\"\n    ],\n    [\n      1,\n      3,\n      \"2020-01-02\"\n    ],\n    [\n      2,\n      3,\n      \"2020-01-03\"\n    ],\n    [\n      3,\n      4,\n      \"2020-01-04\"\n    ]\n  ]\n}\n\nExpected columns: id, num\nExpected rows:\n[\n  [\n    3,\n    3\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"RequestAccepted\": [\n    [\n      1,\n      2,\n      \"2020-01-01\"\n    ],\n    [\n      1,\n      3,\n      \"2020-01-02\"\n    ],\n    [\n      2,\n      3,\n      \"2020-01-03\"\n    ],\n    [\n      3,\n      4,\n      \"2020-01-04\"\n    ]\n  ]\n}\n\nExpected columns: id, num\nExpected rows:\n[\n  [\n    3,\n    3\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -3838,9 +3838,9 @@
     "category": "Subqueries",
     "method": "__sql__",
     "rules": [
-      "tiv_2015가 다른 계약과 같은 값이고, (lat, lon) 위치는 모든 계약 중 유일한 계약만 골라 tiv_2016 합계를 소수 둘째 자리로 반환하세요.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Select policies whose tiv_2015 matches another policy but whose (lat, lon) location is unique across all policies. Return the sum of tiv_2016 rounded to two decimals.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Insurance (pid INTEGER, tiv_2015 REAL, tiv_2016 REAL, lat REAL, lon REAL);\n\nOutput columns: tiv_2016",
     "schema": {
@@ -3953,7 +3953,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Insurance\": [\n    [\n      1,\n      10,\n      5,\n      1,\n      1\n    ],\n    [\n      2,\n      10,\n      7,\n      2,\n      2\n    ],\n    [\n      3,\n      20,\n      9,\n      3,\n      3\n    ],\n    [\n      4,\n      10,\n      11,\n      3,\n      3\n    ]\n  ]\n}\n\nExpected columns: tiv_2016\nExpected rows:\n[\n  [\n    12.0\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Insurance\": [\n    [\n      1,\n      10,\n      5,\n      1,\n      1\n    ],\n    [\n      2,\n      10,\n      7,\n      2,\n      2\n    ],\n    [\n      3,\n      20,\n      9,\n      3,\n      3\n    ],\n    [\n      4,\n      10,\n      11,\n      3,\n      3\n    ]\n  ]\n}\n\nExpected columns: tiv_2016\nExpected rows:\n[\n  [\n    12.0\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   },
@@ -3966,9 +3966,9 @@
     "category": "Subqueries",
     "method": "__sql__",
     "rules": [
-      "부서별 서로 다른 급여 중 상위 3개 급여를 받는 모든 직원을 반환하세요. 같은 급여는 같은 순위이며 동률 직원을 모두 포함하세요.",
-      "별도 정렬 조건이 없으므로 결과 행 순서는 자유입니다.",
-      "실행 환경은 SQLite입니다. 날짜 함수는 date()/strftime(), 조건식은 CASE WHEN을 사용할 수 있습니다. LeetCode에서는 SQL 방언에 맞게 조정하세요."
+      "Return all employees earning one of the top three distinct salaries in each department. Equal salaries share a rank; include every tied employee.",
+      "No ordering is required, so result rows may appear in any order.",
+      "The runtime is SQLite. Use date()/strftime() for dates and CASE WHEN for conditions. Adjust dialect-specific syntax when submitting on LeetCode."
     ],
     "constraints": "CREATE TABLE Employee (id INTEGER, name TEXT, salary INTEGER, departmentId INTEGER);\nCREATE TABLE Department (id INTEGER, name TEXT);\n\nOutput columns: Department, Employee, Salary",
     "schema": {
@@ -4148,7 +4148,7 @@
         ]
       }
     ],
-    "examples": "연습용 예제 데이터 (공식 예제를 그대로 옮긴 것이 아닙니다)\n\n{\n  \"Employee\": [\n    [\n      1,\n      \"A\",\n      100,\n      1\n    ],\n    [\n      2,\n      \"B\",\n      90,\n      1\n    ],\n    [\n      3,\n      \"C\",\n      90,\n      1\n    ],\n    [\n      4,\n      \"D\",\n      80,\n      1\n    ],\n    [\n      5,\n      \"E\",\n      70,\n      1\n    ],\n    [\n      6,\n      \"F\",\n      50,\n      2\n    ]\n  ],\n  \"Department\": [\n    [\n      1,\n      \"IT\"\n    ],\n    [\n      2,\n      \"HR\"\n    ]\n  ]\n}\n\nExpected columns: Department, Employee, Salary\nExpected rows:\n[\n  [\n    \"IT\",\n    \"A\",\n    100\n  ],\n  [\n    \"IT\",\n    \"B\",\n    90\n  ],\n  [\n    \"IT\",\n    \"C\",\n    90\n  ],\n  [\n    \"IT\",\n    \"D\",\n    80\n  ],\n  [\n    \"HR\",\n    \"F\",\n    50\n  ]\n]",
+    "examples": "Practice example data (not a verbatim copy of the official examples)\n\n{\n  \"Employee\": [\n    [\n      1,\n      \"A\",\n      100,\n      1\n    ],\n    [\n      2,\n      \"B\",\n      90,\n      1\n    ],\n    [\n      3,\n      \"C\",\n      90,\n      1\n    ],\n    [\n      4,\n      \"D\",\n      80,\n      1\n    ],\n    [\n      5,\n      \"E\",\n      70,\n      1\n    ],\n    [\n      6,\n      \"F\",\n      50,\n      2\n    ]\n  ],\n  \"Department\": [\n    [\n      1,\n      \"IT\"\n    ],\n    [\n      2,\n      \"HR\"\n    ]\n  ]\n}\n\nExpected columns: Department, Employee, Salary\nExpected rows:\n[\n  [\n    \"IT\",\n    \"A\",\n    100\n  ],\n  [\n    \"IT\",\n    \"B\",\n    90\n  ],\n  [\n    \"IT\",\n    \"C\",\n    90\n  ],\n  [\n    \"IT\",\n    \"D\",\n    80\n  ],\n  [\n    \"HR\",\n    \"F\",\n    50\n  ]\n]",
     "hasEditorial": false,
     "hasAnimation": false
   }

@@ -3,8 +3,8 @@
   const small = matchMedia('(max-width:760px)');
   const make = (tag, text, cls) => { const n = document.createElement(tag); n.textContent = text; if (cls) n.className = cls; return n; };
   const nav = make('nav', '', 'pocket-nav');
-  nav.setAttribute('aria-label', 'SQL 화면');
-  const views = {list:'☰ 목록', problem:'문제', code:'⌨ 코딩', result:'결과'};
+  nav.setAttribute('aria-label', 'SQL view');
+  const views = {list:'☰ List', problem:'Problem', code:'⌨ Code', result:'Result'};
   function show(view) {
     document.body.dataset.pocketView = view;
     for (const b of nav.children) b.setAttribute('aria-pressed', String(b.dataset.view === view));
@@ -16,7 +16,7 @@
     b.onclick = () => show(view); nav.append(b);
   }
   document.body.append(nav); show('problem');
-  const keys = make('div', '', 'pocket-keys'); keys.setAttribute('aria-label', 'SQL 빠른 입력');
+  const keys = make('div', '', 'pocket-keys'); keys.setAttribute('aria-label', 'SQL quick input');
   function insert(text) {
     if (aceEditor) { aceEditor.insert(text); aceEditor.focus(); }
     else { const c = document.getElementById('code'); c.setRangeText(text,c.selectionStart,c.selectionEnd,'end'); c.dispatchEvent(new Event('input',{bubbles:true})); c.focus(); }
@@ -25,8 +25,8 @@
     const b = make('button', label); b.type='button'; b.onpointerdown=e=>e.preventDefault(); b.onclick=()=>insert(text); keys.append(b);
   }
   function dismissKeyboard() {document.activeElement?.blur();aceEditor?.blur();viewport();}
-  const hide = make('button','키보드 닫기'); hide.onclick=dismissKeyboard; keys.append(hide);
-  const done = make('button','완료','pocket-done'); done.type='button';done.setAttribute('aria-label','키보드 닫고 메뉴 보기');done.onclick=dismissKeyboard;
+  const hide = make('button','Dismiss keyboard'); hide.onclick=dismissKeyboard; keys.append(hide);
+  const done = make('button','Done','pocket-done'); done.type='button';done.setAttribute('aria-label','Dismiss keyboard and show menu');done.onclick=dismissKeyboard;
   document.querySelector('.toolbar>div').append(done);
   document.querySelector('.editor-wrap').before(keys);
   let lastId, configuredEditor;
@@ -63,8 +63,9 @@
   document.addEventListener('focusin',viewport);
   document.addEventListener('focusout',viewport);
   viewport();
-  const install=make('button','홈 화면에 추가하기','pocket-install');
-  install.onclick=()=>alert('Safari에서 공유 버튼 → 홈 화면에 추가를 선택하세요.\n첫 실행과 SQL 엔진 로딩에는 인터넷이 필요합니다. 풀이 기록은 이 기기에 저장됩니다.');
+  const install=make('button','Add to Home Screen','pocket-install');
+  install.onclick=()=>alert('In Safari, tap Share → Add to Home Screen.\nInternet is required on first launch and to load the SQL engine. Solutions are saved on this device.');
   document.querySelector('header').append(install);
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(registration=>registration.update()).catch(()=>{});
 })();
+

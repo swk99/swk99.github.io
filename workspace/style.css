@@ -66,3 +66,7 @@ header .title{font-size:14px}
 .syntax-report h3{font-size:20px}.syntax-report p{font:17px/1.6 system-ui;margin:4px 0}
 .archive-toggle{font-size:14px;width:calc(100% - 20px);margin:10px;white-space:normal}
 #sql-study-guide pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:18px}
+
+
+/* Results appear in the execution dialog after Run, Debug, or Submit. */
+body:not(.sql-mode) .coding > .console { display: none; }

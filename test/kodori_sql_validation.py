@@ -58,9 +58,9 @@ assert sorted(r[2] for r in rows('v3-ranking-dense'))==[1,2,2,3]
 assert rows('v3-lag-offset')==[['2026-01-01',10,None],['2026-01-02',30,None],['2026-01-04',20,10]]
 assert rows('v3-lag-default')==[['2026-01-01',10,0],['2026-01-02',30,0],['2026-01-04',20,10]]
 assert rows('v3-pivot-count')==[[2,2]]
-assert sorted(rows('v3-pivot-rate','edge'))==sorted([['산',2,0,0.0],['숲',0,1,1.0],['강',0,0,None]])
+assert sorted(rows('v3-pivot-rate','edge'))==sorted([['Mountain',2,0,0.0],['Forest',0,1,1.0],['River',0,0,None]])
 assert sorted(rows('v3-string-repair-pattern'))==[[1,'UK-001'],[2,'UK-002'],[6,'UK-006']]
-assert rows('v3-order-alias')==[['도토리',40],['열매',40],['차',60]]
+assert rows('v3-order-alias')==[['Acorn',40],['Berry',40],['Tea',60]]
 assert sorted(rows('v3-basket-gap-report'))==[['Bread','Pantry',4.0,2],['Milk','Pantry',2.0,1]]
 assert sorted(r[-1] for r in rows('v3-window-moving'))==[5.0,10.0,10.0,20.0,20.0,20.0]
 # Reject keywords in comments, unused CTEs, and unused window expressions.
@@ -75,3 +75,4 @@ l=by['window-all'];data=course['datasets'][l['dataset']]
 r=evaluate_sql(dict(schema=data['schema'],code='SELECT name, amount, (SELECT SUM(amount) FROM snacks) AS grand_total FROM snacks',columns=l['columns'],ordered=False,tests=[dict(args=[data['example']],expected=l['expected']['example'])],mode='submit',requirements=l['requirements']))
 assert r['results'][0]['ok'] and not r['syntax']['ok']
 print(f'PASS: {total} SQLite answer/data cases; all syntax goals; refactor equivalence; {len(legacy)} preserved IDs/contracts; conceptual and adversarial checks')
+

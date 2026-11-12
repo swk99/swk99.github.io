@@ -24,7 +24,7 @@ function update(){
  if(bfs&&scan&&depth>=2)t='O(V × N × L)';
  let sp=allocated||bfs?'O(n)':'O(1)';
  time.textContent='Time: ~'+t;space.textContent='Space: ~'+sp;
- if(legend){legend.hidden=!/[VNL]/.test(t);legend.textContent=t.includes('V × N × L')?'V = 방문한 단어 수 (visited words)   ·   N = wordList 단어 수   ·   L = 단어 길이 (word length)':'n = 입력 데이터 크기 (input size)';}
+ if(legend){legend.hidden=!/[VNL]/.test(t);legend.textContent=t.includes('V × N × L')?'V = visited words   ·   N = words in wordList   ·   L = word length':'n = input size';}
  note.textContent='Live pattern-based estimate · nested loops, sorting and containers; not guaranteed exact.';
 }
 setInterval(update,400);update();

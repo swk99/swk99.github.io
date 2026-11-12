@@ -15,13 +15,13 @@ async function loadRuntime() {
       // Use the same fallback CDN as the workspace runner.
     }
   }
-  if (!py) throw new Error('실행 엔진을 불러오지 못했습니다. 연결을 확인하고 다시 제출하세요.');
+  if (!py) throw new Error('Could not load the execution engine. Check your connection and submit again.');
   const [runner, grammar, adapter] = await Promise.all([
-    fetch('../runner.py'),
+    fetch('../runner.py?v=english-v1'),
     fetch('../vendor/sqlglot-28.0.0-py3-none-any.whl'),
-    fetch('mysql_adapter.py')
+    fetch('mysql_adapter.py?v=english-v1')
   ]);
-  if (![runner, grammar, adapter].every(response => response.ok)) throw new Error('채점 파일을 불러오지 못했습니다.');
+  if (![runner, grammar, adapter].every(response => response.ok)) throw new Error('Could not load grading files.');
   py.unpackArchive(new Uint8Array(await grammar.arrayBuffer()), 'zip', {extractDir: '/home/pyodide/sqlglot_vendor'});
   py.runPython("import sys; sys.path.insert(0, '/home/pyodide/sqlglot_vendor')");
   py.runPython(await runner.text());
@@ -41,3 +41,4 @@ self.onmessage = async ({data}) => {
     self.postMessage({error: String(error.message || error)});
   }
 };
+

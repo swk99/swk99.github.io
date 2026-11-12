@@ -113,7 +113,7 @@ function isSolved(p){
 function markSolved(p,done){
  completionOverrides.set(String(p.id),done);
  try{localStorage.setItem('workspace-solved:'+p.id,String(done));}
- catch(e){status('완료 표시는 이번 방문에만 유지됩니다 · 저장 공간 사용 불가');}
+ catch(e){status('Completion marks last only for this visit · Storage unavailable');}
  renderFiles();
  if(current?.study)renderSqlStudy(current);
 }
@@ -124,22 +124,22 @@ function renderFiles(){
  const files=$('files');files.replaceChildren();
  if(problemLanguage(current)==='sql'){
   const archiveToggle=document.createElement('button');archiveToggle.type='button';archiveToggle.className='archive-toggle';
-  archiveToggle.textContent=showArchived?'이전 문제: 완료 기록만 보기':'이전 문제 전체 보기 (진도 유지)';
+  archiveToggle.textContent=showArchived?'Previous exercises: show completed only':'Show all previous exercises (keep progress)';
   archiveToggle.setAttribute('aria-expanded',String(showArchived));archiveToggle.onclick=()=>{showArchived=!showArchived;renderFiles();};files.append(archiveToggle);
  }
- if(!matching.length&&current)files.textContent='일치하는 문제가 없어요.';
+ if(!matching.length&&current)files.textContent='No matching problems.';
  const remaining=matching.filter(p=>!isSolved(p));
  const solved=matching.filter(isSolved);
  for(const course of new Set(matching.filter(p=>p.study).map(p=>p.study.course))){
   const lessons=problems.filter(p=>p.study?.course===course);
   const visible=matching.filter(p=>p.study?.course===course);
-  const label=lessons[0]?.retired?`${course} · ${lessons.filter(isSolved).length}개 완료 / ${lessons.length}개 보관`:`${course} · ${lessons.filter(isSolved).length}/${lessons.length} 완료`;
+  const label=lessons[0]?.retired?`${course} · ${lessons.filter(isSolved).length} completed / ${lessons.length} archived`:`${course} · ${lessons.filter(isSolved).length}/${lessons.length} completed`;
   appendGroup(label,visible,false);
  }
  const interview=remaining.filter(p=>!p.study);
- appendGroup(`${problemLanguage(current)==='sql'?'인터뷰 문제':'남은 문제'} · ${interview.length}`,interview,false);
+ appendGroup(`${problemLanguage(current)==='sql'?'Interview problems':'Remaining problems'} · ${interview.length}`,interview,false);
  const solvedInterview=solved.filter(p=>!p.study);
- appendGroup(`✓ 완료 · ${solvedInterview.length}`,solvedInterview,true);
+ appendGroup(`✓ Completed · ${solvedInterview.length}`,solvedInterview,true);
 
  function appendGroup(label,group,done){
   if(!group.length)return;
@@ -150,7 +150,7 @@ function renderFiles(){
   for(const p of group){
    const done=isSolved(p);
    const row=document.createElement('div');row.className='problem-row'+(done?' solved':'');
-   const check=document.createElement('input');check.type='checkbox';check.checked=done;check.setAttribute('aria-label',p.title+' 완료');
+   const check=document.createElement('input');check.type='checkbox';check.checked=done;check.setAttribute('aria-label',p.title+' completed');
    check.onchange=()=>{markSolved(p,check.checked);document.getElementById('completed-'+p.id)?.focus();};check.id='completed-'+p.id;
    const b=document.createElement('button');b.className='file'+(current?.id===p.id?' active':'');b.title=p.id+'. '+p.title;
    const icon=document.createElement('span');icon.className='python';icon.textContent=p.study?.number??(p.language==='sql'?'SQL':'Py');
@@ -160,7 +160,7 @@ function renderFiles(){
  }
 }
 
-function buildSqlStudy({datasets,lessons,course="SQL 학습 코스",intro,retired=false}){
+function buildSqlStudy({datasets,lessons,course="SQL study course",intro,retired=false}){
  return lessons.map(({dataset,expected,level,concept,conceptExample,hints,solution,explanation,...lesson},i)=>{
   const {schema,example,edge}=datasets[dataset];
   const number=String(i+1).padStart(2,'0');
@@ -171,8 +171,8 @@ function buildSqlStudy({datasets,lessons,course="SQL 학습 코스",intro,retire
    schema,examples:'',constraints:Object.entries(schema).map(([name,cols])=>
     `CREATE TABLE ${name} (${cols.map(col=>col.join(' ')).join(', ')});`
    ).join('\n')+'\n\nOutput columns: '+lesson.columns.join(', '),
-   tests:[{label:'예제 데이터',args:[example],expected:expected.example}],
-   extra:[{label:'추가 데이터',args:[edge],expected:expected.edge}]
+   tests:[{label:'Example data',args:[example],expected:expected.example}],
+   extra:[{label:'Additional data',args:[edge],expected:expected.edge}]
   };
  });
 }
@@ -187,31 +187,31 @@ function renderSqlStudy(p){
  const heading=document.createElement('h2');
  heading.textContent=`${course} · ${number}/${total} · ${level}`;
  const conceptHeading=document.createElement('h3');
- conceptHeading.textContent='먼저 보는 개념';
+ conceptHeading.textContent='Concept first';
  const intro=document.createElement('p');
  intro.textContent=concept;
  panel.append(heading);
  if(p.study.intro&&number==='01'){const overviewIntro=document.createElement('p');overviewIntro.className='course-intro';overviewIntro.textContent=p.study.intro;panel.append(overviewIntro);}
  if(!p.syntax)panel.append(conceptHeading,intro);
- if(p.referenceSql){const reference=addReveal('원본 SQL · 결과를 유지하며 고쳐보세요',p.referenceSql,'pre');reference.open=true;}
- if(p.microSteps){const steps=document.createElement('ol');for(const step of p.microSteps){const li=document.createElement('li');li.textContent=step;steps.append(li);}panel.append(steps);const note=document.createElement('p');note.textContent='소단계는 Run으로 중간 결과를 살펴보고, 요구한 최종 결과 열을 모두 갖춘 뒤 Submit하세요.';panel.append(note);}
+ if(p.referenceSql){const reference=addReveal('Original SQL · Refactor without changing the result',p.referenceSql,'pre');reference.open=true;}
+ if(p.microSteps){const steps=document.createElement('ol');for(const step of p.microSteps){const li=document.createElement('li');li.textContent=step;steps.append(li);}panel.append(steps);const note=document.createElement('p');note.textContent='Use Run to inspect intermediate steps. Submit after producing all required final output columns.';panel.append(note);}
  if(conceptExample&&!p.syntax){
-  const example=addReveal('짧은 개념 예제',conceptExample.sql,'pre');
+  const example=addReveal('Short concept example',conceptExample.sql,'pre');
   const explanation=document.createElement('p');
   explanation.textContent=conceptExample.explanation;
   example.append(explanation);
  }
- for(const [i,hint] of hints.entries())addReveal(p.syntax?['힌트 1 · 개념','힌트 2 · 문법 틀','힌트 3 · 거의 정답'][i]:'힌트 '+(i+1),hint,p.syntax&&i>0?'pre':'p');
- const answer=addReveal('예시 풀이와 해설 보기',solution,'pre');
+ for(const [i,hint] of hints.entries())addReveal(p.syntax?['Hint 1 · Concept','Hint 2 · Syntax template','Hint 3 · Almost the answer'][i]:'Hint '+(i+1),hint,p.syntax&&i>0?'pre':'p');
+ const answer=addReveal('View example solution and explanation',solution,'pre');
  const trySolution=document.createElement('button');trySolution.type='button';
- trySolution.textContent='풀이를 편집기에 넣기';
+ trySolution.textContent='Load solution into editor';
  trySolution.onclick=()=>{if(aceEditor)aceEditor.setValue(solution,-1);else $('code').value=solution;save();refreshLines();queueLivePlan();};
  answer.append(trySolution);
  if(explanation){const why=document.createElement('p');why.textContent=explanation;answer.append(why);}
  const courseLessons=problems.filter(problem=>problem.study?.course===course);
  const overview=document.createElement('details');
  const overviewTitle=document.createElement('summary');
- overviewTitle.textContent=`여행 지도 · ${courseLessons.filter(isSolved).length}/${total} 완료 · 원하는 단계로 이동`;
+ overviewTitle.textContent=`Adventure map · ${courseLessons.filter(isSolved).length}/${total} completed · Jump to a stage`;
  overview.append(overviewTitle);
  const map=document.createElement('ol');map.className='course-map';
  for(const lesson of courseLessons){
@@ -225,15 +225,15 @@ function renderSqlStudy(p){
  overview.append(map);panel.append(overview);
  const navigation=document.createElement('nav');
  navigation.className='sql-study-nav';
- navigation.setAttribute('aria-label','SQL 학습 코스 탐색');
+ navigation.setAttribute('aria-label','SQL study course navigation');
  const lessons=courseLessons;
  const index=lessons.indexOf(p);
  const next=lessons[index+1];
  const nextPending=lessons.slice(index+1).find(lesson=>!isSolved(lesson))||lessons.slice(0,index).find(lesson=>!isSolved(lesson));
- addLessonLink('← 이전 문제',lessons[index-1]);
- addLessonLink('다음 문제 →',next);
- if(!p.retired)addLessonLink('다음 미완료 문제 →',nextPending);
- if(!p.retired&&lessons.every(isSolved)){const done=document.createElement('p');done.textContent='🐨 이 코스를 모두 완료했어요! 기존 완료 기록은 그대로 보관돼요.';panel.append(done);}
+ addLessonLink('← Previous problem',lessons[index-1]);
+ addLessonLink('Next problem →',next);
+ if(!p.retired)addLessonLink('Next unfinished problem →',nextPending);
+ if(!p.retired&&lessons.every(isSolved)){const done=document.createElement('p');done.textContent='🐨 You completed this course! Your existing completion history is preserved.';panel.append(done);}
  panel.append(navigation);
 
  function addReveal(label,content,tag){
@@ -261,15 +261,15 @@ function renderSqlStudy(p){
  }
 }
 window.addEventListener('storage',e=>{if(e.key===null||e.key.startsWith('workspace-solved:')||e.key.startsWith('graph-submissions:')){completionOverrides.clear();renderFiles();}});
-function runtimeFailure(message){clearTimeout(timer);if(worker)worker.terminate();worker=null;ready=false;busy=false;if(runtimeAttempt+1<runtimeSources.length){runtimeAttempt++;$('output').textContent=message+'\n다른 다운로드 경로로 자동 재시도 중…';boot();}else{pendingMode=null;status('Runtime unavailable · click Run to retry');if(current?.language==='sql')$('live-plan-status').textContent='SQLite를 불러오지 못했어요. Run으로 다시 시도하세요.';$('output').textContent=message+'\n실행 엔진을 불러오지 못했습니다. Run / Debug / Submit을 누르면 다시 시도합니다. 작성한 코드는 보존됩니다.';buttons();}}
-function boot(){if(worker)worker.terminate();ready=false;busy=false;status('Python loading…');worker=new Worker('worker.js?v=kodori48-v1&source='+runtimeAttempt,{type:'module'});queueLivePlan(true);buttons();clearTimeout(timer);timer=setTimeout(()=>runtimeFailure('Runtime loading timed out.'),30000);
-const activeWorker=worker;worker.onmessage=({data:m})=>{if(worker!==activeWorker)return;if(m.type==='plan'){renderLivePlan(m);return;}if(m.type==='progress'){status(m.message);return;}if(m.type==='ready'){clearTimeout(timer);ready=true;status('Python / SQLite · ready');buttons();if(pendingMode){const mode=pendingMode;pendingMode=null;run(mode);}requestLivePlan();return;}if(m.type==='error'){if(!ready){runtimeFailure(m.error);return;}clearTimeout(timer);busy=false;status('Runtime error');$('output').textContent=m.error;buttons();requestLivePlan();return;}if(m.type==='result'){clearTimeout(timer);busy=false;buttons();requestLivePlan();const d=m.data;const passed=d.results.filter(x=>x.ok===true).length;const lines=d.results.map(r=>`[${r.ok===null?'RESULT':r.ok?'PASS':'FAIL'}] case ${r.case}${r.label?' · '+r.label:''}\n`+(r.error?r.error:`  actual: ${JSON.stringify(r.actual)}${r.ok===null?'':'\n  expected: '+JSON.stringify(r.expected)}`));let summary=runMode==='submit'?`LOCAL SUBMISSION: ${passed===runProblem.tests.length+runProblem.extra.length?'PASSED':'FAILED'} (${passed}/${runProblem.tests.length+runProblem.extra.length})\n${runProblem.study?'학습 코스 · 예제 및 추가 데이터':'Examples + additional local tests; not the official LeetCode judge.'}\n`:'';$('output').textContent=summary+lines.join('\n\n')+(d.output?'\n\nSTDOUT\n'+d.output:'')+`\n\nCompleted in ${d.elapsed} ms.`;if(runProblem.language==='sql')renderSqlResults(d,runMode);status(current?.language==='sql'?'SQLite · ready':'Python · ready');if(runMode==='submit'){const learningPassed=!d.syntax||d.syntax.ok;if(passed>0&&passed===runProblem.tests.length+runProblem.extra.length&&d.results.length===passed&&learningPassed)markSolved(runProblem,true);try{const k='graph-submissions:'+runProblem.id;const old=JSON.parse(localStorage.getItem(k)||'[]');old.unshift({date:new Date().toISOString(),passed,total:runProblem.tests.length+runProblem.extra.length,syntaxPassed:learningPassed,code:runCode});localStorage.setItem(k,JSON.stringify(old.slice(0,10)));}catch(e){status('Results not saved — storage unavailable');}}if(runMode==='debug'&&d.frames.length){frames=d.frames;frameIndex=0;$('trace-case').replaceChildren();const seenCases=new Set();frames.forEach((f,i)=>{if(!seenCases.has(f.case)){seenCases.add(f.case);$('trace-case').add(new Option('Case '+f.case+' · '+f.label,String(i)));}});$('trace-controls').hidden=false;$('variables').hidden=false;showFrame();if(d.traceTruncated)$('output').textContent+='\nTrace capped at 2,500 events per case; all results are still reported.';}}};worker.onerror=()=>runtimeFailure('Unable to load the execution engine.');}
+function runtimeFailure(message){clearTimeout(timer);if(worker)worker.terminate();worker=null;ready=false;busy=false;if(runtimeAttempt+1<runtimeSources.length){runtimeAttempt++;$('output').textContent=message+'\nAutomatically retrying another download source…';boot();}else{pendingMode=null;status('Runtime unavailable · click Run to retry');if(current?.language==='sql')$('live-plan-status').textContent='Could not load SQLite. Click Run to retry.';$('output').textContent=message+'\nCould not load the execution engine. Click Run / Debug / Submit to retry. Your code is preserved.';buttons();}}
+function boot(){if(worker)worker.terminate();ready=false;busy=false;status('Python loading…');worker=new Worker('worker.js?v=english-v1&source='+runtimeAttempt,{type:'module'});queueLivePlan(true);buttons();clearTimeout(timer);timer=setTimeout(()=>runtimeFailure('Runtime loading timed out.'),30000);
+const activeWorker=worker;worker.onmessage=({data:m})=>{if(worker!==activeWorker)return;if(m.type==='plan'){renderLivePlan(m);return;}if(m.type==='progress'){status(m.message);return;}if(m.type==='ready'){clearTimeout(timer);ready=true;status('Python / SQLite · ready');buttons();if(pendingMode){const mode=pendingMode;pendingMode=null;run(mode);}requestLivePlan();return;}if(m.type==='error'){if(!ready){runtimeFailure(m.error);return;}clearTimeout(timer);busy=false;status('Runtime error');$('output').textContent=m.error;buttons();requestLivePlan();return;}if(m.type==='result'){clearTimeout(timer);busy=false;buttons();requestLivePlan();const d=m.data;const passed=d.results.filter(x=>x.ok===true).length;const lines=d.results.map(r=>`[${r.ok===null?'RESULT':r.ok?'PASS':'FAIL'}] case ${r.case}${r.label?' · '+r.label:''}\n`+(r.error?r.error:`  actual: ${JSON.stringify(r.actual)}${r.ok===null?'':'\n  expected: '+JSON.stringify(r.expected)}`));let summary=runMode==='submit'?`LOCAL SUBMISSION: ${passed===runProblem.tests.length+runProblem.extra.length?'PASSED':'FAILED'} (${passed}/${runProblem.tests.length+runProblem.extra.length})\n${runProblem.study?'Study course · Example and additional datasets':'Examples + additional local tests; not the official LeetCode judge.'}\n`:'';$('output').textContent=summary+lines.join('\n\n')+(d.output?'\n\nSTDOUT\n'+d.output:'')+`\n\nCompleted in ${d.elapsed} ms.`;if(runProblem.language==='sql')renderSqlResults(d,runMode);status(current?.language==='sql'?'SQLite · ready':'Python · ready');if(runMode==='submit'){const learningPassed=!d.syntax||d.syntax.ok;if(passed>0&&passed===runProblem.tests.length+runProblem.extra.length&&d.results.length===passed&&learningPassed)markSolved(runProblem,true);try{const k='graph-submissions:'+runProblem.id;const old=JSON.parse(localStorage.getItem(k)||'[]');old.unshift({date:new Date().toISOString(),passed,total:runProblem.tests.length+runProblem.extra.length,syntaxPassed:learningPassed,code:runCode});localStorage.setItem(k,JSON.stringify(old.slice(0,10)));}catch(e){status('Results not saved — storage unavailable');}}if(runMode==='debug'&&d.frames.length){frames=d.frames;frameIndex=0;$('trace-case').replaceChildren();const seenCases=new Set();frames.forEach((f,i)=>{if(!seenCases.has(f.case)){seenCases.add(f.case);$('trace-case').add(new Option('Case '+f.case+' · '+f.label,String(i)));}});$('trace-controls').hidden=false;$('variables').hidden=false;showFrame();if(d.traceTruncated)$('output').textContent+='\nTrace capped at 2,500 events per case; all results are still reported.';}}};worker.onerror=()=>runtimeFailure('Unable to load the execution engine.');}
 function stop(message='Execution cancelled. Reloading Python…'){if(worker)worker.terminate();clearTimeout(timer);worker=null;busy=false;ready=false;buttons();$('output').textContent=message;status('Stopped · reload page to restart');}
-function run(mode){showExecutionPanel();if(!current){$('output').textContent='문제 목록을 아직 불러오는 중입니다. 잠시 후 다시 눌러 주세요.';return;}if(busy)return;if(!ready){pendingMode=mode;$('output').textContent='실행 엔진을 준비하고 있어요. 준비되면 '+mode+'을 자동으로 실행합니다…';if(!worker){runtimeAttempt=0;boot();}return;}let tests=[...current.tests,...current.extra];const selection=$('case').value;if(selection==='examples')tests=current.tests;if(selection==='edges')tests=current.extra;if(selection.startsWith('edge:'))tests=[current.extra[Number(selection.slice(5))]];if(mode!=='submit'&&$('case').value==='custom'){try{const args=JSON.parse($('custom').value);if(!Array.isArray(args)||args.length!==current.tests[0].args.length)throw new Error('Use a JSON array containing '+current.tests[0].args.length+' function arguments.');tests=[{args}];}catch(e){$('output').textContent='Invalid custom arguments: '+e.message;return;}}if(mode==='submit')tests=[...current.tests,...current.extra];save();resetTrace();runMode=mode;runProblem=current;runCode=value();if(current.language==='sql')window.sqlWorkspace?.begin();busy=true;buttons();status(current.language==='sql'?'SQLite · running':'Python · running');$('output').textContent=mode==='debug'?(current.language==='sql'?'Running queries and recording query plans for ':'Recording execution of ')+tests.length+' test cases…':'Running '+tests.length+' test cases…';worker.postMessage({code:runCode,problem:current.id,method:current.method,language:current.language,schema:current.schema,columns:current.columns,ordered:current.ordered,requirements:current.requirements,tests,mode});timer=setTimeout(()=>{const elapsed=12;stop(`Time Limit Exceeded (TLE)\nExecution exceeded the ${elapsed}-second local time limit.\nResult: TIME LIMIT EXCEEDED\n\nYour code was stopped; this submission was not marked as solved.\nTip: avoid scanning every word in every BFS iteration.\n\nThis is a local browser limit, not the official LeetCode time limit.`);boot();},12000);}
+function run(mode){showExecutionPanel();if(!current){$('output').textContent='The problem list is still loading. Please try again shortly.';return;}if(busy)return;if(!ready){pendingMode=mode;$('output').textContent='Preparing the execution engine. Will automatically start '+mode+' when ready…';if(!worker){runtimeAttempt=0;boot();}return;}let tests=[...current.tests,...current.extra];const selection=$('case').value;if(selection==='examples')tests=current.tests;if(selection==='edges')tests=current.extra;if(selection.startsWith('edge:'))tests=[current.extra[Number(selection.slice(5))]];if(mode!=='submit'&&$('case').value==='custom'){try{const args=JSON.parse($('custom').value);if(!Array.isArray(args)||args.length!==current.tests[0].args.length)throw new Error('Use a JSON array containing '+current.tests[0].args.length+' function arguments.');tests=[{args}];}catch(e){$('output').textContent='Invalid custom arguments: '+e.message;return;}}if(mode==='submit')tests=[...current.tests,...current.extra];save();resetTrace();runMode=mode;runProblem=current;runCode=value();if(current.language==='sql')window.sqlWorkspace?.begin();busy=true;buttons();status(current.language==='sql'?'SQLite · running':'Python · running');$('output').textContent=mode==='debug'?(current.language==='sql'?'Running queries and recording query plans for ':'Recording execution of ')+tests.length+' test cases…':'Running '+tests.length+' test cases…';worker.postMessage({code:runCode,problem:current.id,method:current.method,language:current.language,schema:current.schema,columns:current.columns,ordered:current.ordered,requirements:current.requirements,tests,mode});timer=setTimeout(()=>{const elapsed=12;stop(`Time Limit Exceeded (TLE)\nExecution exceeded the ${elapsed}-second local time limit.\nResult: TIME LIMIT EXCEEDED\n\nYour code was stopped; this submission was not marked as solved.\nTip: avoid scanning every word in every BFS iteration.\n\nThis is a local browser limit, not the official LeetCode time limit.`);boot();},12000);}
 function showFrame(){const f=frames[frameIndex];$('trace-case').value=String(frames.findIndex(x=>x.case===f.case));$('step').max=frames.length;$('step').value=frameIndex+1;$('trace-label').textContent=` / ${frames.length} · case ${f.case} · line ${f.line} · ${f.event}`;$('variables').textContent=`Case ${f.case} · ${f.label}\nRecorded ${f.function}() · before line execution (return events are after)\n`+Object.entries(f.locals).map(([k,v])=>`${k} = ${v}`).join('\n');$('prev').disabled=frameIndex===0;$('next').disabled=frameIndex===frames.length-1;if(aceEditor){if(marker!=null)aceEditor.session.removeMarker(marker);const Range=ace.require('ace/range').Range;marker=aceEditor.session.addMarker(new Range(f.line-1,0,f.line-1,1),'trace-line','fullLine');aceEditor.gotoLine(f.line,0,false);}else{const lines=value().split('\n');const start=lines.slice(0,f.line-1).join('\n').length+(f.line>1?1:0);$('code').focus();$('code').setSelectionRange(start,start+(lines[f.line-1]||'').length);$('code').scrollTop=Math.max(0,(f.line-5)*32);}}
 $('trace-case').onchange=()=>{frameIndex=Number($('trace-case').value);showFrame();};$('search').oninput=renderFiles;$('code').oninput=()=>{save();refreshLines();resetTrace();queueLivePlan();};$('code').onscroll=()=>{$('gutter').scrollTop=$('code').scrollTop;};$('code').onclick=refreshLines;$('code').onkeyup=refreshLines;
 $('code').onkeydown=e=>{if(e.key==='Tab'){e.preventDefault();const t=e.target;const a=t.selectionStart,b=t.selectionEnd;t.setRangeText('    ',a,b,'end');save();refreshLines();queueLivePlan();}else if(e.key==='Enter'&&!e.ctrlKey&&!e.metaKey){e.preventDefault();const t=e.target;const before=t.value.slice(0,t.selectionStart).split('\n').at(-1);const indent=(before.match(/^\s*/)||[''])[0]+(before.trimEnd().endsWith(':')?'    ':'');t.setRangeText('\n'+indent,t.selectionStart,t.selectionEnd,'end');save();refreshLines();queueLivePlan();}};
-for(const id of ['run','debug','submit'])$(id).onclick=()=>{try{run(id);}catch(e){busy=false;buttons();showExecutionPanel();$('output').textContent='실행 오류: '+(e.stack||e.message||e);}};$('stop').onclick=()=>{pendingMode=null;runtimeAttempt=0;stop();boot();};$('clear').onclick=()=>{$('output').textContent='';};$('case').onchange=()=>{$('custom').hidden=$('case').value!=='custom';};$('prev').onclick=()=>{frameIndex=Math.max(0,frameIndex-1);showFrame();};$('next').onclick=()=>{frameIndex=Math.min(frames.length-1,frameIndex+1);showFrame();};$('step').onchange=()=>{frameIndex=Math.max(0,Math.min(frames.length-1,(Number($('step').value)||1)-1));showFrame();};$('focus').onclick=()=>{$('spec').hidden=!$('spec').hidden;document.querySelector('.work').classList.toggle('focus',$('spec').hidden);aceEditor?.resize();};$('download').onclick=()=>{const url=URL.createObjectURL(new Blob([value()],{type:'text/x-python'}));const a=document.createElement('a');a.href=url;a.download=current.file;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();run('run');}});
+for(const id of ['run','debug','submit'])$(id).onclick=()=>{try{run(id);}catch(e){busy=false;buttons();showExecutionPanel();$('output').textContent='Execution error: '+(e.stack||e.message||e);}};$('stop').onclick=()=>{pendingMode=null;runtimeAttempt=0;stop();boot();};$('clear').onclick=()=>{$('output').textContent='';};$('case').onchange=()=>{$('custom').hidden=$('case').value!=='custom';};$('prev').onclick=()=>{frameIndex=Math.max(0,frameIndex-1);showFrame();};$('next').onclick=()=>{frameIndex=Math.min(frames.length-1,frameIndex+1);showFrame();};$('step').onchange=()=>{frameIndex=Math.max(0,Math.min(frames.length-1,(Number($('step').value)||1)-1));showFrame();};$('focus').onclick=()=>{$('spec').hidden=!$('spec').hidden;document.querySelector('.work').classList.toggle('focus',$('spec').hidden);aceEditor?.resize();};$('download').onclick=()=>{const url=URL.createObjectURL(new Blob([value()],{type:'text/x-python'}));const a=document.createElement('a');a.href=url;a.download=current.file;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();run('run');}});
 
 const leetcodeSlugs = {
   547: 'number-of-provinces',
@@ -322,7 +322,7 @@ function renderExampleImages(p) {
   let area=$('example-images');
   if(!area){area=document.createElement('div');area.id='example-images';$('examples').after(area);}
   area.replaceChildren();
-  $('examples').parentElement.querySelector('.note').textContent=(p.images||[]).length?'Original example text and supplied diagram links.':p.study?'Run으로 결과를 확인하세요. Submit에서 예제와 추가 데이터를 모두 통과하면 완료로 표시돼요.':p.language==='sql'?'Practice datasets. Each test starts with a fresh database.':'Original example text. Diagrams referenced in this text were not supplied as image links.';
+  $('examples').parentElement.querySelector('.note').textContent=(p.images||[]).length?'Original example text and supplied diagram links.':p.study?'Use Run to inspect results. Submit marks the exercise complete after all example and additional datasets pass.':p.language==='sql'?'Practice datasets. Each test starts with a fresh database.':'Original example text. Diagrams referenced in this text were not supplied as image links.';
   (p.images||[]).forEach((url,index)=>{
     const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';
     const img=document.createElement('img');img.src=url;img.loading='lazy';img.alt=p.title+' · supplied example diagram '+(index+1);img.style.cssText='max-width:100%;height:auto;background:white;border-radius:5px;margin:8px 0';
@@ -333,7 +333,7 @@ const editorialButton=document.createElement('button');
 editorialButton.id='editorial-button';editorialButton.textContent='Solutions · 3 approaches';
 editorialButton.title='English explanations, three Python solutions, and time/space complexity';
 $('run').after(editorialButton);
-import('./animations.js?v=animation-restored-v2').then(m=>{m.installAnimations(editorialButton,()=>current);if(current)$('animation-button').hidden=current.hasAnimation===false;}).catch(e=>console.error('Animation player unavailable',e));
+import('./animations.js?v=english-v1').then(m=>{m.installAnimations(editorialButton,()=>current);if(current)$('animation-button').hidden=current.hasAnimation===false;}).catch(e=>console.error('Animation player unavailable',e));
 const editorialDialog=document.createElement('dialog');
 editorialDialog.id='editorial-dialog';editorialDialog.lang='en';
 editorialDialog.setAttribute('aria-labelledby','editorial-title');
@@ -347,7 +347,7 @@ editorialButton.onclick=async()=>{
   const close=document.createElement('button');close.textContent='Close ×';close.onclick=()=>editorialDialog.close();head.append(title,close);
   const body=document.createElement('div');body.className='editorial-body';body.textContent='Loading explanations…';editorialDialog.append(head,body);editorialDialog.showModal();
   try{
-    editorialDataPromise ||= fetch('editorials.json?v=readable-en-v1').then(r=>{if(!r.ok)throw new Error('Could not load the explanations.');return r.json();}).catch(e=>{editorialDataPromise=null;throw e;});
+    editorialDataPromise ||= fetch('editorials.json?v=english-v1').then(r=>{if(!r.ok)throw new Error('Could not load the explanations.');return r.json();}).catch(e=>{editorialDataPromise=null;throw e;});
     const data=(await editorialDataPromise)[String(selected.id)];
     if(current!==selected||!editorialDialog.open)return;
     if(!data)throw new Error('No explanation was found for this problem.');
@@ -374,7 +374,7 @@ editorialButton.onclick=async()=>{
   }catch(e){body.textContent=e.message;}
 };
 
-async function init(){try{const response=await fetch('problems.json');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=string10-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=sql31-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');const studyResponse=await fetch('sql-study.json?v=2');if(!studyResponse.ok)throw new Error('Could not load the SQL study course');const kodoriResponse=await fetch('kodori-sql.json?v=48-v1');if(!kodoriResponse.ok)throw new Error('Could not load 코돌이와 SQL 심화여행');const archiveResponse=await fetch('kodori-sql-archive.json?v=48-v1');if(!archiveResponse.ok)throw new Error('Could not load saved coursework history');problems.push(...buildSqlStudy(await kodoriResponse.json()),...buildSqlStudy(await studyResponse.json()),...await sqlResponse.json(),...buildSqlStudy(await archiveResponse.json()));$('kodori-start').disabled=false;openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||(location.hash.startsWith('#kodori-sql-')?problems.find(p=>String(p.id).startsWith('kodori-sql-')):(matchMedia('(max-width:760px)').matches||new URLSearchParams(location.search).has('pocket'))?problems.find(p=>p.language==='sql'&&p.study&&!p.retired):problems[0]));boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme(current?.language==='sql'?'ace/theme/chrome':'ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:current?.language==='sql'?'16px':'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;refreshLines();aceEditor.session.on('change',()=>{save();refreshLines();resetTrace();queueLivePlan();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
+async function init(){try{const response=await fetch('problems.json?v=english-v1');if(!response.ok)throw new Error('Could not load modules');problems=await response.json();const stringsResponse=await fetch('strings.json?v=english-v1');if(!stringsResponse.ok)throw new Error('Could not load string modules');problems.push(...await stringsResponse.json());const sqlResponse=await fetch('sql-problems.json?v=english-v1');if(!sqlResponse.ok)throw new Error('Could not load SQL modules');const studyResponse=await fetch('sql-study.json?v=english-v1');if(!studyResponse.ok)throw new Error('Could not load the SQL study course');const kodoriResponse=await fetch('kodori-sql.json?v=english-v1');if(!kodoriResponse.ok)throw new Error('Could not load Advanced SQL Adventure with Kodori');const archiveResponse=await fetch('kodori-sql-archive.json?v=english-v1');if(!archiveResponse.ok)throw new Error('Could not load saved coursework history');problems.push(...buildSqlStudy(await kodoriResponse.json()),...buildSqlStudy(await studyResponse.json()),...await sqlResponse.json(),...buildSqlStudy(await archiveResponse.json()));$('kodori-start').disabled=false;openProblem(problems.find(p=>String(p.id)===location.hash.slice(1))||(location.hash.startsWith('#kodori-sql-')?problems.find(p=>String(p.id).startsWith('kodori-sql-')):(matchMedia('(max-width:760px)').matches||new URLSearchParams(location.search).has('pocket'))?problems.find(p=>p.language==='sql'&&p.study&&!p.retired):problems[0]));boot();const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.2/ace.js';script.onload=()=>{const text=value();$('ace').hidden=false;aceEditor=ace.edit('ace');aceEditor.setTheme(current?.language==='sql'?'ace/theme/chrome':'ace/theme/tomorrow_night');aceEditor.session.setMode(current?.language==='sql'?'ace/mode/sql':'ace/mode/python');aceEditor.setOptions({showPrintMargin:false,fontSize:current?.language==='sql'?'16px':'16pt',tabSize:4,useSoftTabs:true});aceEditor.setValue(text,-1);$('code').hidden=true;$('gutter').hidden=true;refreshLines();aceEditor.session.on('change',()=>{save();refreshLines();resetTrace();queueLivePlan();});aceEditor.selection.on('changeCursor',()=>{const p=aceEditor.getCursorPosition();$('position').textContent=`Ln ${p.row+1}, Col ${p.column+1}`;});aceEditor.commands.addCommand({name:'runTests',bindKey:{win:'Ctrl-Enter',mac:'Command-Enter'},exec:()=>run('run')});};document.head.append(script);}catch(e){$('output').textContent=e.message;status('Workspace unavailable');}}init();
 
 
 
@@ -413,8 +413,8 @@ function sqlTable(title,columns,rows,types){
 }
 function sqlCaseTables(p,test){
  const box=document.createElement('div');box.className='sql-case-tables';
- for(const [name,cols] of Object.entries(p.schema))box.append(sqlTable('입력 표 · '+name,cols.map(c=>c[0]),test.args[0][name]||[],cols.map(c=>c[1])));
- box.append(sqlTable('기대 결과 · 정답 표',p.columns,test.expected));
+ for(const [name,cols] of Object.entries(p.schema))box.append(sqlTable('Input table · '+name,cols.map(c=>c[0]),test.args[0][name]||[],cols.map(c=>c[1])));
+ box.append(sqlTable('Expected result · Answer table',p.columns,test.expected));
  return box;
 }
 function renderSqlExamples(p){
@@ -422,13 +422,13 @@ function renderSqlExamples(p){
  const sql=p.language==='sql';$('examples').hidden=sql;area.hidden=!sql;area.replaceChildren();
  let focus=$('sql-learning-focus');if(!focus){focus=document.createElement('section');focus.id='sql-learning-focus';$('rules').after(focus);}
  focus.hidden=!p.syntax;focus.replaceChildren();
- if(p.syntax){const h=document.createElement('h2');h.textContent='이번에 배우는 문법';const code=document.createElement('code');code.textContent=p.syntax;const delta=document.createElement('p');delta.textContent='이번 단계: '+p.newElement;focus.append(h,code,delta);}
+ if(p.syntax){const h=document.createElement('h2');h.textContent='Syntax to learn';const code=document.createElement('code');code.textContent=p.syntax;const delta=document.createElement('p');delta.textContent='This step: '+p.newElement;focus.append(h,code,delta);}
 
  const examplePanel=$('examples').closest('details');
  const guide=$('sql-study-guide');
  if(sql){focus.after(examplePanel);examplePanel.after(guide);if($('edge-cases'))guide.after($('edge-cases'));examplePanel.open=true;}
  else guide.after(examplePanel);
- examplePanel.querySelector('summary').textContent=sql?'입력 표 · 기대 결과':'Examples · input / output';
+ examplePanel.querySelector('summary').textContent=sql?'Input table · Expected result':'Examples · input / output';
  if(sql)p.tests.forEach((test,i)=>{const label=document.createElement('h2');label.textContent='Example '+(i+1);area.append(label,sqlCaseTables(p,test));});
 }
 function renderSqlResults(data,mode){
@@ -436,17 +436,17 @@ function renderSqlResults(data,mode){
  const output=$('output');output.replaceChildren();
  const summary=document.createElement('div');summary.className='sql-result-summary';
  const passed=data.results.filter(r=>r.ok===true).length;
- summary.textContent=(mode==='submit'?'SUBMIT · ':'RUN · ')+'결과 '+passed+'/'+data.results.length+' 통과 · '+data.elapsed+' ms';output.append(summary);
+ summary.textContent=(mode==='submit'?'SUBMIT · ':'RUN · ')+'Results '+passed+'/'+data.results.length+' passed · '+data.elapsed+' ms';output.append(summary);
  if(data.syntax){
   const report=document.createElement('section');report.className='syntax-report';
-  const h=document.createElement('h3');h.textContent=data.syntax.ok?'✓ 학습 문법 통과':'학습 문법 확인 필요';report.append(h);
+  const h=document.createElement('h3');h.textContent=data.syntax.ok?'✓ Required syntax passed':'Required syntax needs review';report.append(h);
   if(data.syntax.error){const error=document.createElement('p');error.textContent=data.syntax.error;report.append(error);}
   for(const check of data.syntax.checks){const line=document.createElement('p');line.textContent=(check.ok?'✓ ':'✗ ')+check.label;report.append(line);}
-  const note=document.createElement('p');note.textContent='완료 조건: Submit에서 모든 데이터와 학습 문법을 통과. 기존 완료 기록은 변경하지 않아요.';report.append(note);output.append(report);
+  const note=document.createElement('p');note.textContent='Completion requires all datasets and required syntax to pass on Submit. Existing completion history is preserved.';report.append(note);output.append(report);
  }
  data.results.forEach(r=>{const section=document.createElement('section');section.className='sql-result-case';const h=document.createElement('h3');h.textContent=(r.ok===null?'RESULT':r.ok?'PASS':'FAIL')+' · Case '+r.case;section.append(h);
  if(r.error){const e=document.createElement('pre');e.textContent=r.error;section.append(e);}
- else{section.append(sqlTable('Actual result · 실행 결과',r.actual.columns,r.actual.rows));if(r.expected)section.append(sqlTable('기대 결과 · 정답 표',r.expected.columns,r.expected.rows));}output.append(section);});
+ else{section.append(sqlTable('Actual result',r.actual.columns,r.actual.rows));if(r.expected)section.append(sqlTable('Expected result · Answer table',r.expected.columns,r.expected.rows));}output.append(section);});
  if(data.output){const pre=document.createElement('pre');pre.textContent=data.output;output.append(pre);}
 }
 const sqlTableStyle=document.createElement('style');
@@ -477,8 +477,8 @@ function showExecutionPanel(){
  if(!executionDialog){
   executionDialog=document.createElement('dialog');executionDialog.id='execution-dialog';
   const header=document.createElement('div');header.className='execution-heading';
-  const title=document.createElement('h2');title.textContent='실행 결과 · Run / Debug / Submit';
-  const close=document.createElement('button');close.textContent='닫기 ×';close.onclick=()=>executionDialog.close();
+  const title=document.createElement('h2');title.textContent='Execution results · Run / Debug / Submit';
+  const close=document.createElement('button');close.textContent='Close ×';close.onclick=()=>executionDialog.close();
   header.append(title,close);executionDialog.append(header);document.body.append(executionDialog);
   const consolePanel=document.querySelector('.console');
   const placeholder=document.createComment('console location');consolePanel.before(placeholder);
@@ -489,11 +489,11 @@ function showExecutionPanel(){
  if(!executionDialog.open)executionDialog.showModal();
 }
 window.addEventListener('error',event=>{
- const out=$('output');if(out)out.textContent='페이지 오류: '+event.message+'\n'+(event.filename||'')+':'+event.lineno;
+ const out=$('output');if(out)out.textContent='Page error: '+event.message+'\n'+(event.filename||'')+':'+event.lineno;
  status('Page error · see execution results');
 });
 window.addEventListener('unhandledrejection',event=>{
- const out=$('output');if(out)out.textContent='실행 준비 오류: '+String(event.reason?.message||event.reason);
+ const out=$('output');if(out)out.textContent='Execution setup error: '+String(event.reason?.message||event.reason);
  status('Runtime error · see execution results');
 });
 const executionStyle=document.createElement('style');executionStyle.textContent=`
@@ -506,25 +506,25 @@ const executionStyle=document.createElement('style');executionStyle.textContent=
 
 // A collapsible prompt composer opens the user's own ChatGPT session.
 const gptPanel=document.createElement('details');gptPanel.id='gpt-panel';
-gptPanel.innerHTML=`<summary>ChatGPT에 질문하기 · 펼치기</summary>
-<div class="gpt-body"><p>현재 문제와 코드를 질문에 함께 담아요. 답변은 별도 ChatGPT 창에서 받을 수 있어요. 그 창에서 본인 계정으로 로그인하세요.</p>
-<label for="gpt-question">질문</label><textarea id="gpt-question" rows="3" placeholder="이 코드에서 틀린 부분을 전 → 후로 알려줘"></textarea>
-<label class="gpt-option"><input id="gpt-output" type="checkbox"> 현재 실행 결과도 포함</label>
-<div class="gpt-actions"><button id="gpt-copy-open">질문 복사 + ChatGPT 열기 ↗</button><button id="gpt-preview-button">복사할 내용 보기</button><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT 열기 ↗</a></div>
-<p id="gpt-status" role="status"></p><textarea id="gpt-preview" rows="8" readonly hidden aria-label="ChatGPT에 붙여넣을 내용"></textarea></div>`;
+gptPanel.innerHTML=`<summary>Ask ChatGPT · Expand</summary>
+<div class="gpt-body"><p>Include the current problem and code with your question. Answers appear in a separate ChatGPT window; sign in with your account there.</p>
+<label for="gpt-question">Question</label><textarea id="gpt-question" rows="3" placeholder="Explain the bugs in this code with before-and-after examples"></textarea>
+<label class="gpt-option"><input id="gpt-output" type="checkbox"> Include current execution results</label>
+<div class="gpt-actions"><button id="gpt-copy-open">Copy prompt + Open ChatGPT ↗</button><button id="gpt-preview-button">Preview prompt</button><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">Open ChatGPT ↗</a></div>
+<p id="gpt-status" role="status"></p><textarea id="gpt-preview" rows="8" readonly hidden aria-label="Content to paste into ChatGPT"></textarea></div>`;
 document.querySelector('.coding').prepend(gptPanel);
 function gptPrompt(){
  if(!current)return '';
- const question=$('gpt-question').value.trim()||'이 코드를 검토하고 틀린 부분을 전 → 후로 설명해 줘. 한국어로 답해 줘.';
- return ['문제: '+current.id+' · '+current.title,...current.rules,'예시:',current.examples,'제약:',current.constraints,'내 코드 ('+(current.language==='sql'?'SQL / SQLite':'Python 3')+'):',value(),...($('gpt-output').checked?['현재 실행 결과:',$('output').innerText]:[]),'질문:',question].join('\n\n');
+ const question=$('gpt-question').value.trim()||'Review this code and explain any errors with before-and-after examples. Answer in English.';
+ return ['Problem: '+current.id+' · '+current.title,...current.rules,'Examples:',current.examples,'Constraints:',current.constraints,'My code ('+(current.language==='sql'?'SQL / SQLite':'Python 3')+'):',value(),...($('gpt-output').checked?['Current execution results:',$('output').innerText]:[]),'Question:',question].join('\n\n');
 }
 $('gpt-preview-button').onclick=()=>{$('gpt-preview').value=gptPrompt();$('gpt-preview').hidden=false;};
 $('gpt-copy-open').onclick=()=>{
- if(!current){$('gpt-status').textContent='문제를 불러온 후 다시 눌러 주세요.';return;}
+ if(!current){$('gpt-status').textContent='Please try again after the problem loads.';return;}
  const prompt=gptPrompt();$('gpt-preview').value=prompt;
  window.open('https://chatgpt.com/','_blank','noopener,noreferrer');
- navigator.clipboard.writeText(prompt).then(()=>{$('gpt-status').textContent='복사했어요! ChatGPT 창에 Ctrl/Cmd + V로 붙여넣고 보내세요. 창이 안 열리면 ChatGPT 열기 링크를 누르세요.';}).catch(()=>{
-  $('gpt-preview').hidden=false;$('gpt-preview').focus();$('gpt-preview').select();$('gpt-status').textContent='자동 복사가 차단되었어요. 선택된 내용을 Ctrl/Cmd + C로 복사해 ChatGPT에 붙여넣으세요.';
+ navigator.clipboard.writeText(prompt).then(()=>{$('gpt-status').textContent='Copied! Paste into ChatGPT with Ctrl/Cmd + V and send. If no window opened, use the Open ChatGPT link.';}).catch(()=>{
+  $('gpt-preview').hidden=false;$('gpt-preview').focus();$('gpt-preview').select();$('gpt-status').textContent='Automatic copying was blocked. Copy the selected text with Ctrl/Cmd + C and paste it into ChatGPT.';
  });
 };
 gptPanel.addEventListener('toggle',()=>aceEditor?.resize());
@@ -563,13 +563,13 @@ showSqlSchema();
 
 let planTimer,planRevision=0,planCode='';
 const planExplanations={
- SCAN:'테이블 또는 인덱스의 행을 훑어요.',
- SEARCH:'키나 인덱스로 조건에 맞는 행을 찾아요.',
- 'USE TEMP B-TREE FOR ORDER BY':'정렬에 임시 자료구조를 써요.',
- 'USE TEMP B-TREE FOR GROUP BY':'그룹화에 임시 자료구조를 써요.',
- 'USE TEMP B-TREE FOR DISTINCT':'중복 제거에 임시 자료구조를 써요.',
- MATERIALIZE:'중간 결과를 만들어 저장해요.',
- 'CO-ROUTINE':'하위 쿼리의 결과를 필요한 만큼 가져와요.'
+ SCAN:'Scans rows in a table or index.',
+ SEARCH:'Finds matching rows using a key or index.',
+ 'USE TEMP B-TREE FOR ORDER BY':'Uses a temporary structure for sorting.',
+ 'USE TEMP B-TREE FOR GROUP BY':'Uses a temporary structure for grouping.',
+ 'USE TEMP B-TREE FOR DISTINCT':'Uses a temporary structure for removing duplicates.',
+ MATERIALIZE:'Builds and stores an intermediate result.',
+ 'CO-ROUTINE':'Retrieves subquery results as needed.'
 };
 
 function queueLivePlan(reset=false){
@@ -580,11 +580,11 @@ function queueLivePlan(reset=false){
  const code=value().replace(/^(?:\s+|--[^\r\n]*|\/\*[\s\S]*?(?:\*\/|$))+/,'');
  if(reset||!code.trim())$('live-plan-steps').hidden=true;
  if(!code.trim()){
-  $('live-plan-status').textContent='SELECT 또는 WITH 쿼리를 입력하면 실행 흐름이 표시돼요.';
+  $('live-plan-status').textContent='Enter a SELECT or WITH query to see its execution plan.';
   return;
  }
- $('live-plan-status').textContent=ready?'새 실행 계획을 확인하는 중…':'SQLite를 준비하는 중…';
- if(!worker&&runtimeAttempt>0)$('live-plan-status').textContent='SQLite를 불러오지 못했어요. Run으로 다시 시도하세요.';
+ $('live-plan-status').textContent=ready?'Checking the new query plan…':'Preparing SQLite…';
+ if(!worker&&runtimeAttempt>0)$('live-plan-status').textContent='Could not load SQLite. Click Run to retry.';
  planTimer=setTimeout(()=>{
   if(revision!==planRevision)return;
   planCode=code;
@@ -604,10 +604,10 @@ function renderLivePlan(message){
  const list=$('live-plan-steps');
  if(message.error){
   list.hidden=true;
-  status.textContent='실행 계획 대기 중 · '+message.error;
+  status.textContent='Waiting for query plan · '+message.error;
   return;
  }
- status.textContent='SQLite 실행 계획 · 첫 번째 예시의 테이블 기준';
+ status.textContent='SQLite query plan · Based on the first example\'s tables';
  const depth=new Map();
  const steps=[];
  for(const [id,parent,,detail] of message.rows){
@@ -627,3 +627,4 @@ function renderLivePlan(message){
 }
 
 window.addEventListener('hashchange',()=>{const target=problems.find(p=>String(p.id)===location.hash.slice(1));if(target&&target!==current)openProblem(target);});
+

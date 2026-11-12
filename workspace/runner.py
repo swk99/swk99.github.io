@@ -184,7 +184,7 @@ def check_sql_learning(code, requirements, schema=None):
         statements = sqlglot.parse(code, read='sqlite')
         statements = [s for s in statements if s is not None]
         if len(statements) != 1:
-            raise ValueError('한 개의 SELECT / WITH 문장을 작성하세요.')
+            raise ValueError('Write one SELECT / WITH statement.')
         tree = statements[0]
         # Strip unused projections before checking functions. A decorative unused
         # window expression or unreferenced CTE must not satisfy the learning goal.
@@ -193,7 +193,7 @@ def check_sql_learning(code, requirements, schema=None):
         tree = pushdown_projections(tree, schema=sql_schema, dialect='sqlite')
         root = build_scope(tree)
         if root is None:
-            raise ValueError('SELECT / WITH 쿼리를 작성하세요.')
+            raise ValueError('Write a SELECT / WITH query.')
         scopes=[]; seen=set(); references=[]
         def visit(scope):
             if id(scope) in seen: return
@@ -212,13 +212,13 @@ def check_sql_learning(code, requirements, schema=None):
         checks=[]
         def require(label,condition): checks.append({'label':label,'ok':bool(condition)})
         req=requirements
-        if req.get('minCtes'): require('실제 참조되는 CTE '+str(req['minCtes'])+'개 이상',len(ctes)>=req['minCtes'])
-        if req.get('cteRefs'): require('CTE 결과를 본문에서 사용',any(dst.is_cte for src,dst in references))
-        if req.get('cteChain'): require('앞 CTE를 다음 CTE가 참조',any(src.is_cte and dst.is_cte for src,dst in references))
-        if req.get('cteReuse'): require('같은 CTE를 두 곳에서 사용',any(sum(dst is c for src,dst in references)>=2 for c in ctes))
-        for name in req.get('windows',[]): require(name+' OVER(...)가 계산에 사용됨',any(isinstance(w.this,exp.Func) and w.this.sql_name()==name for w in windows))
-        if req.get('partition'): require('윈도 PARTITION BY',any(w.args.get('partition_by') for w in windows))
-        if req.get('windowOrder'): require('윈도 안 ORDER BY',any(w.args.get('order') for w in windows))
+        if req.get('minCtes'): require('Referenced CTE count: '+str(req['minCtes'])+' or more',len(ctes)>=req['minCtes'])
+        if req.get('cteRefs'): require('Use the CTE result in the main query',any(dst.is_cte for src,dst in references))
+        if req.get('cteChain'): require('Reference an earlier CTE from a later CTE',any(src.is_cte and dst.is_cte for src,dst in references))
+        if req.get('cteReuse'): require('Use the same CTE in two places',any(sum(dst is c for src,dst in references)>=2 for c in ctes))
+        for name in req.get('windows',[]): require(name+' OVER(...) used in the calculation',any(isinstance(w.this,exp.Func) and w.this.sql_name()==name for w in windows))
+        if req.get('partition'): require('Window PARTITION BY',any(w.args.get('partition_by') for w in windows))
+        if req.get('windowOrder'): require('ORDER BY inside the window',any(w.args.get('order') for w in windows))
         if 'frame' in req:
             target=str(req['frame']).upper()
             def frame_matches(w):
@@ -226,7 +226,7 @@ def check_sql_learning(code, requirements, schema=None):
                 if not spec or str(spec.args.get('kind')).upper()!='ROWS': return False
                 start=spec.args.get('start'); start=start.sql() if isinstance(start,exp.Expression) else str(start)
                 return start.upper()==target and str(spec.args.get('start_side')).upper()=='PRECEDING' and str(spec.args.get('end')).upper()=='CURRENT ROW'
-            require('명시한 ROWS 프레임',any(frame_matches(w) for w in windows))
+            require('Explicit ROWS frame',any(frame_matches(w) for w in windows))
         for key,arg in [('lagOffset','offset'),('lagDefault','default')]:
             if key in req:
                 require('LAG '+arg+' = '+str(req[key]),any(isinstance(w.this,exp.Lag) and isinstance(w.this.args.get(arg),exp.Literal) and w.this.args[arg].this==str(req[key]) for w in windows))
@@ -241,22 +241,23 @@ def check_sql_learning(code, requirements, schema=None):
                                 on=join.args.get('on')
                                 aliases={c.table.lower() for c in on.find_all(exp.Column)} if on else set()
                                 if {a.lower(),b.lower()} <= aliases:found=True
-            require('같은 표의 두 역할을 ON 조건으로 연결',found)
-        if req.get('operator'): require('관계 조건 '+req['operator'],any(n.key.upper()==req['operator'].upper() for n in nodes))
+            require('Connect two roles of the same table with an ON condition',found)
+        if req.get('operator'): require('Relationship condition '+req['operator'],any(n.key.upper()==req['operator'].upper() for n in nodes))
         if req.get('union'):
             unions=[n for n in nodes if isinstance(n,exp.Union)]
-            require('UNION ALL' if req['union']=='all' else 'UNION (중복 제거)',any((u.args.get('distinct') is False)==(req['union']=='all') for u in unions))
-        for name in req.get('functions',[]):require(name+' 함수 사용',any(isinstance(n,exp.Func) and n.sql_name()==name for n in nodes))
+            require('UNION ALL' if req['union']=='all' else 'UNION (remove duplicates)',any((u.args.get('distinct') is False)==(req['union']=='all') for u in unions))
+        for name in req.get('functions',[]):require(name+' function used',any(isinstance(n,exp.Func) and n.sql_name()==name for n in nodes))
         if req.get('aliases'):
             aliases={a.lower() for s in scopes for a in s.selected_sources}
-            require('역할 별칭: '+', '.join(req['aliases']),set(req['aliases'])<=aliases)
-        if req.get('outerFilter'): require('바깥 SELECT에 WHERE',bool(tree.args.get('where')))
-        if req.get('having'):require('그룹 조건을 HAVING에서 검사',any(isinstance(n,exp.Having) for n in nodes))
+            require('Role aliases: '+', '.join(req['aliases']),set(req['aliases'])<=aliases)
+        if req.get('outerFilter'): require('WHERE in the outer SELECT',bool(tree.args.get('where')))
+        if req.get('having'):require('Check group conditions in HAVING',any(isinstance(n,exp.Having) for n in nodes))
         if req.get('caseAggregates'):
             count=sum(isinstance(n,(exp.Sum,exp.Count)) and n.this is not None and bool(n.this.find(exp.Case)) for n in nodes)
-            require('CASE 조건부 집계 '+str(req['caseAggregates'])+'개 이상',count>=req['caseAggregates'])
-        if req.get('concat'):require('문자열 이어 붙이기 ||',any(isinstance(n,exp.DPipe) for n in nodes))
-        if req.get('like'):require('LIKE 패턴 검사',any(isinstance(n,exp.Like) for n in nodes))
+            require('Conditional CASE aggregate count: '+str(req['caseAggregates'])+' or more',count>=req['caseAggregates'])
+        if req.get('concat'):require('String concatenation with ||',any(isinstance(n,exp.DPipe) for n in nodes))
+        if req.get('like'):require('LIKE pattern check',any(isinstance(n,exp.Like) for n in nodes))
         return {'ok':all(c['ok'] for c in checks),'checks':checks}
     except Exception as error:
-        return {'ok':False,'checks':[],'error':'문법 구조를 확인하지 못했어요: '+str(error)}
+        return {'ok':False,'checks':[],'error':'Could not validate the syntax structure: '+str(error)}
+

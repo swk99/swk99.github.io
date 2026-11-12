@@ -34,8 +34,8 @@ read('renderFiles()');
 const all=[];function walk(el){all.push(el);for(const child of el.children||[])walk(child)}walk(els.files);
 assert.equal(all.find(el=>el.id==='completed-kodori-sql-window-all').checked,true);
 assert.equal(all.find(el=>el.id==='completed-kodori-sql-hello').checked,true);
-assert(all.some(el=>el.textContent.includes('2/48 完了')||el.textContent.includes('2/48 완료')));
-assert(all.some(el=>el.textContent.includes('1개 완료 / 28개 보관')));
+assert(all.some(el=>el.textContent.includes('2/48 completed')));
+assert(all.some(el=>el.textContent.includes('1 completed / 28 archived')));
 assert.deepEqual([...saved],[...before],'Reading and displaying revised course must not mutate old storage');
 read("$('kodori-start').onclick()");assert.equal(read('current.id'),'kodori-sql-v3-cte-extract');
 // Completing a new task advances only that task; old IDs/drafts remain byte-identical.
@@ -65,3 +65,4 @@ const nodes=[];function descendants(n){nodes.push(n);for(const child of n.childr
 assert.equal(nodes.filter(n=>n.tag==='mark').length,2,'Both repeated subqueries highlighted');
 assert(nodes.some(n=>n.className==='sql-literal'&&n.textContent==="'FROM WHERE'"),'Keywords inside strings stay intact');
 console.log('PASS: study streak dates, duplicate subquery highlights and quoted SQL literals');
+

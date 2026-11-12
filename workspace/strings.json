@@ -5,8 +5,8 @@
     "slug": "longest-substring-without-repeating-characters",
     "file": "length_of_longest_substring.py",
     "rules": [
-      "문자열 s에서 같은 문자가 두 번 나오지 않는 가장 긴 연속 부분 문자열의 길이를 반환하세요.",
-      "문자를 건너뛸 수 없습니다. 빈 문자열의 답은 0입니다."
+      "Return the length of the longest contiguous substring of s containing no repeated characters.",
+      "You cannot skip characters. An empty string returns 0."
     ],
     "constraints": "0 <= len(s) <= 50000; letters, digits, symbols and spaces.",
     "method": "lengthOfLongestSubstring",
@@ -71,9 +71,9 @@
     "slug": "minimum-window-substring",
     "file": "min_window.py",
     "rules": [
-      "s의 연속 부분 문자열 중 t의 모든 문자를 필요한 개수만큼 포함하는 가장 짧은 문자열을 반환하세요.",
-      "t에 A가 두 번 있으면 구간에도 A가 최소 두 번 있어야 합니다. 순서는 달라도 됩니다.",
-      "가능한 구간이 없으면 빈 문자열을 반환하세요. 정답이 있으면 유일합니다."
+      "Return the shortest contiguous substring of s containing every character of t with the required multiplicity.",
+      "If t contains two As, the window must contain at least two As. Character order may differ.",
+      "Return an empty string if no window exists. The answer is unique when it exists."
     ],
     "constraints": "1 <= len(s), len(t) <= 100000; English letters, case-sensitive.",
     "method": "minWindow",
@@ -137,9 +137,9 @@
     "slug": "regular-expression-matching",
     "file": "is_match.py",
     "rules": [
-      "패턴 p가 문자열 s 전체와 일치하는지 반환하세요. 일부만 일치하면 False입니다.",
-      ".은 임의의 문자 한 개, *는 바로 앞 요소가 0번 이상 반복됨을 뜻합니다.",
-      "예: a*는 빈 문자열, a, aa 등에 대응합니다. 패턴은 유효하게 주어집니다."
+      "Return whether pattern p matches the entire string s. A partial match returns False.",
+      ". matches any single character; * repeats the preceding element zero or more times.",
+      "For example, a* matches the empty string, a, aa, and so on. The pattern is valid."
     ],
     "constraints": "1 <= len(s), len(p) <= 20; s: lowercase letters; p: lowercase letters, '.' and '*'.",
     "method": "isMatch",
@@ -211,8 +211,8 @@
     "slug": "edit-distance",
     "file": "min_distance.py",
     "rules": [
-      "word1을 word2로 바꾸는 데 필요한 최소 연산 횟수를 반환하세요.",
-      "한 번의 연산은 문자 하나 삽입, 삭제 또는 교체입니다. 같은 문자를 그대로 두는 것은 비용이 없습니다."
+      "Return the minimum number of operations needed to transform word1 into word2.",
+      "An operation inserts, deletes, or replaces one character. Keeping an identical character costs nothing."
     ],
     "constraints": "0 <= len(word1), len(word2) <= 500; lowercase English letters.",
     "method": "minDistance",
@@ -277,9 +277,9 @@
     "slug": "string-to-integer-atoi",
     "file": "my_atoi.py",
     "rules": [
-      "앞쪽 공백(' ')을 건너뛴 뒤 선택적인 + 또는 - 부호 하나를 읽으세요.",
-      "그다음 연속된 숫자만 읽고 첫 비숫자 문자에서 멈추세요. 숫자를 읽지 못하면 0입니다.",
-      "결과를 32비트 부호 있는 정수 범위 [-2147483648, 2147483647]로 제한하여 반환하세요."
+      "Skip leading spaces (' '), then read one optional + or - sign.",
+      "Read consecutive digits and stop at the first nondigit. Return 0 if no digits are read.",
+      "Clamp the result to the signed 32-bit integer range [-2147483648, 2147483647]."
     ],
     "constraints": "0 <= len(s) <= 200; English letters, digits, spaces, '+', '-', '.'.",
     "method": "myAtoi",
@@ -358,8 +358,8 @@
     "slug": "group-anagrams",
     "file": "group_anagrams.py",
     "rules": [
-      "문자 순서만 바꿔서 서로 같게 만들 수 있는 단어들을 같은 그룹으로 묶으세요.",
-      "모든 입력 단어를 중복 횟수까지 보존하세요. 그룹 순서와 그룹 안의 단어 순서는 자유입니다."
+      "Group words that can be made identical by rearranging their characters.",
+      "Preserve all input words, including duplicates. Group order and order within each group are unrestricted."
     ],
     "constraints": "1 <= len(strs) <= 10000; 0 <= len(strs[i]) <= 100; lowercase English letters.",
     "method": "groupAnagrams",
@@ -464,8 +464,8 @@
     "slug": "longest-palindromic-substring",
     "file": "longest_palindrome.py",
     "rules": [
-      "s에서 앞뒤로 읽어도 같은 가장 긴 연속 부분 문자열을 반환하세요.",
-      "문자열의 길이가 아니라 문자열 자체를 반환합니다. 최대 길이 정답이 여러 개면 아무 것이나 가능합니다."
+      "Return the longest contiguous substring of s that reads the same forwards and backwards.",
+      "Return the string itself, not its length. Any longest answer is acceptable if several exist."
     ],
     "constraints": "1 <= len(s) <= 1000; English letters and digits.",
     "method": "longestPalindrome",
@@ -524,9 +524,9 @@
     "slug": "zigzag-conversion",
     "file": "convert.py",
     "rules": [
-      "문자열을 numRows개의 행에 위에서 아래로, 그다음 대각선 위쪽으로 지그재그 배치하세요.",
-      "맨 위 행부터 각 행의 문자를 왼쪽에서 오른쪽 순서로 이어 붙여 반환하세요.",
-      "numRows가 1이면 원래 문자열을 그대로 반환합니다."
+      "Arrange the string in numRows rows, moving downwards and then diagonally upwards in a zigzag.",
+      "Return the characters of each row from left to right, concatenated from top row to bottom.",
+      "If numRows is 1, return the original string unchanged."
     ],
     "constraints": "1 <= len(s), numRows <= 1000; English letters, ',' and '.'.",
     "method": "convert",
@@ -590,9 +590,9 @@
     "slug": "valid-parentheses",
     "file": "is_valid.py",
     "rules": [
-      "괄호 (), {}, []만 들어 있는 문자열이 올바르게 짝지어졌는지 반환하세요.",
-      "여는 괄호는 같은 종류의 닫는 괄호로 닫혀야 하며, 가장 나중에 열린 괄호부터 닫혀야 합니다.",
-      "모든 괄호가 짝을 이루어야 합니다."
+      "Return whether a string containing only (), {}, and [] is correctly balanced.",
+      "Each opening bracket must close with the same type, and the most recently opened bracket must close first.",
+      "Every bracket must be paired."
     ],
     "constraints": "1 <= len(s) <= 10000; only (){}[].",
     "method": "isValid",
@@ -657,10 +657,10 @@
     "slug": "string-compression",
     "file": "compress.py",
     "rules": [
-      "문자 배열 chars의 연속된 동일 문자 그룹을 압축하여 같은 배열의 앞부분에 직접 저장하세요.",
-      "그룹 길이가 1이면 문자만 쓰고, 2 이상이면 문자 뒤에 개수의 각 자릿수를 따로 쓰세요.",
-      "압축된 길이 k를 정수로 반환하세요. chars[:k]도 채점합니다. 나머지 배열 내용은 무시합니다. 추가 공간은 O(1)을 사용하세요.",
-      "예: aabcccccaaa → a2bc5a3. 게시글의 b1과 달리 LeetCode 443에서는 개수 1을 생략합니다."
+      "Compress consecutive groups of identical characters in chars in place at the start of the same array.",
+      "For a group of length 1, write only the character. For length 2 or more, append each digit of the count separately.",
+      "Return the compressed length k as an integer. chars[:k] is also checked; the remaining contents are ignored. Use O(1) extra space.",
+      "Example: aabcccccaaa → a2bc5a3. Unlike b1 in the post, LeetCode 443 omits counts of 1."
     ],
     "constraints": "1 <= len(chars) <= 2000; each element is one letter, digit or symbol.",
     "method": "compress",

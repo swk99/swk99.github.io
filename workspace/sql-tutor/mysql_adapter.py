@@ -43,10 +43,10 @@ def evaluate_tutor(payload):
     try:
         statements = [tree for tree in parse(payload["code"], read="mysql") if tree]
         if len(statements) != 1 or not isinstance(statements[0], exp.Query):
-            return {"message": "SELECT 또는 WITH 쿼리 하나를 제출하세요."}
+            return {"message": "Submit one SELECT or WITH query."}
         tree = statements[0]
         if any(tree.find_all(exp.Any, exp.All)):
-            return {"message": "ANY/ALL은 MySQL에서 실행할 수 있습니다. 이 브라우저 채점기는 이 구문을 실행하지 못합니다. 이 실습의 요구 구문을 사용하세요."}
+            return {"message": "ANY/ALL can run in MySQL, but this browser grader cannot execute that syntax. Use the syntax required by this exercise."}
         sql_tree = tree.copy()
         for division in reversed(list(sql_tree.find_all(exp.Div))):
             division.set("this", exp.Cast(this=division.this.copy(), to=exp.DataType.build("DOUBLE")))
@@ -59,13 +59,13 @@ def evaluate_tutor(payload):
             subquery.replace(wrapped)
         payload["code"] = sql_tree.sql(dialect=TutorSQLite, unsupported_level=ErrorLevel.RAISE)
     except SqlglotError as error:
-        return {"message": "MySQL 구문을 확인하세요. " + str(error)}
+        return {"message": "Check the MySQL syntax. " + str(error)}
     requirements = payload.pop("methods", [])
     missing = [name for name in requirements if not uses_method(tree, name)]
     result = evaluate_sql(payload)
     for case in result["results"]:
         if case.get("error") == "user-defined aggregate's 'step' method raised error":
-            case["error"] = "Scalar subquery가 두 행 이상을 반환했습니다. MySQL은 이 경우 오류를 반환합니다."
+            case["error"] = "A scalar subquery returned more than one row. MySQL reports an error in this case."
     result["missing"] = missing
     return result
 
@@ -90,3 +90,4 @@ def uses_method(tree, method):
     if method == "count_over":
         return any(isinstance(node.this, exp.Count) for node in tree.find_all(exp.Window))
     return any(node.key == method for node in tree.walk())
+
