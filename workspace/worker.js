@@ -7,7 +7,7 @@ try {
   const base=sources[source]||sources[0];
   const {loadPyodide}=await import(base+'pyodide.mjs');
   py=await loadPyodide({indexURL:base});
-  const response=await fetch('./runner.py?v=english-v1');
+  const response=await fetch('./runner.py?v=sql24-v4');
   if(!response.ok)throw new Error('Could not load test runner: '+response.status);
   py.runPython(await response.text());
   self.postMessage({type:'ready',version:py.runPython('sys.version.split()[0]')});

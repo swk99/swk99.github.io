@@ -134,6 +134,10 @@ def evaluate_sql(payload):
     results=[]; plans=[]; started=time.monotonic()
     def same(a,b):
         if isinstance(a,(int,float)) and isinstance(b,(int,float)):
+            if payload.get('precision') is not None:
+                from decimal import Decimal, ROUND_HALF_UP
+                unit=Decimal(1).scaleb(-payload['precision'])
+                return math.isfinite(a) and Decimal(str(a)).quantize(unit, rounding=ROUND_HALF_UP)==Decimal(str(b)).quantize(unit, rounding=ROUND_HALF_UP)
             return math.isfinite(a) and abs(a-b)<=1e-6
         return type(a)==type(b) and a==b
     def row_equal(a,b): return len(a)==len(b) and all(same(x,y) for x,y in zip(a,b))
