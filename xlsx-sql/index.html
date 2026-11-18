@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>XLSX → SQL Practice</title>
+<meta name="description" content="Turn an Excel file into SQL tables in your browser and practice queries. Nothing is uploaded.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f6f7f9;color:#1b293b;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+header{height:72px;border-bottom:1px solid #e2e6eb;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:#fff}
+.brand{font-size:20px;font-weight:800;letter-spacing:-.5px}.mark{background:#5065e8;color:#fff;padding:6px 10px;border-radius:9px;margin-right:8px}
+.privacy{font-size:13px;color:#557367}
+main{max-width:1200px;margin:32px auto;padding:0 20px}
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tab{background:#fff;border:1px solid #dce1e9;border-radius:9px;padding:10px 18px;font:inherit;font-size:14px;color:#5b6879;cursor:pointer}
+.tab.active{background:#eff1ff;color:#4e60cf;border-color:#7c89e6;font-weight:600}
+.card{background:#fff;border:1px solid #e1e6ee;border-radius:16px;padding:22px;margin-bottom:18px}
+h2{font-size:16px;margin:0 0 14px}
+.drop{display:block;border:1.5px dashed #c0c8e5;border-radius:12px;background:#fafbff;padding:26px;text-align:center;cursor:pointer}
+.drop:hover,.drop.over{border-color:#5065e8;background:#f2f4ff}
+.small{font-size:12px;color:#7c8796;line-height:1.7}
+.layout{display:grid;grid-template-columns:260px 1fr;gap:18px}
+.tbl{border:1px solid #e6e9f0;border-radius:10px;padding:10px;margin-bottom:8px;font-size:13px}
+.tbl b{color:#4e60cf;cursor:pointer}
+.tbl ul{margin:6px 0 0;padding-left:16px;color:#6a7686;font-size:12px;max-height:160px;overflow:auto}
+textarea{width:100%;min-height:150px;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;padding:12px;border:1px solid #cdd5e0;border-radius:10px;resize:vertical}
+button.primary{background:#5266df;color:#fff;border:0;border-radius:9px;padding:10px 18px;font:inherit;font-weight:600;cursor:pointer}
+button.ghost{background:#fff;border:1px solid #dce1e9;border-radius:9px;padding:10px 14px;font:inherit;cursor:pointer;color:#5b6879}
+.row{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.out{overflow:auto;max-height:420px;margin-top:14px}
+table.res{border-collapse:collapse;font-size:12px;width:100%}
+table.res th,table.res td{border:1px solid #e6e9f0;padding:6px 8px;text-align:left;white-space:nowrap}
+table.res th{background:#f3f5fa;position:sticky;top:0}
+.err{color:#c13a48;font-size:13px;white-space:pre-wrap}
+.ok{color:#247546;font-size:13px}
+.q{border:1px solid #e6e9f0;border-radius:10px;padding:14px;margin-bottom:10px}
+.q .t{font-weight:600;font-size:14px}
+.q .lvl{font-size:11px;background:#eef1ff;color:#5263ce;border-radius:6px;padding:2px 7px;margin-left:6px}
+.q.active{border-color:#7c89e6;background:#fafbff}
+.hint{font-size:12px;color:#6a7686;margin-top:6px}
+select{font:inherit;padding:8px;border:1px solid #cdd5e0;border-radius:8px}
+[hidden]{display:none!important}
+@media(max-width:800px){.layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="brand"><span class="mark">⊞</span>XLSX → SQL</div><div class="privacy">● Files stay in your browser</div></header>
+<main>
+<div class="card">
+  <h2>1. Load a spreadsheet</h2>
+  <label class="drop" id="drop"><strong>Drop an .xlsx / .xls / .csv file or click to choose</strong>
+    <div class="small">Each sheet becomes a SQLite table. Nothing is uploaded.</div>
+    <input id="file" type="file" accept=".xlsx,.xls,.csv" hidden></label>
+  <div class="row"><button class="ghost" id="sample">Use sample loan data</button><span id="loadMsg" class="small"></span></div>
+</div>
+
+<div class="tabs"><button class="tab active" data-v="build">Build</button><button class="tab" data-v="practice">Practice</button></div>
+
+<div class="layout">
+  <aside class="card"><h2>Tables</h2><div id="tables"><p class="small">No tables yet.</p></div></aside>
+  <section>
+    <!-- BUILD -->
+    <div id="view-build" class="card">
+      <h2>Build — write any SQL</h2>
+      <textarea id="sql" spellcheck="false" placeholder="SELECT * FROM loans LIMIT 10;"></textarea>
+      <div class="row"><button class="primary" id="run">Run (Ctrl+Enter)</button><button class="ghost" id="clear">Clear</button>
+        <span class="small">CREATE / INSERT / UPDATE work too — changes stay in memory.</span></div>
+      <div id="out" class="out"></div>
+    </div>
+    <!-- PRACTICE -->
+    <div id="view-practice" class="card" hidden>
+      <h2>Practice — auto-generated exercises</h2>
+      <div class="row" style="margin-top:0"><label class="small">Table</label><select id="ptable"></select><button class="ghost" id="regen">New set</button></div>
+      <div id="qs" style="margin-top:14px"><p class="small">Load a file first.</p></div>
+      <textarea id="psql" spellcheck="false" placeholder="Pick an exercise, then write your answer here"></textarea>
+      <div class="row"><button class="primary" id="check">Check answer</button><button class="ghost" id="showAns">Show answer</button><span id="verdict"></span></div>
+      <div id="pout" class="out"></div>
+    </div>
+  </section>
+</div>
+</main>
+<script>
+let SQL, db, tables = [], current = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const qi = n => '"' + String(n).replace(/"/g,'""') + '"';
+
+initSqlJs({locateFile: f => 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/' + f}).then(s => { SQL = s; db = new SQL.Database(); });
+
+function cleanName(s, used) {
+  let n = String(s || 'col').trim().replace(/[^A-Za-z0-9_]+/g, '_').replace(/^_+|_+$/g, '') || 'col';
+  if (/^\d/.test(n)) n = '_' + n;
+  let b = n, i = 2; while (used.has(n.toLowerCase())) n = b + '_' + i++;
+  used.add(n.toLowerCase()); return n;
+}
+function typeOf(vals) {
+  const v = vals.filter(x => x !== null && x !== '' && x !== undefined);
+  if (!v.length) return 'TEXT';
+  if (v.every(x => typeof x === 'number' && Number.isInteger(x))) return 'INTEGER';
+  if (v.every(x => typeof x === 'number')) return 'REAL';
+  return 'TEXT';
+}
+function loadWorkbook(wb) {
+  if (!SQL) { $('loadMsg').textContent = 'SQL engine still loading, try again in a second.'; return; }
+  db = new SQL.Database(); tables = [];
+  const usedT = new Set();
+  wb.SheetNames.forEach(sn => {
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], {header: 1, raw: true, defval: null, blankrows: false});
+    if (!rows.length) return;
+    const used = new Set();
+    const cols = rows[0].map((h, i) => cleanName(h ?? ('col' + (i+1)), used));
+    const data = rows.slice(1).map(r => cols.map((_, i) => { let x = r[i]; if (x instanceof Date) x = x.toISOString().slice(0,10); return x === undefined ? null : x; }));
+    const types = cols.map((_, i) => typeOf(data.map(r => r[i])));
+    const tn = cleanName(sn.toLowerCase(), usedT);
+    db.run(`CREATE TABLE ${qi(tn)} (${cols.map((c,i)=>qi(c)+' '+types[i]).join(',')})`);
+    const st = db.prepare(`INSERT INTO ${qi(tn)} VALUES (${cols.map(()=>'?').join(',')})`);
+    db.run('BEGIN'); data.forEach(r => st.run(r)); db.run('COMMIT'); st.free();
+    tables.push({name: tn, cols: cols.map((c,i)=>({name:c,type:types[i]})), rows: data.length});
+  });
+  renderTables();
+  $('loadMsg').textContent = `Loaded ${tables.length} table(s).`;
+  if (tables[0]) $('sql').value = `SELECT * FROM ${tables[0].name} LIMIT 10;`;
+  fillPracticeTables(); genQuestions();
+}
+function renderTables() {
+  $('tables').innerHTML = tables.map(t => `<div class="tbl"><b data-t="${esc(t.name)}">${esc(t.name)}</b> <span class="small">${t.rows} rows</span><ul>${t.cols.map(c=>`<li>${esc(c.name)} <span class="small">${c.type}</span></li>`).join('')}</ul></div>`).join('') || '<p class="small">No tables.</p>';
+  document.querySelectorAll('.tbl b').forEach(b => b.onclick = () => { $('sql').value = `SELECT * FROM ${b.dataset.t} LIMIT 10;`; switchView('build'); });
+}
+function readFile(f) {
+  const r = new FileReader();
+  r.onload = e => { try { loadWorkbook(XLSX.read(e.target.result, {type: 'array', cellDates: true})); } catch (x) { $('loadMsg').textContent = 'Could not read file: ' + x.message; } };
+  r.readAsArrayBuffer(f);
+}
+$('drop').onclick = () => $('file').click();
+$('file').onchange = e => e.target.files[0] && readFile(e.target.files[0]);
+['dragover','dragenter'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.add('over'); }));
+['dragleave','drop'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('over'); }));
+$('drop').addEventListener('drop', e => e.dataTransfer.files[0] && readFile(e.dataTransfer.files[0]));
+
+$('sample').onclick = () => {
+  const st = ['Approved','Pending','Rejected','Approved','Paid'], pr = ['PL01','PL02','CB01'];
+  const loans = [['LoanID','MemberID','ProductCode','AmountApplied','AmountApproved','FinalTerm','ApplicationStatus','ApplicationReceivedDate','IncomeSalary']];
+  for (let i = 1; i <= 120; i++) { const a = 500 + Math.round(Math.random()*95)*100, s = st[i%5];
+    loans.push([i, 1000 + (i*7)%40, pr[i%3], a, s==='Rejected'||s==='Pending'?null:a - (i%4)*100, [12,24,36,48][i%4], s, `2026-${String(1+i%10).padStart(2,'0')}-${String(1+i%27).padStart(2,'0')}`, 18000 + (i*1373)%40000]); }
+  const members = [['MemberID','MemberTitle','CurrentCity','EmploymentStatus','HomeOwnership']];
+  const cities = ['London','Croydon','Kingston','Sutton','Bromley'], emp = ['Employed','Self-employed','Retired','Part-time'];
+  for (let m = 1000; m < 1040; m++) members.push([m, ['Mr','Ms','Mrs','Dr'][m%4], cities[m%5], emp[m%4], ['Rent','Own','Mortgage'][m%3]]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(loans), 'loans');
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(members), 'members');
+  loadWorkbook(wb);
+};
+
+function exec(sql) { return db.exec(sql); }
+function renderResult(res, el) {
+  if (!res.length) { el.innerHTML = '<p class="ok">Done. (no rows returned)</p>'; return; }
+  el.innerHTML = res.map(r => `<p class="small">${r.values.length} row(s)</p><table class="res"><tr>${r.columns.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>${r.values.slice(0,500).map(v=>`<tr>${v.map(x=>`<td>${x===null?'<i class="small">NULL</i>':esc(x)}</td>`).join('')}</tr>`).join('')}</table>`).join('');
+}
+function runBuild() {
+  if (!db) return;
+  try { renderResult(exec($('sql').value), $('out')); if (/\b(create|drop|alter)\b/i.test($('sql').value)) refreshSchema(); }
+  catch (e) { $('out').innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+}
+function refreshSchema() {
+  const names = exec("SELECT name FROM sqlite_master WHERE type='table'")[0]?.values.map(v=>v[0]) || [];
+  tables = names.map(n => ({name: n, cols: exec(`PRAGMA table_info(${qi(n)})`)[0].values.map(v=>({name:v[1],type:v[2]||'TEXT'})), rows: exec(`SELECT COUNT(*) FROM ${qi(n)}`)[0].values[0][0]}));
+  renderTables(); fillPracticeTables();
+}
+$('run').onclick = runBuild; $('clear').onclick = () => { $('sql').value=''; $('out').innerHTML=''; };
+$('sql').addEventListener('keydown', e => { if ((e.ctrlKey||e.metaKey) && e.key==='Enter') runBuild(); });
+
+function switchView(v) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.v===v));
+  $('view-build').hidden = v!=='build'; $('view-practice').hidden = v!=='practice';
+}
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => switchView(t.dataset.v));
+
+// ---------- Practice ----------
+let qs = [], active = -1;
+function fillPracticeTables() { $('ptable').innerHTML = tables.map(t=>`<option>${esc(t.name)}</option>`).join(''); }
+const pick = a => a[Math.floor(Math.random()*a.length)];
+function genQuestions() {
+  const t = tables.find(x => x.name === $('ptable').value) || tables[0];
+  if (!t) return;
+  const T = qi(t.name), nums = t.cols.filter(c=>c.type!=='TEXT'), texts = t.cols.filter(c=>c.type==='TEXT');
+  const lowCard = texts.filter(c => { const n = exec(`SELECT COUNT(DISTINCT ${qi(c.name)}) FROM ${T}`)[0].values[0][0]; return n>1 && n<=30; });
+  const C = c => qi(c.name);
+  qs = [];
+  qs.push({lvl:'Easy', t:`Count all rows in ${t.name}.`, a:`SELECT COUNT(*) FROM ${T};`});
+  const c1 = pick(t.cols), c2 = pick(t.cols);
+  qs.push({lvl:'Easy', t:`Show ${c1.name} and ${c2.name} for the first 5 rows.`, a:`SELECT ${C(c1)}, ${C(c2)} FROM ${T} LIMIT 5;`, ordered:false});
+  if (nums.length) { const n = pick(nums);
+    qs.push({lvl:'Easy', t:`What are the MIN, MAX and AVG of ${n.name}?`, a:`SELECT MIN(${C(n)}), MAX(${C(n)}), AVG(${C(n)}) FROM ${T};`});
+    const avg = exec(`SELECT AVG(${C(n)}) FROM ${T}`)[0].values[0][0];
+    qs.push({lvl:'Medium', t:`How many rows have ${n.name} above its average?`, a:`SELECT COUNT(*) FROM ${T} WHERE ${C(n)} > (SELECT AVG(${C(n)}) FROM ${T});`});
+    qs.push({lvl:'Medium', t:`Top 3 rows by ${n.name} (highest first) — show all columns.`, a:`SELECT * FROM ${T} ORDER BY ${C(n)} DESC LIMIT 3;`, ordered:true});
+  }
+  if (lowCard.length) { const g = pick(lowCard);
+    const val = exec(`SELECT ${C(g)} FROM ${T} WHERE ${C(g)} IS NOT NULL LIMIT 1`)[0]?.values[0][0];
+    if (val!=null) qs.push({lvl:'Easy', t:`How many rows have ${g.name} = '${val}'?`, a:`SELECT COUNT(*) FROM ${T} WHERE ${C(g)} = '${String(val).replace(/'/g,"''")}';`});
+    qs.push({lvl:'Medium', t:`Count rows per ${g.name}, ordered by count descending.`, a:`SELECT ${C(g)}, COUNT(*) AS cnt FROM ${T} GROUP BY ${C(g)} ORDER BY cnt DESC;`, ordered:true});
+    if (nums.length) { const n = pick(nums);
+      qs.push({lvl:'Medium', t:`Average ${n.name} per ${g.name}.`, a:`SELECT ${C(g)}, AVG(${C(n)}) FROM ${T} GROUP BY ${C(g)};`});
+      qs.push({lvl:'Hard', t:`Which ${g.name} values have more than 5 rows? Show value and count.`, a:`SELECT ${C(g)}, COUNT(*) FROM ${T} GROUP BY ${C(g)} HAVING COUNT(*) > 5;`});
+      qs.push({lvl:'Hard', t:`For each ${g.name}, rank rows by ${n.name} (highest = 1) and return only rank 1. Show ${g.name} and ${n.name}.`, a:`SELECT ${C(g)}, ${C(n)} FROM (SELECT ${C(g)}, ${C(n)}, ROW_NUMBER() OVER (PARTITION BY ${C(g)} ORDER BY ${C(n)} DESC) AS rn FROM ${T}) WHERE rn = 1;`});
+    }
+  }
+  const nullc = t.cols.find(c => exec(`SELECT COUNT(*) FROM ${T} WHERE ${C(c)} IS NULL`)[0].values[0][0] > 0);
+  if (nullc) qs.push({lvl:'Easy', t:`How many rows have ${nullc.name} missing (NULL)?`, a:`SELECT COUNT(*) FROM ${T} WHERE ${C(nullc)} IS NULL;`});
+  // join between tables sharing a column name
+  for (const o of tables) { if (o.name===t.name) continue;
+    const k = t.cols.find(c => o.cols.some(d => d.name.toLowerCase()===c.name.toLowerCase()));
+    if (k) { const oc = o.cols.find(d=>d.name.toLowerCase()!==k.name.toLowerCase());
+      if (oc) qs.push({lvl:'Hard', t:`Join ${t.name} with ${o.name} on ${k.name}. Count ${t.name} rows per ${o.name}.${oc.name}.`, a:`SELECT o.${qi(oc.name)}, COUNT(*) FROM ${T} t JOIN ${qi(o.name)} o ON t.${C(k)} = o.${qi(k.name)} GROUP BY o.${qi(oc.name)};`});
+      break; }
+  }
+  active = -1; renderQs(); $('psql').value=''; $('pout').innerHTML=''; $('verdict').textContent='';
+}
+function renderQs() {
+  $('qs').innerHTML = qs.map((q,i)=>`<div class="q ${i===active?'active':''}" data-i="${i}"><span class="t">${i+1}. ${esc(q.t)}</span><span class="lvl">${q.lvl}</span>${q.show?`<div class="hint"><code>${esc(q.a)}</code></div>`:''}</div>`).join('');
+  document.querySelectorAll('.q').forEach(d => d.onclick = () => { active = +d.dataset.i; renderQs(); $('verdict').textContent=''; $('psql').focus(); });
+}
+function norm(res, ordered) {
+  if (!res.length) return '[]';
+  const rows = res[res.length-1].values.map(r => JSON.stringify(r.map(x => typeof x==='number' ? Math.round(x*1e6)/1e6 : x)));
+  if (!ordered) rows.sort();
+  return rows.join('\n');
+}
+$('check').onclick = () => {
+  if (active<0) { $('verdict').innerHTML='<span class="err">Pick an exercise first.</span>'; return; }
+  const q = qs[active];
+  try {
+    const mine = exec($('psql').value); renderResult(mine, $('pout'));
+    const ok = norm(mine, q.ordered) === norm(exec(q.a), q.ordered);
+    $('verdict').innerHTML = ok ? '<span class="ok">✓ Correct</span>' : '<span class="err">✗ Result differs from the expected answer</span>';
+  } catch (e) { $('pout').innerHTML = `<p class="err">${esc(e.message)}</p>`; $('verdict').textContent=''; }
+};
+$('showAns').onclick = () => { if (active>=0) { qs[active].show = true; renderQs(); } };
+$('psql').addEventListener('keydown', e => { if ((e.ctrlKey||e.metaKey) && e.key==='Enter') $('check').click(); });
+$('regen').onclick = genQuestions; $('ptable').onchange = genQuestions;
+</script>
+</body>
+</html>
