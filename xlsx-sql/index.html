@@ -54,7 +54,11 @@ select{font:inherit;padding:8px;border:1px solid #cdd5e0;border-radius:8px}
   <label class="drop" id="drop"><strong>Drop an .xlsx / .xls / .csv file or click to choose</strong>
     <div class="small">Each sheet becomes a SQLite table. Nothing is uploaded.</div>
     <input id="file" type="file" accept=".xlsx,.xls,.csv" hidden></label>
-  <div class="row"><button class="ghost" id="sample">Use sample loan data</button><span id="loadMsg" class="small"></span></div>
+  <div class="small" style="margin:14px 0 6px">…or paste cells straight from Excel / Sheets (first row = headers, tab or comma separated):</div>
+  <textarea id="paste" spellcheck="false" style="min-height:110px" placeholder="book_id&#9;book_title&#9;author&#10;1001&#9;A Gentleman in Moscow&#9;Amor Towles"></textarea>
+  <div class="row"><label class="small">Table name</label><input id="pname" value="books" style="padding:9px;border:1px solid #cdd5e0;border-radius:8px;font:inherit;width:160px">
+    <button class="primary" id="addPaste">Add as table</button>
+    <button class="ghost" id="sample">Use sample loan data</button><span id="loadMsg" class="small"></span></div>
 </div>
 
 <div class="tabs"><button class="tab active" data-v="build">Build</button><button class="tab" data-v="practice">Practice</button></div>
@@ -103,12 +107,7 @@ function typeOf(vals) {
   if (v.every(x => typeof x === 'number')) return 'REAL';
   return 'TEXT';
 }
-function loadWorkbook(wb) {
-  if (!SQL) { $('loadMsg').textContent = 'SQL engine still loading, try again in a second.'; return; }
-  db = new SQL.Database(); tables = [];
-  const usedT = new Set();
-  wb.SheetNames.forEach(sn => {
-    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sn], {header: 1, raw: true, defval: null, blankrows: false});
+function addRows(sn, rows, usedT) {
     if (!rows.length) return;
     const used = new Set();
     const cols = rows[0].map((h, i) => cleanName(h ?? ('col' + (i+1)), used));
@@ -119,7 +118,13 @@ function loadWorkbook(wb) {
     const st = db.prepare(`INSERT INTO ${qi(tn)} VALUES (${cols.map(()=>'?').join(',')})`);
     db.run('BEGIN'); data.forEach(r => st.run(r)); db.run('COMMIT'); st.free();
     tables.push({name: tn, cols: cols.map((c,i)=>({name:c,type:types[i]})), rows: data.length});
-  });
+    return tn;
+}
+function loadWorkbook(wb) {
+  if (!SQL) { $('loadMsg').textContent = 'SQL engine still loading, try again in a second.'; return; }
+  db = new SQL.Database(); tables = [];
+  const usedT = new Set();
+  wb.SheetNames.forEach(sn => addRows(sn, XLSX.utils.sheet_to_json(wb.Sheets[sn], {header: 1, raw: true, defval: null, blankrows: false}), usedT));
   renderTables();
   $('loadMsg').textContent = `Loaded ${tables.length} table(s).`;
   if (tables[0]) $('sql').value = `SELECT * FROM ${tables[0].name} LIMIT 10;`;
@@ -140,6 +145,25 @@ $('file').onchange = e => e.target.files[0] && readFile(e.target.files[0]);
 ['dragleave','drop'].forEach(ev => $('drop').addEventListener(ev, e => { e.preventDefault(); $('drop').classList.remove('over'); }));
 $('drop').addEventListener('drop', e => e.dataTransfer.files[0] && readFile(e.dataTransfer.files[0]));
 
+$('addPaste').onclick = () => {
+  if (!SQL) { $('loadMsg').textContent = 'SQL engine still loading, try again in a second.'; return; }
+  const txt = $('paste').value.replace(/\r/g,'').replace(/\n+$/,'');
+  if (!txt.trim()) { $('loadMsg').textContent = 'Paste some cells first.'; return; }
+  let rows;
+  if (txt.includes('\t')) rows = txt.split('\n').filter(l=>l.trim()).map(l => l.split('\t'));
+  else { const wb = XLSX.read(txt, {type:'string', raw:true}); rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {header:1, raw:true, defval:null, blankrows:false}); }
+  rows = rows.map((r,i) => i===0 ? r : r.map(x => { if (typeof x!=='string') return x; const s=x.trim(); if (s==='') return null; return /^-?\d+(\.\d+)?$/.test(s) && !/^0\d/.test(s) ? Number(s) : s; }));
+  if (!db) db = new SQL.Database();
+  const name = $('pname').value.trim() || 'pasted';
+  const used = new Set(); const target = cleanName(name, new Set());
+  db.run(`DROP TABLE IF EXISTS ${qi(target)}`);
+  tables = tables.filter(t => t.name.toLowerCase() !== target.toLowerCase());
+  tables.forEach(t => used.add(t.name.toLowerCase()));
+  const tn = addRows(name, rows, used);
+  renderTables(); fillPracticeTables(); $('ptable').value = tn; genQuestions();
+  $('sql').value = `SELECT * FROM ${tn} LIMIT 10;`;
+  $('loadMsg').textContent = `Added table "${tn}" (${rows.length-1} rows).`;
+};
 $('sample').onclick = () => {
   const st = ['Approved','Pending','Rejected','Approved','Paid'], pr = ['PL01','PL02','CB01'];
   const loans = [['LoanID','MemberID','ProductCode','AmountApplied','AmountApproved','FinalTerm','ApplicationStatus','ApplicationReceivedDate','IncomeSalary']];
