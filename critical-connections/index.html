@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Critical Connections — 줄별 실행</title>
+<style>
+  :root { --bg:#0f1117; --panel:#171a23; --line:#262a36; --fg:#e6e8ee; --dim:#7d8496; --hl:#ffd166; --ok:#06d6a0; --bad:#ef476f; --blue:#4cc9f0; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,"Segoe UI","Noto Sans KR",sans-serif; background:var(--bg); color:var(--fg); }
+  header { padding:16px 20px 4px; }
+  h1 { font-size:18px; margin:0; }
+  header p { margin:4px 0 0; color:var(--dim); font-size:13px; }
+  .wrap { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:14px; padding:14px 20px; }
+  @media (max-width:820px){ .wrap{ grid-template-columns:1fr; } }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:12px; }
+  pre { margin:0; font:13px/1.65 ui-monospace,Menlo,Consolas,monospace; }
+  .ln { display:block; padding:0 8px; border-radius:4px; white-space:pre; transition:background .15s; }
+  .ln .no { color:#4a5063; display:inline-block; width:22px; text-align:right; margin-right:12px; }
+  .ln.cur { background:rgba(255,209,102,.18); box-shadow:inset 3px 0 0 var(--hl); }
+  .ln.cur .no { color:var(--hl); }
+  .ctrl { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:12px; }
+  button { background:#232838; color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:7px 12px; font-size:13px; cursor:pointer; }
+  button:hover { border-color:var(--blue); }
+  label { font-size:12px; color:var(--dim); display:flex; align-items:center; gap:6px; }
+  .msg { font-size:13px; min-height:20px; color:var(--hl); margin:8px 0 0; }
+  svg { width:100%; height:auto; display:block; }
+  .vars { display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font:13px ui-monospace,Menlo,Consolas,monospace; margin-top:10px; }
+  .vars .k { color:var(--dim); }
+  .vars .v.changed { color:var(--hl); }
+  .step { font-size:12px; color:var(--dim); }
+  .inp { width:100%; background:#0f1117; color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:6px 8px; font:12px ui-monospace,monospace; }
+</style>
+</head>
+<body>
+<header>
+  <h1>LeetCode 1192 · Critical Connections — 한 줄씩 실행</h1>
+  <p>간선을 하나 끊고 BFS를 돌려서, 반대편 끝에 못 가면 bridge로 판정하는 코드예요.</p>
+</header>
+
+<div class="wrap">
+  <div class="card">
+    <div class="ctrl">
+      <button id="prev">◀ 이전</button>
+      <button id="play">▶ 재생</button>
+      <button id="next">다음 ▶</button>
+      <button id="reset">처음</button>
+      <label>속도 <input id="speed" type="range" min="100" max="1500" value="600" style="direction:rtl"></label>
+      <span class="step" id="stepInfo"></span>
+    </div>
+    <pre id="code"></pre>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <div class="card">
+    <label style="margin-bottom:8px">n <input id="nIn" class="inp" style="width:50px" value="4"></label>
+    <label style="margin-bottom:8px">connections <input id="eIn" class="inp" value="[[0,1],[1,2],[2,0],[1,3]]"></label>
+    <button id="load" style="margin-bottom:8px">입력 적용</button>
+    <svg id="graph" viewBox="0 0 400 300"></svg>
+    <div class="vars" id="vars"></div>
+  </div>
+</div>
+
+<script>
+const LINES = [
+  "adj = defaultdict(list)",
+  "for a, b in connections:",
+  "    adj[a].append(b)",
+  "    adj[b].append(a)",
+  "",
+  "res = []",
+  "for a, b in connections:",
+  "    adj[a].remove(b)",
+  "    adj[b].remove(a)",
+  "",
+  "    seen = {a}",
+  "    q = deque([a])",
+  "",
+  "    while q:",
+  "        x = q.popleft()",
+  "        for y in adj[x]:",
+  "            if y not in seen:",
+  "                seen.add(y)",
+  "                q.append(y)",
+  "",
+  "    if b not in seen:",
+  "        res.append([a, b])",
+  "",
+  "    adj[a].append(b)",
+  "    adj[b].append(a)",
+  "",
+  "return res",
+];
+// line numbers (1-based) used by the tracer
+const L = { adj:1, for1:2, ap1:3, ap2:4, res:6, for2:7, rm1:8, rm2:9, seen:11, q:12, wh:14, pop:15, fy:16, ifs:17, add:18, qa:19, ifb:21, resap:22, bk1:24, bk2:25, ret:27 };
+
+function clone(adj){ const o={}; for(const k in adj) o[k]=adj[k].slice(); return o; }
+
+function trace(n, conns){
+  const S=[]; let adj={}, res=[], a=null, b=null, seen=null, q=null, x=null, y=null, removed=null;
+  const snap=(line,msg)=>S.push({line,msg,adj:clone(adj),res:res.map(r=>r.slice()),a,b,seen:seen?[...seen]:null,q:q?q.slice():null,x,y,removed});
+  snap(L.adj,"빈 인접 리스트를 만들어요.");
+  for(const [ea,eb] of conns){
+    a=ea; b=eb;
+    snap(L.for1,`간선 (${a}, ${b})를 읽어요.`);
+    (adj[a]=adj[a]||[]).push(b); snap(L.ap1,`adj[${a}]에 ${b} 추가`);
+    (adj[b]=adj[b]||[]).push(a); snap(L.ap2,`adj[${b}]에 ${a} 추가`);
+  }
+  a=b=null;
+  snap(L.res,"결과 리스트를 비워둬요.");
+  for(const [ea,eb] of conns){
+    a=ea; b=eb; seen=null; q=null; x=null; y=null;
+    snap(L.for2,`이번에 검사할 간선: (${a}, ${b})`);
+    adj[a].splice(adj[a].indexOf(b),1); removed=[a,b];
+    snap(L.rm1,`adj[${a}]에서 ${b}를 지워요 (간선 끊기 1/2)`);
+    adj[b].splice(adj[b].indexOf(a),1);
+    snap(L.rm2,`adj[${b}]에서 ${a}를 지워요 (간선 끊기 2/2)`);
+    seen=new Set([a]); snap(L.seen,`시작점 ${a}를 방문 처리`);
+    q=[a]; snap(L.q,`큐에 ${a}를 넣어요`);
+    while(true){
+      snap(L.wh, q.length?`큐가 비어있지 않아요 → 계속`:`큐가 비었어요 → BFS 종료`);
+      if(!q.length) break;
+      x=q.shift(); y=null; snap(L.pop,`큐에서 ${x}를 꺼내요`);
+      for(const yy of adj[x]){
+        y=yy; snap(L.fy,`${x}의 이웃 ${y}`);
+        const ns=!seen.has(y);
+        snap(L.ifs, ns?`${y}는 처음 보는 정점`:`${y}는 이미 방문함 → 건너뜀`);
+        if(ns){
+          seen.add(y); snap(L.add,`${y} 방문 처리`);
+          q.push(y); snap(L.qa,`큐에 ${y} 추가`);
+        }
+      }
+      y=null;
+    }
+    x=null;
+    const cut=!seen.has(b);
+    snap(L.ifb, cut?`${b}에 도달 못 함 → (${a}, ${b})는 bridge!`:`${b}에 도달함 → bridge 아님`);
+    if(cut){ res.push([a,b]); snap(L.resap,`res에 [${a}, ${b}] 추가`); }
+    adj[a].push(b); snap(L.bk1,`adj[${a}]에 ${b} 복구 (간선 되붙이기 1/2)`);
+    adj[b].push(a); removed=null; snap(L.bk2,`adj[${b}]에 ${a} 복구 (간선 되붙이기 2/2)`);
+  }
+  a=b=null; seen=null; q=null;
+  snap(L.ret,`끝! 결과: ${JSON.stringify(res)}`);
+  return S;
+}
+
+let N=4, CONNS=[[0,1],[1,2],[2,0],[1,3]], steps=[], i=0, timer=null, pos=[], prev=null;
+const $=id=>document.getElementById(id);
+
+$("code").innerHTML = LINES.map((t,k)=>`<span class="ln" data-l="${k+1}"><span class="no">${k+1}</span>${t.replace(/</g,"&lt;")||" "}</span>`).join("");
+
+function layout(){
+  pos=[]; const cx=200, cy=150, r=Math.min(115, 40+N*15);
+  for(let k=0;k<N;k++){ const t=-Math.PI/2+2*Math.PI*k/N; pos.push([cx+r*Math.cos(t), cy+r*Math.sin(t)]); }
+}
+
+function drawGraph(s){
+  let h="";
+  const isRes=(u,v)=>s.res.some(([p,q])=>(p===u&&q===v)||(p===v&&q===u));
+  const isCur=(u,v)=>s.a!==null&&((s.a===u&&s.b===v)||(s.a===v&&s.b===u));
+  for(const [u,v] of CONNS){
+    const [x1,y1]=pos[u],[x2,y2]=pos[v];
+    const has=(s.adj[u]||[]).includes(v), hasR=(s.adj[v]||[]).includes(u);
+    let col="#3a4156", w=2, dash="";
+    if(isRes(u,v)){ col="var(--bad)"; w=4; }
+    if(isCur(u,v)){ col="var(--hl)"; w=4; }
+    if(!has&&!hasR){ dash='stroke-dasharray="6 6"'; col="#555"; w=2; }
+    else if(!has||!hasR){ dash='stroke-dasharray="3 3"'; }
+    h+=`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${col}" stroke-width="${w}" ${dash}/>`;
+  }
+  for(let k=0;k<N;k++){
+    const [x,y]=pos[k];
+    let fill="#232838", st="#4a5063";
+    if(s.seen&&s.seen.includes(k)){ fill="rgba(6,214,160,.25)"; st="var(--ok)"; }
+    if(s.q&&s.q.includes(k)) st="var(--blue)";
+    if(s.x===k){ fill="rgba(255,209,102,.35)"; st="var(--hl)"; }
+    if(s.y===k) st="#ff9f1c";
+    h+=`<circle cx="${x}" cy="${y}" r="18" fill="${fill}" stroke="${st}" stroke-width="3"/>`;
+    h+=`<text x="${x}" y="${y+5}" text-anchor="middle" fill="#e6e8ee" font-size="15" font-family="monospace">${k}</text>`;
+  }
+  $("graph").innerHTML=h;
+}
+
+function fmt(v){ return v===null||v===undefined?"—":JSON.stringify(v); }
+
+function render(){
+  const s=steps[i];
+  document.querySelectorAll(".ln").forEach(e=>e.classList.toggle("cur", +e.dataset.l===s.line));
+  $("msg").textContent=s.msg;
+  $("stepInfo").textContent=`${i+1} / ${steps.length}`;
+  drawGraph(s);
+  const adjStr=Object.keys(s.adj).sort((p,q)=>p-q).map(k=>`${k}:[${s.adj[k]}]`).join("  ");
+  const rows=[["a",fmt(s.a)],["b",fmt(s.b)],["x",fmt(s.x)],["y",fmt(s.y)],["q",s.q?`[${s.q}]`:"—"],["seen",s.seen?`{${s.seen}}`:"—"],["res",fmt(s.res)],["adj",adjStr||"{}"]];
+  $("vars").innerHTML=rows.map(([k,v])=>{
+    const p=prev&&prev[k]; const ch=prev&&p!==v;
+    return `<span class="k">${k}</span><span class="v${ch?" changed":""}">${v}</span>`;
+  }).join("");
+  prev=Object.fromEntries(rows);
+}
+
+function go(k){ i=Math.max(0,Math.min(steps.length-1,k)); render(); }
+function stop(){ clearInterval(timer); timer=null; $("play").textContent="▶ 재생"; }
+function play(){
+  if(timer){ stop(); return; }
+  if(i>=steps.length-1) go(0);
+  $("play").textContent="⏸ 정지";
+  timer=setInterval(()=>{ if(i>=steps.length-1){ stop(); return; } go(i+1); }, +$("speed").value);
+}
+function load(){
+  stop();
+  try{
+    const n=parseInt($("nIn").value,10), c=JSON.parse($("eIn").value);
+    if(!(n>0&&n<=12)) throw 0;
+    if(!Array.isArray(c)||c.some(e=>e.length!==2||e.some(v=>!(v>=0&&v<n)))) throw 0;
+    N=n; CONNS=c;
+  }catch(e){ $("msg").textContent="입력이 올바르지 않아요 (n ≤ 12, 정점 번호는 0~n-1)."; return; }
+  layout(); steps=trace(N,CONNS); prev=null; go(0);
+}
+
+$("next").onclick=()=>{ stop(); go(i+1); };
+$("prev").onclick=()=>{ stop(); go(i-1); };
+$("reset").onclick=()=>{ stop(); prev=null; go(0); };
+$("play").onclick=play;
+$("load").onclick=load;
+$("speed").oninput=()=>{ if(timer){ stop(); play(); } };
+document.addEventListener("keydown",e=>{ if(e.target.tagName==="INPUT") return; if(e.key==="ArrowRight") $("next").click(); if(e.key==="ArrowLeft") $("prev").click(); if(e.key===" "){ e.preventDefault(); play(); } });
+load();
+</script>
+</body>
+</html>
