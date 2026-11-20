@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#faf9f6"><meta name="robots" content="noindex"><title>Project Lines · Interview Notes</title>
+<style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#292929;background:#faf9f6}*{box-sizing:border-box}body{margin:0}main{max-width:760px;margin:auto;padding:34px 22px 110px}a{color:#5a5b65;text-decoration:none}.back{font-size:13px}h1{font-size:clamp(28px,6vw,40px);letter-spacing:-1px;margin:40px 0 6px}header p{color:#777;font-size:14px;margin:0 0 18px}
+.bar{position:sticky;top:0;background:#faf9f6;padding:10px 0;display:flex;gap:8px;z-index:2}
+button{font:inherit;font-size:13px;padding:8px 14px;border:1px solid #e5e3df;border-radius:999px;background:#fff;cursor:pointer}button.on{background:#292929;color:#fff;border-color:#292929}
+section{background:#fff;border:1px solid #ecebe7;border-radius:12px;padding:16px 18px;margin:14px 0}h2{font-size:17px;margin:0 0 8px}
+ol{margin:0;padding-left:22px}li{padding:5px 0;line-height:1.5;cursor:pointer}
+.hide li span{background:#ecebe7;color:transparent;border-radius:4px}.hide li.show span{background:none;color:inherit}
+</style></head><body><main>
+<a class="back" href="./">← Interview Notes</a>
+<header><h1>Project Lines</h1><p>6 projects × 6 lines. Tap “Quiz” to hide, then tap a line to reveal.</p></header>
+<div class="bar"><button id="q">Quiz</button><button id="r">Reveal all</button></div>
+<div id="list">
+<section><h2>Faster Payments</h2><ol>
+<li><span>Automated daily Faster Payments reconciliation.</span></li>
+<li><span>Compared TCS BaNCS records against the Sage 200 ledger.</span></li>
+<li><span>Matched manual Sage figures exactly in all 19 test periods.</span></li>
+<li><span>Identified the 18:30 file-cut and weekend file gaps.</span></li>
+<li><span>Replaced two days a week of manual work.</span></li>
+<li><span>Left fraud-module journals for manual review by design.</span></li></ol></section>
+<section><h2>Credit Scoring</h2><ol>
+<li><span>Built a hybrid rule + XGBoost scoring pipeline.</span></li>
+<li><span>Added hierarchical Bayesian calibration.</span></li>
+<li><span>Processes 1,000+ loan applications weekly.</span></li>
+<li><span>Cut review time by more than 10%.</span></li>
+<li><span>Improved arrears repayment by 11%.</span></li>
+<li><span>Used SHAP to audit features for fairness.</span></li></ol></section>
+<section><h2>DASH</h2><ol>
+<li><span>Designed a bounded-state streaming framework.</span></li>
+<li><span>Externalised state to keep latency low.</span></li>
+<li><span>Targeted real-time crypto surveillance.</span></li>
+<li><span>Found a GC artifact behind the latency knee.</span></li>
+<li><span>Replaced the observed curve with a closed-form model.</span></li>
+<li><span>Packaged experiments with Docker for reproducibility.</span></li></ol></section>
+<section><h2>Loan CRM</h2><ol>
+<li><span>Built an internal CRM for the Loans team.</span></li>
+<li><span>Replaced Zendesk with an in-house tool.</span></li>
+<li><span>Integrated CU Online with Outlook.</span></li>
+<li><span>Centralised member and loan history in one view.</span></li>
+<li><span>Planned the Invu migration to S3.</span></li>
+<li><span>Scoped delivery to the Loans team first.</span></li></ol></section>
+<section><h2>Grok AI</h2><ol>
+<li><span>Built an AI loan dashboard using MCP tool calling.</span></li>
+<li><span>Negotiated a Zero Data Retention agreement with xAI.</span></li>
+<li><span>Chose Grok to support voice features.</span></li>
+<li><span>Kept AI answers separate from staff decisions.</span></li>
+<li><span>Ran manual O/X testing with the Loans team.</span></li>
+<li><span>AI answers passed 950 of 1,000 checks.</span></li></ol></section>
+<section><h2>TCS Card Blocking</h2><ol>
+<li><span>Automated after-hours lost-card blocking.</span></li>
+<li><span>Integrated with the TCS BaNCS API.</span></li>
+<li><span>Built a two-step verify-then-block flow.</span></li>
+<li><span>Built the service with FastAPI and PostgreSQL.</span></li>
+<li><span>Logged every block decision for audit.</span></li>
+<li><span>Removed the need for a third-party vendor.</span></li></ol></section>
+</div>
+<script>
+const L=document.getElementById('list'),q=document.getElementById('q');
+q.onclick=()=>{L.classList.toggle('hide');q.classList.toggle('on');L.querySelectorAll('li').forEach(li=>li.classList.remove('show'))};
+document.getElementById('r').onclick=()=>L.querySelectorAll('li').forEach(li=>li.classList.add('show'));
+L.addEventListener('click',e=>{const li=e.target.closest('li');if(li&&L.classList.contains('hide'))li.classList.toggle('show')});
+</script>
+</main></body></html>
