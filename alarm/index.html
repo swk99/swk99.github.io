@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>YouTube Alarm</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 16px; color: #222; }
+  h1 { font-size: 22px; }
+  label { display: block; margin-top: 14px; font-size: 14px; color: #555; }
+  input { width: 100%; padding: 8px; font-size: 16px; box-sizing: border-box; margin-top: 4px; }
+  button { margin-top: 18px; padding: 10px 18px; font-size: 16px; cursor: pointer; border: 0; border-radius: 6px; }
+  #arm { background: #222; color: #fff; }
+  #stop { background: #e33; color: #fff; display: none; }
+  #status { margin-top: 16px; font-size: 15px; }
+  #now { font-size: 40px; font-variant-numeric: tabular-nums; margin: 10px 0; }
+  #player { margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>⏰ YouTube Alarm</h1>
+<div id="now">--:--:--</div>
+
+<label>알람 시간 <input type="time" id="time"></label>
+<label>YouTube URL <input type="url" id="url" placeholder="https://www.youtube.com/watch?v=..."></label>
+
+<button id="arm">알람 켜기</button>
+<button id="stop">끄기</button>
+<div id="status">꺼져 있음</div>
+<div id="player"></div>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+<script>
+const $ = id => document.getElementById(id);
+let player, armed = false, firedToday = null;
+
+// 저장된 설정 불러오기
+try {
+  $('time').value = localStorage.getItem('alarm_time') || '07:00';
+  $('url').value = localStorage.getItem('alarm_url') || '';
+} catch (e) {}
+
+function videoId(u) {
+  const m = u.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/);
+  return m ? m[1] : null;
+}
+
+function onYouTubeIframeAPIReady() {
+  player = new YT.Player('player', {
+    width: '100%', height: '280',
+    playerVars: { playsinline: 1 },
+    events: { onStateChange: e => { if (armed && e.data === YT.PlayerState.ENDED) player.playVideo(); } } // 끌 때까지 반복
+  });
+}
+
+$('arm').onclick = () => {
+  const id = videoId($('url').value);
+  if (!id) { alert('YouTube URL을 확인해줘'); return; }
+  if (!player || !player.loadVideoById) { alert('플레이어 로딩 중, 잠시 후 다시'); return; }
+  try {
+    localStorage.setItem('alarm_time', $('time').value);
+    localStorage.setItem('alarm_url', $('url').value);
+  } catch (e) {}
+  // 브라우저 자동재생 정책 때문에 클릭 시점에 한 번 재생→정지해서 권한 확보
+  player.loadVideoById(id);
+  player.mute();
+  setTimeout(() => { player.pauseVideo(); player.seekTo(0); player.unMute(); }, 1500);
+  armed = true; firedToday = null;
+  $('status').textContent = `✅ ${$('time').value}에 울림 (이 탭 열어두기)`;
+};
+
+$('stop').onclick = () => {
+  armed = false;
+  player.stopVideo();
+  $('stop').style.display = 'none';
+  $('status').textContent = '꺼져 있음';
+};
+
+setInterval(() => {
+  const d = new Date();
+  const hm = d.toTimeString().slice(0, 5);
+  $('now').textContent = d.toTimeString().slice(0, 8);
+  const today = d.toDateString();
+  if (armed && hm === $('time').value && firedToday !== today) {
+    firedToday = today;
+    player.unMute(); player.setVolume(100); player.playVideo();
+    $('stop').style.display = 'inline-block';
+    $('status').textContent = '🔔 울리는 중';
+  }
+}, 1000);
+</script>
+</body>
+</html>
