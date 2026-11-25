@@ -2,15 +2,12 @@
 layout: null
 sitemap: false
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Translate / Correct</title>
-<meta name="robots" content="noindex">
-<meta http-equiv="refresh" content="0; url=https://claude.ai/artifact/RiDVDM7dUYGcC7bz1o8PLD">
-<link rel="canonical" href="https://claude.ai/artifact/RiDVDM7dUYGcC7bz1o8PLD">
-<script>location.replace("https://claude.ai/artifact/RiDVDM7dUYGcC7bz1o8PLD");</script>
-</head>
-<body><a href="https://claude.ai/artifact/RiDVDM7dUYGcC7bz1o8PLD">Translate / Correct</a></body>
-</html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Translate / Correct · GPT</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6f5;color:#172b25;font:16px system-ui,sans-serif}main{max-width:680px;margin:8vh auto;padding:28px}h1{font-size:32px;letter-spacing:-1px;margin:12px 0}p{line-height:1.6;color:#52645d}form{background:white;padding:24px;border:1px solid #dce5df;border-radius:20px}label{display:block;font-weight:600;margin:16px 0 8px}select,textarea,button{font:inherit;width:100%;border-radius:10px;padding:13px}select,textarea{border:1px solid #bacac1;background:white;color:inherit}textarea{min-height:180px;resize:vertical}button{background:#12664d;color:white;border:0;font-weight:600;margin-top:14px;cursor:pointer}button.secondary{background:#e8f0eb;color:#12664d}small{display:block;margin-top:16px;color:#52645d;line-height:1.5}a{color:#12664d}
+</style></head><body><main><small>GPT · BRITISH ENGLISH</small><h1>Translate / Correct</h1><p>Your personal English assistant for work and everyday life.</p><form id="f"><label for="mode">Mode</label><select id="mode"><option value="correct">Correct my English</option><option value="translate">Translate Korean ↔ English</option><option value="native">Natural British English (C1–C2)</option><option value="work">Professional workplace English</option></select><label for="source">Your text</label><textarea id="source" required placeholder="Type or paste your text here…"></textarea><button type="submit">Open in ChatGPT ↗</button><button type="button" class="secondary" id="copy">Copy prompt</button><small id="status" role="status">Opens ChatGPT in a new tab. No API key required. Avoid entering confidential or personal customer information.</small></form><p><a href="https://chatgpt.com/">Open ChatGPT directly</a></p></main><script>
+const modes={correct:"Correct the English text. Preserve meaning and tone. Show the corrected version first, then explain important grammar or wording changes in Korean. If already natural, say so.",translate:"Translate Korean into natural British English, or English into natural Korean, according to the input language. Preserve meaning and tone.",native:"Rewrite in natural C1–C2 British English without unnecessarily complex vocabulary. Explain useful expressions in Korean.",work:"Rewrite as concise, professional British workplace English. Preserve the intended meaning and avoid adding unsupported claims."};
+const source=document.getElementById("source"),mode=document.getElementById("mode"),status=document.getElementById("status");
+function promptText(){return modes[mode.value]+"\n\nText to process:\n"+source.value.trim();}
+document.getElementById("f").addEventListener("submit",e=>{e.preventDefault();if(!source.value.trim())return;window.open("https://chatgpt.com/?q="+encodeURIComponent(promptText()),"_blank","noopener,noreferrer");});
+document.getElementById("copy").addEventListener("click",async()=>{if(!source.value.trim()){source.focus();return;}try{await navigator.clipboard.writeText(promptText());status.textContent="Prompt copied. Paste it into ChatGPT.";}catch{status.textContent="Clipboard unavailable. Use Open in ChatGPT instead.";}});</script></body></html>
